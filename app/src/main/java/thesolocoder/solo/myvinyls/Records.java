@@ -1,12 +1,15 @@
 package thesolocoder.solo.myvinyls;
 
+import java.util.ArrayList;
+
 public class Records {
 
     private int _id;
     private String _bandname;
     private String _albumname;
     private int    _releaseyear;
-    private String _genre;
+    private ArrayList<String> _genre;
+    private String _imageurl;
 
     public Records(String bandname){
         this._bandname = bandname;
@@ -32,18 +35,15 @@ public class Records {
         this._albumname = _albumname;
     }
 
-    public void set_genre(String _genre) {
+    public void set_genre(ArrayList<String> _genre) {
         this._genre = _genre;
     }
 
-    public int get_id() {
+    public void set_imageurl(String _imageurl){ this._imageurl = _imageurl; }
 
-        return _id;
-    }
+    public int get_id() { return _id; }
 
-    public String get_bandname() {
-        return _bandname;
-    }
+    public String get_bandname() { return _bandname; }
 
     public String get_albumname() {
         return _albumname;
@@ -53,7 +53,9 @@ public class Records {
         return _releaseyear;
     }
 
-    public String get_genre() {
-        return _genre;
-    }
+    public ArrayList<String> get_genre() { return _genre; }
+
+    public String get_imageurl() { return _imageurl; }
+
+
 }
