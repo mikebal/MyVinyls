@@ -12,8 +12,44 @@
     tools:context="thesolocoder.solo.myvinyls.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_Input"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="88dp"
+        android:width="300dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/button_add"
+        android:layout_below="@+id/editText_Input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="49dp"
+        android:onClick="addButtonCliked" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/deleteButton"
+        android:layout_alignBottom="@+id/button_add"
+        android:layout_alignRight="@+id/editText_Input"
+        android:layout_alignEnd="@+id/editText_Input"
+        android:onClick="deleteButtonClicked" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/buckysText"
+        android:layout_marginTop="72dp"
+        android:layout_below="@+id/deleteButton"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

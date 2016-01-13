@@ -12,9 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    EditText buckysInput;
+    TextView myTextViewl;
+    MyDBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        buckysInput = (EditText) findViewById(R.id.editText_Input);
+        myTextViewl = (TextView) findViewById(R.id.buckysText);
+        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        printDatabase();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,6 +54,27 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+    // Add a record to the database
+    public void addButtonCliked(View view){
+        Records record = new Records(buckysInput.getText().toString());
+        dbHandler.addRecord(record);
+        printDatabase();
+    }
+
+    // Delete record
+    public void deleteButtonClicked(View view){
+        String inputText = buckysInput.getText().toString();
+        dbHandler.deleteRecord(inputText);
+        printDatabase();
+    }
+
+
+    public void printDatabase(){
+        String dbString = dbHandler.databseToString();
+        myTextViewl.setText(dbString);
+        buckysInput.setText("");
+    }
+
 
     @Override
     public void onBackPressed() {
