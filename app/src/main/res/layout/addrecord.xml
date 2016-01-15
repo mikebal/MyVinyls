@@ -4,11 +4,21 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album cover"
+        android:id="@+id/textView5"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/imageButton" />
+
     <ImageButton
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/imageButton"
-        android:layout_marginTop="5dp"
+        android:onClick="albumCoverClicked"
+        android:src="@mipmap/ic_add_a_photo_black_48dp"
+        android:layout_marginTop="15dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <TextView
@@ -31,15 +41,19 @@
     <EditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editText_albumName"
+        android:maxLength="30"
+        android:maxLines="1"
         android:layout_above="@+id/textView3"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView" />
 
     <EditText
         android:layout_width="100dp"
+        android:inputType="number"
+        android:maxLength="4"
         android:layout_height="wrap_content"
-        android:id="@+id/year_spinner"
+        android:id="@+id/editText_year"
         android:paddingRight="20dp"
         android:layout_below="@+id/textView2"
         android:layout_alignLeft="@+id/textView2"
@@ -53,27 +67,29 @@
         android:text="Band Name:"
         android:id="@+id/textView3"
         android:layout_marginTop="31dp"
-        android:layout_below="@+id/year_spinner"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_below="@+id/editText_year"
+        android:layout_alignLeft="@+id/editText_albumName"
+        android:layout_alignStart="@+id/editText_albumName" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/editText_bandName"
+        android:maxLength="25"
+        android:maxLines="1"
         android:layout_below="@+id/textView3"
         android:layout_alignLeft="@+id/textView3"
         android:layout_alignStart="@+id/textView3"
-        android:layout_toLeftOf="@+id/year_spinner"
-        android:layout_toStartOf="@+id/year_spinner" />
+        android:layout_toLeftOf="@+id/editText_year"
+        android:layout_toStartOf="@+id/editText_year" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageButton2"
-        android:layout_below="@+id/editText2"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignStart="@+id/editText2"
+        android:layout_below="@+id/editText_bandName"
+        android:layout_alignLeft="@+id/editText_bandName"
+        android:layout_alignStart="@+id/editText_bandName"
         android:layout_marginTop="36dp"
         android:background="@android:color/transparent"
         android:src ="@mipmap/ic_add_circle_black_24dp"/>
@@ -86,4 +102,15 @@
         android:layout_alignBottom="@+id/imageButton2"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:onClick="addRecordClicked"
+        android:id="@+id/button"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/textView4"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

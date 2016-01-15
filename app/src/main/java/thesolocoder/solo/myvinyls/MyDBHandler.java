@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
-import android.util.Log;
 
 public class MyDBHandler extends SQLiteOpenHelper{
 
@@ -27,10 +26,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-     //   String query = "CREATE TABLE " + TABLE_RECORDS + "(" +
-      //  COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-       //  COLUMN_BANDNAME + " TEXT " +
-        // ");";
+
         String query = "CREATE TABLE " + TABLE_RECORDS + "(" + COLUMN_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         COLUMN_ALBUMNAME + " TEXT, " +
                         COLUMN_BANDNAME + " TEXT, " +
@@ -54,15 +50,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
     // Add new row to the database
     public void addRecord(Records record){
         ContentValues values = new ContentValues();
-      /*  values.put(COLUMN_BANDNAME, record.get_bandname());
+        values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
-        values.put(COLUMN_GENRE, record.get_genre());*/
+        //values.put(COLUMN_GENRE, record.get_genre());
 
-        values.put(COLUMN_BANDNAME, "Jay-z");
-        values.put(COLUMN_ALBUMNAME, "The black album");
-        values.put(COLUMN_RELEASEYEAR, "2001");
-       // values.put(COLUMN_GENRE, "RAP");
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_RECORDS, null, values);

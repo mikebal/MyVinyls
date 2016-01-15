@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity
     }
     // Add a record to the database
     public void addButtonCliked(View view){
-        Records record = new Records(buckysInput.getText().toString());
-        dbHandler.addRecord(record);
-        printDatabase();
+     //   Records record = new Records(buckysInput.getText().toString());
+      //  dbHandler.addRecord(record);
+       // printDatabase();
         Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
         startActivity(open_AddRecords);
     }
