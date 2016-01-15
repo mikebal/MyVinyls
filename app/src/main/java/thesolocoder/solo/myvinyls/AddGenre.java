@@ -6,21 +6,31 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Michael on 1/14/2016.
- */
+
 public class AddGenre extends AppCompatActivity {
+
+    ListView genre_list;
+    private static final String PRIMARY_GENRE_FILE = "#genre.txt";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.genre);
-        ArrayList<String> myList = new ArrayList<>();
-        myList.add("Test 1");
-        myList.add("Test 2");
+        setupVariables();
+        populateList();
+ }
 
-        ListView genre_list = (ListView) findViewById(R.id.listView_genre);
-        GenreAdapter customAdapter = new GenreAdapter(this, myList);
+    private void setupVariables(){
+        genre_list = (ListView) findViewById(R.id.listView_genre);
+    }
+    private void populateList(){
+
+        ArrayList<String> primaryGenres; 
+        GenreFileManager fileManager = new GenreFileManager(getApplicationContext());
+
+        primaryGenres = fileManager.readInGenres(PRIMARY_GENRE_FILE);
+
+        GenreAdapter customAdapter = new GenreAdapter(this, primaryGenres);
         genre_list.setAdapter(customAdapter);
-
     }
 }
