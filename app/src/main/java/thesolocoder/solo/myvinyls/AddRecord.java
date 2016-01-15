@@ -1,9 +1,12 @@
 package thesolocoder.solo.myvinyls;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class AddRecord extends AppCompatActivity{
 
@@ -23,13 +26,37 @@ public class AddRecord extends AppCompatActivity{
     }
 
     public void addRecordClicked(View v){
-        Records newRecord = new Records();
-        newRecord.set_albumname(albumName.getText().toString());
-        newRecord.set_releaseyear(Integer.valueOf(albumYear.getText().toString()));  // Make record contain year as a string?
-        newRecord.set_bandname(albumBand.getText().toString());
+        if(hasRequiredFields())
+            {
+                Records newRecord = new Records();
+                newRecord.set_albumname(albumName.getText().toString());
 
-        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        dbHandler.addRecord(newRecord);
-        finish();
+                if(!albumYear.getText().toString().equals(""))
+                    newRecord.set_releaseyear(Integer.valueOf(albumYear.getText().toString()));  // Make record contain year as a string?
+                else
+                    newRecord.set_releaseyear(-1);
+                newRecord.set_bandname(albumBand.getText().toString());
+
+                MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+                dbHandler.addRecord(newRecord);
+                finish();
+            }
+    }
+
+    private boolean hasRequiredFields()
+    {
+        boolean hasAllRequiredFields = true;
+        if(albumName.getText().toString().equals("")) {
+            hasAllRequiredFields = false;
+            TextView requiredAstrix = (TextView) findViewById(R.id.textView_RequiredAlbumName);
+            requiredAstrix.setVisibility(View.VISIBLE);
+        }
+        return hasAllRequiredFields;
+    }
+
+    public void addGenreClicked(View v){
+        Intent open_AddGenre = new Intent(AddRecord.this, AddGenre.class);
+        startActivityForResult(open_AddGenre, 1);
+
     }
 }

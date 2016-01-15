@@ -51,15 +51,15 @@ public class MyDBHandler extends SQLiteOpenHelper{
     public void addRecord(Records record){
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
-        values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
+        values.put(COLUMN_ALBUMNAME, record.get_albumname());
         //values.put(COLUMN_GENRE, record.get_genre());
 
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_RECORDS, null, values);
 
-        Cursor c = db.rawQuery("SELECT _id from "+ TABLE_RECORDS + " order by ROWID DESC limit 1", null);
+        Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
 
           //long FOREIGN_KEY_ALBUMID = Long.valueOf(c.getString(c.getColumnIndex("_id")), 0));//.longValue();
@@ -99,12 +99,14 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         while (!c.isAfterLast()){
             if(c.getString(c.getColumnIndex("bandname")) != null){
+               // if(c.getString(c.getColumnIndex("bandname")) != null){
                 dbString += c.getString(c.getColumnIndex("bandname"));
-                dbString += "\n";
+                dbString += "\n";//}
                 dbString += c.getString(c.getColumnIndex("albumname"));
                 dbString += "\n";
+              //  if(c.getString(c.getColumnIndex("releaseyear")) != null){
                 dbString += c.getString(c.getColumnIndex("releaseyear"));
-                dbString += "\n";
+                dbString += "\n";//}
 
                 String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
                                 COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));

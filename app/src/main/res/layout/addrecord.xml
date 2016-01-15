@@ -3,7 +3,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/relativeLayoutAddNoQueue">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,7 +95,8 @@
         android:layout_alignStart="@+id/editText_bandName"
         android:layout_marginTop="36dp"
         android:background="@android:color/transparent"
-        android:src ="@mipmap/ic_add_circle_black_24dp"/>
+        android:src ="@mipmap/ic_add_circle_black_24dp"
+        android:onClick="addGenreClicked"/>
 
     <TextView
         android:layout_width="50dp"
@@ -112,5 +116,17 @@
         android:layout_marginTop="30dp"
         android:layout_below="@+id/textView4"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textColor="#FF0000"
+        android:id="@+id/textView_RequiredAlbumName"
+        android:visibility="gone"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+</RelativeLayout>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ public class Records {
     private int    _releaseyear;
     private ArrayList<String> _genre;
     private String _imageurl;
+    private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
 
     public Records(String bandname){
         this._bandname = bandname;
@@ -33,6 +34,8 @@ public class Records {
 
     public void set_albumname(String _albumname) {
         this._albumname = _albumname;
+        if(_albumname.equals(""))
+            this._albumname = EMPTY_FIELD_DEFAULT;
     }
 
     public void set_genre(ArrayList<String> _genre) {
