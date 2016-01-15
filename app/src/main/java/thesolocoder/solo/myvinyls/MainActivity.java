@@ -1,5 +1,6 @@
 package thesolocoder.solo.myvinyls;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity
         Records record = new Records(buckysInput.getText().toString());
         dbHandler.addRecord(record);
         printDatabase();
+        Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+        startActivity(open_AddRecords);
     }
 
     // Delete record
