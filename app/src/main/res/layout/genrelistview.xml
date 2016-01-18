@@ -18,8 +18,14 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:textSize="25dp"
-        android:layout_weight="9"
+
         android:id="@+id/genreMainCat" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:checked="false"/>
 
 
 </LinearLayout>
