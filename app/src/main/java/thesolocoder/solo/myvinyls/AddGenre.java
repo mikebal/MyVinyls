@@ -43,9 +43,11 @@ public class AddGenre extends AppCompatActivity {
         ArrayList<String> primaryGenres;
         GenreFileManager fileManager = new GenreFileManager(getApplicationContext());
 
+        LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
+
         primaryGenres = fileManager.readInGenres(PRIMARY_GENRE_FILE);
 
-        GenreAdapter customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView);
+        GenreAdapter customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView, checkboxHolder);
         genre_list.setAdapter(customAdapter);
 
     }

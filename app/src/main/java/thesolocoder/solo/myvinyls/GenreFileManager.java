@@ -26,16 +26,18 @@ public class GenreFileManager {
             }
         }
         catch (IOException e) {
-            categories.add("Classical");
-            categories.add("Electronica");
-            categories.add("Hip-Hop");
-            categories.add("Jazz");
-            categories.add("Latin");
-            categories.add("Metal");
-            categories.add("Pop");
-            categories.add("R&B");
-            categories.add("Rock");
-            categories.add("World");
+            if(filename.equals("#genre.txt")) {
+                categories.add("Classical");
+                categories.add("Electronica");
+                categories.add("Hip-Hop");
+                categories.add("Jazz");
+                categories.add("Latin");
+                categories.add("Metal");
+                categories.add("Pop");
+                categories.add("R&B");
+                categories.add("Rock");
+                categories.add("World");
+            }
         }
         return categories;
     }
