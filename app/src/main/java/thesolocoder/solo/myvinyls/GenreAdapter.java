@@ -19,6 +19,7 @@ public class GenreAdapter  extends BaseAdapter {
     LinearLayout selectedLayout;
     LinearLayout checkboxHolder;
     TextView selectedTextView;
+    ArrayList<String> checkedItems  = new ArrayList<>();
 
     public GenreAdapter(Context context, ArrayList<String> data, LinearLayout selectedLayout, TextView slectedTextView,
                         LinearLayout checkboxArea) {
@@ -40,6 +41,8 @@ public class GenreAdapter  extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+    public ArrayList<String> getCheckedItems(){return checkedItems;}
 
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
@@ -73,16 +76,31 @@ public class GenreAdapter  extends BaseAdapter {
         LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
         LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
 
+
+
         String categoryFileName = genreCategories.get(position).toString() + ".txt";
         GenreFileManager fileManager = new GenreFileManager(parent.getContext());
         ArrayList<String> sub_genreElements = fileManager.readInGenres(categoryFileName);
 
-       // sub_genreElements.add("Heavy Metal");
+        sub_genreElements.add("Heavy Metal");
 
 
         for (int i = 0; i < sub_genreElements.size(); i++) {
             CheckBox cb = new CheckBox(parent.getContext());
             cb.setText(sub_genreElements.get(i));
+            cb.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    CheckBox checkedItem = (CheckBox)v;
+                    if(checkedItem.isChecked())
+                        checkedItems.add(checkedItem.getText().toString());
+                    else
+                        checkedItems.remove(checkedItem.getText().toString());
+                }
+
+
+            });
             if (i % 2 == 0)
                 checkboxArea1.addView(cb);
             else
