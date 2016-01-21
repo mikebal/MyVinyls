@@ -1,5 +1,6 @@
 package thesolocoder.solo.myvinyls;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -86,7 +87,11 @@ public class AddGenre extends AppCompatActivity {
         //selectedCategoryTextView.setVisibility(View.VISIBLE);
     }
 
-
+    public void addSubGenreClicked(View v)
+    {
+        Intent open_AddSubGenrePopup = new Intent(AddGenre.this, AddSubGenrePopup.class);
+        startActivityForResult(open_AddSubGenrePopup, 1);
+    }
 
 
 

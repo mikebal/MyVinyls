@@ -119,6 +119,7 @@
         android:text="Sub-Genre"
         android:id="@+id/button3"
         android:visibility="gone"
+        android:onClick="addSubGenreClicked"
         android:layout_alignBottom="@+id/listView_genre"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

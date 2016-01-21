@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:paddingTop="65dp"
+    android:background="#F7abb8b8"
+    android:fillViewport="false">
+
+    <RelativeLayout
+        android:layout_width="350dp"
+        android:layout_height="387dp"
+        android:padding="10dp"
+        android:background="#FFFFFF"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Add Genre:"
+            android:id="@+id/tv_header_delete"
+            android:layout_weight="0.39"
+            android:textSize="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Parent Genre"
+            android:textSize="20dp"
+            android:id="@+id/textView8"
+            android:layout_gravity="center"
+            android:layout_weight="0.39"
+            android:layout_below="@+id/tv_header_delete"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="43dp"
+            android:paddingLeft="15dp" />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_below="@+id/textView8"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/button_confirmDelete"
+
+            android:text="Yes"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:layout_width="170dp"
+            android:layout_height="60dp"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:onClick="addSubGenre"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/tv_header_delete"
+            android:layout_alignEnd="@+id/tv_header_delete" />
+        <Button
+            android:id="@+id/button_cancelDelete"
+
+            android:text="No"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+
+            android:layout_width="170dp"
+            android:layout_height="60dp"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Sub-genre name:"
+            android:id="@+id/textView6"
+            android:paddingLeft="15dp"
+            android:layout_below="@+id/spinner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextNewSubGenre"
+            android:layout_below="@+id/textView6"
+            android:layout_alignLeft="@+id/textView6"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:layout_alignStart="@+id/textView6" />
+
+    </RelativeLayout>
+</ScrollView>
