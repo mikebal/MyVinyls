@@ -1,14 +1,10 @@
 package thesolocoder.solo.myvinyls;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -89,8 +85,13 @@ public class AddGenre extends AppCompatActivity {
         //selectedCategoryTextView.setText(selected.get(0));
         //selectedCategoryTextView.setVisibility(View.VISIBLE);
     }
-
+    public void addSubGenreClicked(View v)
+    {
+        Intent open_AddSubGenrePopup = new Intent(AddGenre.this, AddSubGenrePopup.class);
+        startActivityForResult(open_AddSubGenrePopup, 1);
+    }
     public void addNewGenre(View v){
+
 
 
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
