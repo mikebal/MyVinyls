@@ -57,6 +57,16 @@ public class AddRecord extends AppCompatActivity{
     public void addGenreClicked(View v){
         Intent open_AddGenre = new Intent(AddRecord.this, AddGenre.class);
         startActivityForResult(open_AddGenre, 1);
+    }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                //Use Data to get string
+                String string = data.getStringExtra("returnKey");
+                TextView test = (TextView) findViewById(R.id.textViewTEST);
+                test.setText(string);
+            }
+        }
     }
 }

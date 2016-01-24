@@ -1,22 +1,20 @@
 package thesolocoder.solo.myvinyls;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
-// TO-DO
-// When expanded category hit: - Cut the current list view to end and click possition
-//                             - Show checkbox list for that category
-//                             - Create populate secondary listView with the remainder of the first list view
-//                             - On click outside of Step 2 (dynamic check box area) recreate single list;
 
 public class AddGenre extends AppCompatActivity {
 
@@ -26,6 +24,7 @@ public class AddGenre extends AppCompatActivity {
     ImageButton upArrow;
     private static final String PRIMARY_GENRE_FILE = "#genre.txt";
     GenreAdapter customAdapter;
+    ArrayList<String> selectedGenres = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +33,7 @@ public class AddGenre extends AppCompatActivity {
         setupVariables();
         populateList();
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -45,18 +43,25 @@ public class AddGenre extends AppCompatActivity {
                 button.setVisibility(View.VISIBLE);
                 button = (Button) findViewById(R.id.button3);
                 button.setVisibility(View.VISIBLE);
+                fab.setImageResource(R.mipmap.ic_clear_white_36dp);
             }
         });
 
  }
     public void menuBackgroundClicked(View v){
+        closeOpenMenu();
+    }
+    private void closeOpenMenu(){
         Button   button = (Button) findViewById(R.id.buttonBackGround);
         button.setVisibility(View.GONE);
         button = (Button) findViewById(R.id.button2);
         button.setVisibility(View.GONE);
         button = (Button) findViewById(R.id.button3);
         button.setVisibility(View.GONE);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageResource(R.mipmap.ic_add_white_36dp);
     }
+
 
     private void setupVariables(){
         genre_list = (ListView) findViewById(R.id.listView_genre);
@@ -82,18 +87,20 @@ public class AddGenre extends AppCompatActivity {
         selectedView.setVisibility(View.GONE);
         genre_list.setVisibility(View.VISIBLE);
         ArrayList<String> selected = customAdapter.getCheckedItems();
-        //selectedCategoryTextView.setText(selected.get(0));
-        //selectedCategoryTextView.setVisibility(View.VISIBLE);
+        selectedGenres.addAll(selected);
+        LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
+        LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
+        LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
+        checkboxArea1.removeAllViews();
+        checkboxArea2.removeAllViews();
     }
     public void addSubGenreClicked(View v)
     {
         Intent open_AddSubGenrePopup = new Intent(AddGenre.this, AddSubGenrePopup.class);
         startActivityForResult(open_AddSubGenrePopup, 1);
+        closeOpenMenu();
     }
     public void addNewGenre(View v){
-
-
-
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Adding Genre!");
@@ -111,14 +118,26 @@ public class AddGenre extends AppCompatActivity {
                     if (!value.equals("")) {
                         GenreFileManager genreManager = new GenreFileManager(getApplicationContext());
                         genreManager.addAlphabetically(value, "#genre.txt");
-
+                        closeOpenMenu();
                     } else
                         finish();
-
                 }
             });
             alert.create();
             alert.show();
+    }
+
+    public void doneClicked(View v){
+        Intent intent = new Intent();
+        String returnValue = "";
+        selectedGenres = customAdapter.getCheckedItems();
+        for(int i = 0; i < selectedGenres.size(); i++)
+        {
+            returnValue += selectedGenres.get(i) + "\n";
+        }
+        intent.putExtra("returnKey", returnValue);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
 }

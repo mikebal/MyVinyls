@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class GenreAdapter  extends BaseAdapter {
@@ -20,6 +19,7 @@ public class GenreAdapter  extends BaseAdapter {
     LinearLayout checkboxHolder;
     TextView selectedTextView;
     ArrayList<String> checkedItems  = new ArrayList<>();
+  //  int lastExpanded;
 
     public GenreAdapter(Context context, ArrayList<String> data, LinearLayout selectedLayout, TextView slectedTextView,
                         LinearLayout checkboxArea) {
@@ -49,7 +49,19 @@ public class GenreAdapter  extends BaseAdapter {
         //return super.getView(position, convertView, parent);
 
         final View customView = inflator.inflate(R.layout.genrelistview, parent, false);
-        TextView category = (TextView) customView.findViewById(R.id.genreMainCat);
+        final TextView category = (TextView) customView.findViewById(R.id.genreMainCat);
+        final CheckBox mainGenereCheckBox = (CheckBox) customView.findViewById(R.id.checkBox);
+        mainGenereCheckBox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                CheckBox checkedItem = (CheckBox)v;
+                if(checkedItem.isChecked())
+                    checkedItems.add(category.getText().toString());
+                else
+                    checkedItems.remove(category.getText().toString());
+            }
+        });
         String item = getItem(position);
         category.setText(item);
 
@@ -59,7 +71,10 @@ public class GenreAdapter  extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                handleCategoryExpansion(v, position, convertView, parent);
+
+                boolean isChecked = mainGenereCheckBox.isChecked();
+               // lastExpanded = position;
+                handleCategoryExpansion(v, position, convertView, parent, isChecked);
             }
 
 
@@ -69,21 +84,43 @@ public class GenreAdapter  extends BaseAdapter {
 
     }
 
-    public void handleCategoryExpansion(View v, final int position, View convertView, final ViewGroup parent) {
+
+    public void handleCategoryExpansion(View v, final int position, final View convertView, final ViewGroup parent, boolean isMainCategoryChecked) {
         selectedTextView.setText(genreCategories.get(position));
         parent.setVisibility(View.GONE);
         selectedLayout.setVisibility(View.VISIBLE);
+
+        CheckBox mainGenerCheckBox = (CheckBox) selectedLayout.findViewById(R.id.checkBox);
+        mainGenerCheckBox.setChecked(false);
+        if(isMainCategoryChecked)
+            mainGenerCheckBox.setChecked(true);
+        mainGenerCheckBox.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                CheckBox checkedItem = (CheckBox) v;
+                if (checkedItem.isChecked()) {
+                    checkedItems.add(selectedTextView.getText().toString());
+                    CheckBox parentBox = (CheckBox) parent.getChildAt(position).findViewById(R.id.checkBox);
+                    parentBox.setChecked(true);
+                }
+                else {
+                    checkedItems.remove(selectedTextView.getText().toString());
+                    checkedItems.add(selectedTextView.getText().toString());
+                    CheckBox parentBox = (CheckBox) parent.getChildAt(position).findViewById(R.id.checkBox);
+                    parentBox.setChecked(false);
+                }
+            }
+
+
+        });
+
         LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
         LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
 
-
-
-        String categoryFileName = genreCategories.get(position).toString() + ".txt";
+        String categoryFileName = "#" + genreCategories.get(position).toString() + ".txt";
         GenreFileManager fileManager = new GenreFileManager(parent.getContext());
         ArrayList<String> sub_genreElements = fileManager.readInGenres(categoryFileName);
-
-        sub_genreElements.add("Heavy Metal");
-
 
         for (int i = 0; i < sub_genreElements.size(); i++) {
             CheckBox cb = new CheckBox(parent.getContext());

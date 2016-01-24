@@ -59,14 +59,14 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:orientation="vertical"
-        android:background="#F1234C"
         android:layout_weight="1"
         android:id="@+id/LinearLayoutCheckboxArea1"/>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#FA6A1A"
+            android:layout_marginTop="40dp"
             android:layout_weight="1"
             android:orientation="vertical"
             android:id="@+id/LinearLayoutCheckboxArea2"/>
@@ -108,10 +108,10 @@
         android:id="@+id/button2"
         android:onClick="addNewGenre"
         android:visibility="gone"
-        android:layout_alignBottom="@+id/listView_genre"
+        android:layout_marginBottom="59dp"
+        android:layout_marginTop="380dp"
         android:layout_alignRight="@+id/fab"
-        android:layout_alignEnd="@+id/fab"
-        android:layout_marginBottom="60dp" />
+        android:layout_alignEnd="@+id/fab" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -119,12 +119,19 @@
         android:layout_height="wrap_content"
         android:text="Sub-Genre"
         android:id="@+id/button3"
-        android:onClick="addNewSubGenre"
         android:visibility="gone"
         android:onClick="addSubGenreClicked"
-        android:layout_alignBottom="@+id/listView_genre"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginTop="435dp"
+        android:layout_alignRight="@+id/fab"
+        android:layout_alignEnd="@+id/fab"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/button4"
+        android:onClick="doneClicked"
+        android:layout_alignBottom="@+id/fab"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
