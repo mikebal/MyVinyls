@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        buckysInput = (EditText) findViewById(R.id.editText_Input);
         myTextViewl = (TextView) findViewById(R.id.buckysText);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         printDatabase();
@@ -41,8 +40,8 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                startActivity(open_AddRecords);
             }
         });
 
@@ -54,14 +53,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-    // Add a record to the database
-    public void addButtonCliked(View view){
-     //   Records record = new Records(buckysInput.getText().toString());
-      //  dbHandler.addRecord(record);
-       // printDatabase();
-        Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-        startActivity(open_AddRecords);
     }
 
     // Delete record
@@ -75,9 +66,14 @@ public class MainActivity extends AppCompatActivity
     public void printDatabase(){
         String dbString = dbHandler.databseToString();
         myTextViewl.setText(dbString);
-        buckysInput.setText("");
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        printDatabase();
+    }
 
     @Override
     public void onBackPressed() {

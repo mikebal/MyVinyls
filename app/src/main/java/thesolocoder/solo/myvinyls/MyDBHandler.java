@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+
 public class MyDBHandler extends SQLiteOpenHelper{
 
     private static final int DATABASE_VERSION = 1;
@@ -53,8 +55,6 @@ public class MyDBHandler extends SQLiteOpenHelper{
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
-        //values.put(COLUMN_GENRE, record.get_genre());
-
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_RECORDS, null, values);
@@ -67,10 +67,12 @@ public class MyDBHandler extends SQLiteOpenHelper{
             if(album_id != "-1") {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
-                values.put(COLUMN_GENRE, "TEST");
-                db.insert(TABLE_GENRES, null, values);
-                values.put(COLUMN_GENRE, "SWAG");
-                db.insert(TABLE_GENRES, null, values);
+                if(record.get_genre() != null)
+                    for(int i = 0; i < record.get_genre().size(); i++)
+                    {
+                        values.put(COLUMN_GENRE, record.get_genre().get(i));
+                        db.insert(TABLE_GENRES, null, values);
+                    }
             }
         }
         c.close();

@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class AddRecord extends AppCompatActivity{
 
     EditText albumName, albumYear, albumBand;
+    ArrayList<String> genres = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,9 @@ public class AddRecord extends AppCompatActivity{
                     newRecord.set_releaseyear(Integer.valueOf(albumYear.getText().toString()));  // Make record contain year as a string?
                 else
                     newRecord.set_releaseyear(-1);
-                newRecord.set_bandname(albumBand.getText().toString());
 
+                newRecord.set_bandname(albumBand.getText().toString());
+                newRecord.set_genre(genres);
                 MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
                 dbHandler.addRecord(newRecord);
                 finish();
@@ -62,11 +65,15 @@ public class AddRecord extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                //Use Data to get string
-                String string = data.getStringExtra("returnKey");
-                TextView test = (TextView) findViewById(R.id.textViewTEST);
-                test.setText(string);
+                String returnedData = data.getStringExtra("returnKey");
+                newLineStringToArrayList(returnedData);
             }
         }
+    }
+    private void newLineStringToArrayList(String stringToParse)
+    {
+        StringTokenizer tokens = new StringTokenizer(stringToParse, "\n");
+        while(tokens.hasMoreTokens())
+            genres.add(tokens.nextToken());
     }
 }
