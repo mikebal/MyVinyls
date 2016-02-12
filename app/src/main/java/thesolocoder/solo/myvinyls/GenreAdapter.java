@@ -76,8 +76,6 @@ public class GenreAdapter  extends BaseAdapter {
                // lastExpanded = position;
                 handleCategoryExpansion(v, position, convertView, parent, isChecked);
             }
-
-
         });
 
         return customView;
