@@ -48,13 +48,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
     }
 
     // Add new row to the database
-    public void addRecord(Records record){
+    public String addRecord(Records record){
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         //values.put(COLUMN_GENRE, record.get_genre());
-
+        String album_id = "-1";
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_RECORDS, null, values);
@@ -63,7 +63,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         if (c.moveToFirst()) {
 
           //long FOREIGN_KEY_ALBUMID = Long.valueOf(c.getString(c.getColumnIndex("_id")), 0));//.longValue();
-           String album_id = c.getString(c.getColumnIndex("_id"));
+            album_id = c.getString(c.getColumnIndex("_id"));
             if(album_id != "-1") {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
@@ -75,6 +75,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
         }
         c.close();
         db.close();
+
+        return album_id;
     }
 
     //Delete a record from the database

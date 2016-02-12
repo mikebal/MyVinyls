@@ -1,7 +1,10 @@
 package thesolocoder.solo.myvinyls;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,7 +17,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -31,11 +37,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        buckysInput = (EditText) findViewById(R.id.editText_Input);
+        //buckysInput = (EditText) findViewById(R.id.editText_Input);
         myTextViewl = (TextView) findViewById(R.id.buckysText);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         printDatabase();
-
+        loadImage();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity
     public void printDatabase(){
         String dbString = dbHandler.databseToString();
         myTextViewl.setText(dbString);
-        buckysInput.setText("");
+//        buckysInput.setText("");
     }
 
 
@@ -130,5 +136,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void loadImage() {
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Imagename.jpg";
+        Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
+        ImageView myImageView = (ImageView) findViewById(R.id.imageViewMAIN);
+        myImageView.setImageBitmap(bitmap);
     }
 }
