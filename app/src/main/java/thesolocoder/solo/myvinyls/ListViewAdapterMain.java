@@ -48,12 +48,12 @@ class ListViewAdapterMain extends BaseAdapter {
         albumName.setText(record.get_albumname());
         bandName.setText(record.get_bandname());
         albumYear.setText(record.get_releaseyear());
-        loadImage(albumCover);
+        loadImage(albumCover, record.get_imageurl());
 
         return customView;
     }
-    private void loadImage(ImageView albumCover) {
-        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + "7" + ".jpg";
+    private void loadImage(ImageView albumCover, String fileName) {
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
         albumCover.setImageBitmap(bitmap);
     }

@@ -13,40 +13,11 @@
     tools:showIn="@layout/app_bar_main">
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete"
-        android:id="@+id/deleteButton"
-        android:onClick="deleteButtonClicked"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/buckysText"
-        android:layout_below="@+id/deleteButton"
-        android:layout_alignLeft="@+id/deleteButton"
-        android:layout_alignStart="@+id/deleteButton" />
-
-    <ImageView
-        android:layout_width="150dip"
-        android:layout_height="150dip"
-        android:id="@+id/imageViewMAIN"
-        android:background="#000000"
-        android:adjustViewBounds="false"
-        android:layout_alignBottom="@+id/buckysText"
-        android:layout_toLeftOf="@+id/deleteButton"
-        android:layout_toStartOf="@+id/deleteButton" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewMainDisplay"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/buckysText" />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
