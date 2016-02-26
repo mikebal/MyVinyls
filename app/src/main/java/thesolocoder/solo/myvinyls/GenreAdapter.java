@@ -19,7 +19,6 @@ public class GenreAdapter  extends BaseAdapter {
     LinearLayout checkboxHolder;
     TextView selectedTextView;
     ArrayList<String> checkedItems  = new ArrayList<>();
-  //  int lastExpanded;
 
     public GenreAdapter(Context context, ArrayList<String> data, LinearLayout selectedLayout, TextView slectedTextView,
                         LinearLayout checkboxArea) {
@@ -46,8 +45,6 @@ public class GenreAdapter  extends BaseAdapter {
 
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
-        //return super.getView(position, convertView, parent);
-
         final View customView = inflator.inflate(R.layout.genrelistview, parent, false);
         final TextView category = (TextView) customView.findViewById(R.id.genreMainCat);
         final CheckBox mainGenereCheckBox = (CheckBox) customView.findViewById(R.id.checkBox);
@@ -71,28 +68,23 @@ public class GenreAdapter  extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-
                 boolean isChecked = mainGenereCheckBox.isChecked();
-               // lastExpanded = position;
                 handleCategoryExpansion(v, position, convertView, parent, isChecked);
             }
         });
-
         return customView;
-
     }
-
 
     public void handleCategoryExpansion(View v, final int position, final View convertView, final ViewGroup parent, boolean isMainCategoryChecked) {
         selectedTextView.setText(genreCategories.get(position));
         parent.setVisibility(View.GONE);
         selectedLayout.setVisibility(View.VISIBLE);
 
-        CheckBox mainGenerCheckBox = (CheckBox) selectedLayout.findViewById(R.id.checkBox);
-        mainGenerCheckBox.setChecked(false);
+        CheckBox mainGenreCheckBox = (CheckBox) selectedLayout.findViewById(R.id.checkBox);
+        mainGenreCheckBox.setChecked(false);
         if(isMainCategoryChecked)
-            mainGenerCheckBox.setChecked(true);
-        mainGenerCheckBox.setOnClickListener(new View.OnClickListener() {
+            mainGenreCheckBox.setChecked(true);
+        mainGenreCheckBox.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,16 +17,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     EditText buckysInput;
-    TextView myTextViewl;
+    //TextView myTextViewl;
     MyDBHandler dbHandler;
+    ListView  recordDisplayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +37,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        //buckysInput = (EditText) findViewById(R.id.editText_Input);
-        myTextViewl = (TextView) findViewById(R.id.buckysText);
+     //   myTextViewl = (TextView) findViewById(R.id.buckysText);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         printDatabase();
         loadImage();
+        populateList();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                startActivity(open_AddRecords);
             }
         });
 
@@ -61,14 +61,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-    // Add a record to the database
-    public void addButtonCliked(View view){
-     //   Records record = new Records(buckysInput.getText().toString());
-      //  dbHandler.addRecord(record);
-       // printDatabase();
-        Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-        startActivity(open_AddRecords);
-    }
 
     // Delete record
     public void deleteButtonClicked(View view){
@@ -80,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
     public void printDatabase(){
         String dbString = dbHandler.databseToString();
-        myTextViewl.setText(dbString);
+     //   myTextViewl.setText(dbString);
 //        buckysInput.setText("");
     }
 
@@ -138,9 +130,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     private void loadImage() {
-        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Imagename.jpg";
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + "7" + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
         ImageView myImageView = (ImageView) findViewById(R.id.imageViewMAIN);
         myImageView.setImageBitmap(bitmap);
+    }
+    private void populateList() {
+        recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
+        ArrayList<Records> recordList = new ArrayList<>();
+        recordList = dbHandler.databseToList();
+       // logFiles = logHandler.readInPurchaseLog(fileName + ".txt", false);
+        ListViewAdapterMain customAdapter = new ListViewAdapterMain(this, recordList);
+        recordDisplayList.setAdapter(customAdapter);
+        customAdapter.notifyDataSetChanged();
     }
 }

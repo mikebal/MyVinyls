@@ -7,7 +7,7 @@ public class Records {
     private int _id;
     private String _bandname;
     private String _albumname;
-    private int    _releaseyear;
+    private String    _releaseyear;
     private ArrayList<String> _genre;
     private String _imageurl;
     private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
@@ -28,7 +28,7 @@ public class Records {
         this._bandname = _bandname;
     }
 
-    public void set_releaseyear(int _releaseyear) {
+    public void set_releaseyear(String _releaseyear) {
         this._releaseyear = _releaseyear;
     }
 
@@ -52,7 +52,7 @@ public class Records {
         return _albumname;
     }
 
-    public int get_releaseyear() {
+    public String get_releaseyear() {
         return _releaseyear;
     }
 

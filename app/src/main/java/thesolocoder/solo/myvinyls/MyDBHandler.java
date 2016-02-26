@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+import java.util.ArrayList;
 
 public class MyDBHandler extends SQLiteOpenHelper{
 
@@ -61,15 +62,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
-
-          //long FOREIGN_KEY_ALBUMID = Long.valueOf(c.getString(c.getColumnIndex("_id")), 0));//.longValue();
             album_id = c.getString(c.getColumnIndex("_id"));
             if(album_id != "-1") {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, "TEST");
                 db.insert(TABLE_GENRES, null, values);
-                values.put(COLUMN_GENRE, "SWAG");
+                values.put(COLUMN_GENRE, "TEST2");
                 db.insert(TABLE_GENRES, null, values);
             }
         }
@@ -101,14 +100,12 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         while (!c.isAfterLast()){
             if(c.getString(c.getColumnIndex("bandname")) != null){
-               // if(c.getString(c.getColumnIndex("bandname")) != null){
                 dbString += c.getString(c.getColumnIndex("bandname"));
-                dbString += "\n";//}
+                dbString += "\n";
                 dbString += c.getString(c.getColumnIndex("albumname"));
                 dbString += "\n";
-              //  if(c.getString(c.getColumnIndex("releaseyear")) != null){
                 dbString += c.getString(c.getColumnIndex("releaseyear"));
-                dbString += "\n";//}
+                dbString += "\n";
 
                 String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
                                 COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));
@@ -121,13 +118,50 @@ public class MyDBHandler extends SQLiteOpenHelper{
                     }
                     genre_cursor.moveToNext();
                 }
-
-//                dbString += c.getString(c.getColumnIndex("genre"));
- //               dbString += "\n";
             }
             c.moveToNext();
         }
         db.close();
         return dbString;
+    }
+    public ArrayList<Records> databseToList(){
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
+        ArrayList<Records> recordList = new ArrayList<>();
+        ArrayList<String> generes = new ArrayList<>();
+        Records listEntry;
+        //Cursor point to a location in your result
+        Cursor c = db.rawQuery(query, null);
+        Cursor genre_cursor;
+        // Move to the first row in your result
+        c.moveToFirst();
+
+        while (!c.isAfterLast()){
+            if(c.getString(c.getColumnIndex("bandname")) != null){
+                listEntry = new Records();
+                generes = new ArrayList<>();
+                listEntry.set_bandname(c.getString(c.getColumnIndex("bandname")));
+                listEntry.set_albumname(c.getString(c.getColumnIndex("albumname")));
+                listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
+                listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
+
+                String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
+                        COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));
+                genre_cursor = db.rawQuery(genre_querey, null);
+                genre_cursor.moveToFirst();
+                while (!genre_cursor.isAfterLast()){
+                    if(genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null){
+                        generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
+                    }
+                    genre_cursor.moveToNext();
+                }
+                listEntry.set_genre(generes);
+                recordList.add(listEntry);
+            }
+            c.moveToNext();
+        }
+        db.close();
+        return recordList;
     }
 }
