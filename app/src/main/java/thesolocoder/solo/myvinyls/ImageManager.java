@@ -31,7 +31,7 @@ public class ImageManager {
         return cursor.getInt(0);
     }
 
-    public static Bitmap getCorrectlyOrientedImage(Context context, Uri photoUri, int forcedOrientation) throws IOException {
+    public Bitmap getCorrectlyOrientedImage(Context context, Uri photoUri, int forcedOrientation) throws IOException {
         int MAX_IMAGE_DIMENSION = 150;
         InputStream is = context.getContentResolver().openInputStream(photoUri);
         BitmapFactory.Options dbo = new BitmapFactory.Options();

@@ -105,26 +105,26 @@ public class AddRecord extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            imageOrientation = 0;
             if(requestCode == 777)
                 mPhotoUri = data.getData();
-            try {
-                ImageManager imageManager = new ImageManager();
-                albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, 0);
-                albumArtwork.setImageBitmap(albumCover);
-            }
-            catch (Exception e){}
+           loadAndSetImage();
         }
     }
-    public void rotateImageRightClicked(View v) {
-        ImageManager imageManager = new ImageManager();
+    public void rotateImageRightClicked(View v){
         imageOrientation += 90;
         if(imageOrientation > 270)
             imageOrientation = 0;
-
+        loadAndSetImage();
+    }
+    private void loadAndSetImage(){
         try {
-             albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, imageOrientation);
-             albumArtwork.setImageBitmap(albumCover);
-            }
-        catch (Exception e){}
+            ImageManager imageManager = new ImageManager();
+            albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, imageOrientation);
+            albumArtwork.setImageBitmap(albumCover);
+        }
+        catch (Exception e){
+            albumArtwork.setImageResource(R.mipmap.ic_report_black_24dp);
+        }
     }
 }
