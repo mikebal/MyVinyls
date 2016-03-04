@@ -1,6 +1,7 @@
 package thesolocoder.solo.myvinyls;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,13 +13,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import java.io.ByteArrayOutputStream;
 
 public class AddRecord extends AppCompatActivity {
 
     EditText albumName, albumYear, albumBand;
     ImageButton albumArtwork;
     Bitmap albumCover;
+    Uri mPhotoUri = null;
+    int imageOrientation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +85,14 @@ public class AddRecord extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
+                    mPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 666);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+                    startActivityForResult(intent,666);
                 } else if (items[item].equals("Choose from Library")) {
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
-                            777);
+                    startActivityForResult(Intent.createChooser(intent, "Select File"),777);
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -105,23 +105,26 @@ public class AddRecord extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == 666) {
-                albumCover = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                albumCover.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+            if(requestCode == 777)
+                mPhotoUri = data.getData();
+            try {
+                ImageManager imageManager = new ImageManager();
+                albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, 0);
                 albumArtwork.setImageBitmap(albumCover);
-            } else if (requestCode == 777) {
-
-                Uri selectedImageUri = data.getData();
-                try {
-                    ImageManager imageManager = new ImageManager();
-                    albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), selectedImageUri);
-                    albumArtwork.setImageBitmap(albumCover);
-                }
-               catch (Exception e){
-
-               }
             }
+            catch (Exception e){}
         }
+    }
+    public void rotateImageRightClicked(View v) {
+        ImageManager imageManager = new ImageManager();
+        imageOrientation += 90;
+        if(imageOrientation > 270)
+            imageOrientation = 0;
+
+        try {
+             albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, imageOrientation);
+             albumArtwork.setImageBitmap(albumCover);
+            }
+        catch (Exception e){}
     }
 }

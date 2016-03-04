@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     private void populateList() {
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
         ArrayList<Records> recordList = new ArrayList<>();
-        recordList = dbHandler.databseToList();
+        recordList = dbHandler.databaseToList();
         ListViewAdapterMain customAdapter = new ListViewAdapterMain(this, recordList);
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();

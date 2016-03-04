@@ -124,9 +124,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.close();
         return dbString;
     }
-    public ArrayList<Records> databseToList(){
-        String dbString = "";
-        SQLiteDatabase db = getWritableDatabase();
+    public ArrayList<Records> databaseToList(){
+             SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes = new ArrayList<>();
