@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -108,6 +109,12 @@ public class AddRecord extends AppCompatActivity {
             imageOrientation = 0;
             if(requestCode == 777)
                 mPhotoUri = data.getData();
+            else
+            {
+                SharedPreferences savedData;
+                savedData = getApplicationContext().getSharedPreferences("savedData", 0);// save data
+                imageOrientation = savedData.getInt("camera_correction", 0);
+            }
            loadAndSetImage();
         }
     }
@@ -115,6 +122,13 @@ public class AddRecord extends AppCompatActivity {
         imageOrientation += 90;
         if(imageOrientation > 270)
             imageOrientation = 0;
+
+        SharedPreferences savedData;
+        savedData = getApplicationContext().getSharedPreferences("savedData", 0);// save data
+        SharedPreferences.Editor editor = savedData.edit();
+        editor.putInt("camera_correction", imageOrientation);
+        editor.apply();
+
         loadAndSetImage();
     }
     private void loadAndSetImage(){
