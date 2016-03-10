@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity
 
     MyDBHandler dbHandler;
     ListView  recordDisplayList;
+    ListViewAdapterMain customAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setListClickListener();
     }
 
     @Override
@@ -84,8 +88,23 @@ public class MainActivity extends AppCompatActivity
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
         ArrayList<Records> recordList = new ArrayList<>();
         recordList = dbHandler.databaseToList();
-        ListViewAdapterMain customAdapter = new ListViewAdapterMain(this, recordList);
+        customAdapter = new ListViewAdapterMain(this, recordList);
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
+    }
+
+    private void setListClickListener(){
+        recordDisplayList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View v, int position,
+                                    long arg3)
+            {
+                Records selected = (Records)adapter.getItemAtPosition(position);
+                Intent open_EditRecords = new Intent(MainActivity.this, EditRecord.class);
+                open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_id()));
+                startActivity(open_EditRecords);
+            }
+        });
     }
 }

@@ -57,4 +57,5 @@ class ListViewAdapterMain extends BaseAdapter {
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
         albumCover.setImageBitmap(bitmap);
     }
+
 }
