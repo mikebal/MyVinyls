@@ -27,12 +27,10 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         String query = "CREATE TABLE " + TABLE_RECORDS + "(" + COLUMN_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         COLUMN_ALBUMNAME + " TEXT, " +
                         COLUMN_BANDNAME + " TEXT, " +
                         COLUMN_RELEASEYEAR + " INTEGER, " +
-                        /*COLUMN_GENRE + " TEXT, " +*/
                         COLUMN_URL +" TEXT" + ");";
         db.execSQL(query);
 
@@ -48,13 +46,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    // Add new row to the database
     public String addRecord(Records record){
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
-        //values.put(COLUMN_GENRE, record.get_genre());
         String album_id = "-1";
 
         SQLiteDatabase db = getWritableDatabase();
@@ -63,7 +59,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
-            if(album_id != "-1") {
+            if(!album_id.equals("-1")) {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, "TEST");
@@ -74,7 +70,6 @@ public class MyDBHandler extends SQLiteOpenHelper{
         }
         c.close();
         db.close();
-
         return album_id;
     }
 
@@ -125,7 +120,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return dbString;
     }
     public ArrayList<Records> databaseToList(){
-             SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes = new ArrayList<>();
@@ -162,5 +157,49 @@ public class MyDBHandler extends SQLiteOpenHelper{
         }
         db.close();
         return recordList;
+    }
+
+    public Records getRecordByID(String id) {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=" + id;
+        Records selectedRecord = new Records();
+        ArrayList<String> generes = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        Cursor genre_cursor;
+        c.moveToFirst();
+        if (c.getString(c.getColumnIndex("bandname")) != null) {
+            selectedRecord.set_bandname(c.getString(c.getColumnIndex("bandname")));
+            selectedRecord.set_albumname(c.getString(c.getColumnIndex("albumname")));
+            selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
+            selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
+
+            String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
+                    COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
+            genre_cursor = db.rawQuery(genre_querey, null);
+            genre_cursor.moveToFirst();
+            while (!genre_cursor.isAfterLast()) {
+                if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
+                    generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
+                }
+                genre_cursor.moveToNext();
+            }
+            selectedRecord.set_genre(generes);
+        }
+        c.moveToNext();
+        db.close();
+
+        return selectedRecord;
+    }
+
+    public void updateRecord(Records record){
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor c=  db.rawQuery("UPDATE " + TABLE_RECORDS + " SET " + COLUMN_BANDNAME + "='" +record.get_bandname() +
+                "', " + COLUMN_ALBUMNAME + "='" + record.get_albumname() +
+                "'," + COLUMN_RELEASEYEAR +"='" + record.get_releaseyear() +
+                "' WHERE _id='" + record.get_id() +"'", null);
+        c.moveToFirst();
+        c.close();
+        db.close();
     }
 }

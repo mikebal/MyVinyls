@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
                 startActivity(open_AddRecords);
             }
         });
@@ -101,8 +102,8 @@ public class MainActivity extends AppCompatActivity
                                     long arg3)
             {
                 Records selected = (Records)adapter.getItemAtPosition(position);
-                Intent open_EditRecords = new Intent(MainActivity.this, EditRecord.class);
-                open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_id()));
+                Intent open_EditRecords = new Intent(MainActivity.this, AddRecord.class);
+                open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
                 startActivity(open_EditRecords);
             }
         });

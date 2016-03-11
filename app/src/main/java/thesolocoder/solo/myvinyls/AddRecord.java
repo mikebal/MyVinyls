@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -22,12 +23,14 @@ public class AddRecord extends AppCompatActivity {
     Bitmap albumCover;
     Uri mPhotoUri = null;
     int imageOrientation = 0;
+    String editCall = "-1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addrecord);
         setupVariables();
+        manageIfEdit();
     }
 
     private void setupVariables() {
@@ -50,7 +53,13 @@ public class AddRecord extends AppCompatActivity {
             newRecord.set_bandname(albumBand.getText().toString());
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-            newAlbumID = dbHandler.addRecord(newRecord);
+            if(editCall.equals("-1"))
+                newAlbumID = dbHandler.addRecord(newRecord);
+            else{
+                newAlbumID = editCall;
+                newRecord.set_id(editCall);
+                dbHandler.updateRecord(newRecord);
+            }
             if(albumCover != null) {
                 ImageManager imageManager = new ImageManager();
                 imageManager.saveImageToFile(albumCover, newAlbumID);
@@ -109,8 +118,7 @@ public class AddRecord extends AppCompatActivity {
             imageOrientation = 0;
             if(requestCode == 777)
                 mPhotoUri = data.getData();
-            else
-            {
+            else{
                 SharedPreferences savedData;
                 savedData = getApplicationContext().getSharedPreferences("savedData", 0);// save data
                 imageOrientation = savedData.getInt("camera_correction", 0);
@@ -128,7 +136,6 @@ public class AddRecord extends AppCompatActivity {
         SharedPreferences.Editor editor = savedData.edit();
         editor.putInt("camera_correction", imageOrientation);
         editor.apply();
-
         loadAndSetImage();
     }
     private void loadAndSetImage(){
@@ -136,9 +143,31 @@ public class AddRecord extends AppCompatActivity {
             ImageManager imageManager = new ImageManager();
             albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, imageOrientation);
             albumArtwork.setImageBitmap(albumCover);
-        }
-        catch (Exception e){
+        }catch (Exception e){
             albumArtwork.setImageResource(R.mipmap.ic_report_black_24dp);
         }
+    }
+    //******************************************************************************************
+    private void manageIfEdit(){
+        Bundle extras = getIntent().getExtras();
+        String _id = extras.getString("toEditID");
+        if(_id.equals("New Entry"))
+            return;
+        editCall = _id;
+        loadRecordToEdit(_id);
+        changeButtonTextToSave();
+    }
+    private void loadRecordToEdit(String _id){
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        Records recordToEdit = dbHandler.getRecordByID(_id);
+        albumName.setText(recordToEdit.get_albumname());
+        albumBand.setText(recordToEdit.get_bandname());
+        albumYear.setText(recordToEdit.get_releaseyear());
+        mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
+    }
+    private void changeButtonTextToSave()
+    {
+        Button saveButton = (Button) findViewById(R.id.button);
+        saveButton.setText(R.string.save);
     }
 }

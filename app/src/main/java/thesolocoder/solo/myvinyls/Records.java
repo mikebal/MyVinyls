@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Records {
 
-    private int _id;
+    private String _id;
     private String _bandname;
     private String _albumname;
     private String    _releaseyear;
@@ -20,7 +20,7 @@ public class Records {
 
     }
 
-    public void set_id(int _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 
@@ -44,7 +44,7 @@ public class Records {
 
     public void set_imageurl(String _imageurl){ this._imageurl = _imageurl; }
 
-    public int get_id() { return _id; }
+    public String get_id() { return _id; }
 
     public String get_bandname() { return _bandname; }
 
