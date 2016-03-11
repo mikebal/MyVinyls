@@ -74,12 +74,12 @@ public class MyDBHandler extends SQLiteOpenHelper{
     }
 
     //Delete a record from the database
-    public void deleteRecord(String albumName)
+  /*  public void deleteRecord(String albumName)
     {
         albumName = "The black album";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ALBUMNAME + "=\"" + albumName + "\";");
-    }
+    }*/
 
     //Print out database as a string
     public  String databseToString(){
@@ -201,5 +201,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
         c.moveToFirst();
         c.close();
         db.close();
+    }
+    //Delete a record from the database
+    public void deleteRecord(String _id)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
     }
 }
