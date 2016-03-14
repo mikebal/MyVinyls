@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         populateList();
 
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.startAnimation(animRotate);
                 Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
                 open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
                 startActivity(open_AddRecords);
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity
 
     private void populateList() {
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-        ArrayList<Records> recordList = new ArrayList<>();
+        ArrayList<Records> recordList;
         recordList = dbHandler.databaseToList();
         customAdapter = new ListViewAdapterMain(this, recordList);
         recordDisplayList.setAdapter(customAdapter);

@@ -5,4 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="save">Save</string>
     <string name="action_settings">Settings</string>
+    <string name="artists">Artists</string>
+    <string name="genres">Genres</string>
+    <string name="albums">Albums</string>
+    <string name="Underline_artists"><u>Artists</u></string>
+    <string name="Underline_genres"><u>Genres</u></string>
+    <string name="Underline_albums"><u>Albums</u></string>
+
 </resources>
