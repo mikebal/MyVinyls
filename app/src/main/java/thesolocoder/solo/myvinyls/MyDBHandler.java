@@ -73,55 +73,26 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return album_id;
     }
 
-    //Delete a record from the database
-  /*  public void deleteRecord(String albumName)
+    private String getQuery(String request)
     {
-        albumName = "The black album";
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ALBUMNAME + "=\"" + albumName + "\";");
-    }*/
+        String relatedQuery = "";
+        String queryNewest = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
+        final String baseQuery = "SELECT * FROM " + TABLE_RECORDS + " ORDER BY ";
 
-    //Print out database as a string
-    public  String databseToString(){
-        String dbString = "";
-        SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
+        if(request.equals("ALBUM"))
+            relatedQuery = baseQuery + COLUMN_ALBUMNAME;
+        else if(request.equals("BAND"))
+            relatedQuery = baseQuery + COLUMN_BANDNAME;
+        else if(request.equals("GENRES"))  // THis needs to be changed to
+            relatedQuery = queryNewest;
 
-        //Cursor point to a location in your result
-        Cursor c = db.rawQuery(query, null);
-        Cursor genre_cursor;
-        // Move to the first row in your result
-        c.moveToFirst();
-
-        while (!c.isAfterLast()){
-            if(c.getString(c.getColumnIndex("bandname")) != null){
-                dbString += c.getString(c.getColumnIndex("bandname"));
-                dbString += "\n";
-                dbString += c.getString(c.getColumnIndex("albumname"));
-                dbString += "\n";
-                dbString += c.getString(c.getColumnIndex("releaseyear"));
-                dbString += "\n";
-
-                String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
-                                COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));
-                genre_cursor = db.rawQuery(genre_querey, null);
-                genre_cursor.moveToFirst();
-                while (!genre_cursor.isAfterLast()){
-                    if(genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null){
-                        dbString += genre_cursor.getString(genre_cursor.getColumnIndex("genre"));
-                        dbString += "\n";
-                    }
-                    genre_cursor.moveToNext();
-                }
-            }
-            c.moveToNext();
-        }
-        db.close();
-        return dbString;
+        return relatedQuery;
     }
-    public ArrayList<Records> databaseToList(){
+
+    public ArrayList<Records> databaseToList(String request){
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
+        //String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
+        String query = getQuery(request);
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes = new ArrayList<>();
         Records listEntry;
