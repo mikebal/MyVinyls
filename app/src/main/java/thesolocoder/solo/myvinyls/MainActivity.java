@@ -1,5 +1,7 @@
 package thesolocoder.solo.myvinyls;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity
     ListViewAdapterMain customAdapter;
     int menuID_ADD;
     EditText inputSearch;
-    boolean fistRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,31 +110,36 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final LinearLayout tabBar = (LinearLayout) findViewById(R.id.linearLayout);
-        Animation animTranslate = AnimationUtils.loadAnimation(this, R.anim.anim_translate);
-        Animation animTranslate1 = AnimationUtils.loadAnimation(this, R.anim.anim_translatein);
-        animTranslate.setAnimationListener(new Animation.AnimationListener() {
-
-            public void onAnimationEnd(Animation anim) {
-                tabBar.getRootView().clearAnimation();   // to get rid of flicker at end of animation
-                tabBar.setVisibility(View.GONE);
-
-                findViewById(R.id.linearLayoutSearchBar).setVisibility(View.VISIBLE);
-            }
-
-            public void onAnimationRepeat(Animation arg0) {
-                tabBar.setVisibility(View.GONE);
-
-            }
-
-            public void onAnimationStart(Animation arg0) {
-            }
-
-        });
-
-        tabBar.startAnimation(animTranslate);
-        findViewById(R.id.linearLayoutSearchBar).startAnimation(animTranslate1);
+        tabSearchAnimationHandler();
         return super.onOptionsItemSelected(item);
+    }
+    private void tabSearchAnimationHandler(){
+        final LinearLayout tabBar = (LinearLayout) findViewById(R.id.linearLayout);
+        final LinearLayout searchArea = (LinearLayout) findViewById(R.id.linearLayoutSearchBar);
+
+        if(tabBar.getVisibility() == View.GONE)
+            searchBarAnimation(searchArea, tabBar);
+        else
+            searchBarAnimation(tabBar, searchArea);
+    }
+
+    private void searchBarAnimation(final LinearLayout fadeoutElement, final LinearLayout fadeInElement){
+
+        fadeoutElement.setAlpha(1);
+        fadeoutElement.animate().setDuration(1000).alpha(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                fadeoutElement.setVisibility(View.GONE);
+                fadeInElement.setVisibility(View.VISIBLE);
+                fadeInElement.setAlpha(0);
+                fadeInElement.animate().setDuration(1000).alpha(1).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            fadeInElement.setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
+        });
     }
 
     private void populateArrayList(String dbCall)

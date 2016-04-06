@@ -121,19 +121,20 @@ public class AddRecord extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         imageOrientation = 0;
         if (resultCode == RESULT_OK) {
-            if(requestCode == 111)
-            {
+            if (requestCode == 111) {
                 String returnedData = data.getStringExtra("returnKey");
                 newLineStringToArrayList(returnedData);
             }
-            else if(requestCode == 777)
-                mPhotoUri = data.getData();
-            else{
-                SharedPreferences savedData;
-                savedData = getApplicationContext().getSharedPreferences("savedData", 0);// save data
-                imageOrientation = savedData.getInt("camera_correction", 0);
+            else {
+                if (requestCode == 777)
+                    mPhotoUri = data.getData();
+                else {
+                    SharedPreferences savedData;
+                    savedData = getApplicationContext().getSharedPreferences("savedData", 0);// save data
+                    imageOrientation = savedData.getInt("camera_correction", 0);
+                }
+                loadAndSetImage();
             }
-           loadAndSetImage();
         }
     }
     public void rotateImageRightClicked(View v){
@@ -171,7 +172,7 @@ public class AddRecord extends AppCompatActivity {
     private void manageIfEdit(){
         Bundle extras = getIntent().getExtras();
         String _id = extras.getString("toEditID");
-        if(_id.equals("New Entry"))
+        if(_id == null || _id.equals("New Entry"))
             return;
         editCall = _id;
         ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonDelete);
