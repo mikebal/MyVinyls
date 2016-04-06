@@ -1,6 +1,5 @@
 package thesolocoder.solo.myvinyls;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -16,10 +15,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -113,11 +110,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         final LinearLayout tabBar = (LinearLayout) findViewById(R.id.linearLayout);
         Animation animTranslate = AnimationUtils.loadAnimation(this, R.anim.anim_translate);
+        Animation animTranslate1 = AnimationUtils.loadAnimation(this, R.anim.anim_translatein);
         animTranslate.setAnimationListener(new Animation.AnimationListener() {
 
             public void onAnimationEnd(Animation anim) {
                 tabBar.getRootView().clearAnimation();   // to get rid of flicker at end of animation
                 tabBar.setVisibility(View.GONE);
+
                 findViewById(R.id.linearLayoutSearchBar).setVisibility(View.VISIBLE);
             }
 
@@ -132,16 +131,32 @@ public class MainActivity extends AppCompatActivity
         });
 
         tabBar.startAnimation(animTranslate);
-
+        findViewById(R.id.linearLayoutSearchBar).startAnimation(animTranslate1);
         return super.onOptionsItemSelected(item);
     }
 
     private void populateArrayList(String dbCall)
     {
-        ArrayList<Records> recordList;
-        recordList = dbHandler.databaseToList(dbCall);
+        ArrayList<Records> recordList = new ArrayList<>();
+        if(dbCall.equals("GENRES"))
+        {
+            ArrayList<String> genreList;
+            genreList = dbHandler.getGeners();
+            Records current;
+            for(int i = 0; i < genreList.size(); i++)
+            {
+                current = new Records();
+                current.set_albumname(genreList.get(i));
+                recordList.add(current);
+            }
+            populateList(recordList);
+        }
+        else {
 
-        populateList(recordList);
+            recordList = dbHandler.databaseToList(dbCall);
+            populateList(recordList);
+        }
+
     }
 
    private void populateList(ArrayList<Records> recordList) {

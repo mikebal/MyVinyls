@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class AddRecord extends AppCompatActivity {
 
@@ -24,6 +26,7 @@ public class AddRecord extends AppCompatActivity {
     Uri mPhotoUri = null;
     int imageOrientation = 0;
     String editCall = "-1";
+    ArrayList<String> genres = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class AddRecord extends AppCompatActivity {
             else
                 newRecord.set_releaseyear("");
             newRecord.set_bandname(albumBand.getText().toString());
+            newRecord.set_genre(genres);
+
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
             if(editCall.equals("-1"))
@@ -80,7 +85,7 @@ public class AddRecord extends AppCompatActivity {
 
     public void addGenreClicked(View v) {
         Intent open_AddGenre = new Intent(AddRecord.this, AddGenre.class);
-        startActivityForResult(open_AddGenre, 1);
+        startActivityForResult(open_AddGenre, 111);
     }
 
     public void albumCoverClicked(View v) {
@@ -114,9 +119,14 @@ public class AddRecord extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        imageOrientation = 0;
         if (resultCode == RESULT_OK) {
-            imageOrientation = 0;
-            if(requestCode == 777)
+            if(requestCode == 111)
+            {
+                String returnedData = data.getStringExtra("returnKey");
+                newLineStringToArrayList(returnedData);
+            }
+            else if(requestCode == 777)
                 mPhotoUri = data.getData();
             else{
                 SharedPreferences savedData;
@@ -138,6 +148,13 @@ public class AddRecord extends AppCompatActivity {
         editor.apply();
         loadAndSetImage();
     }
+    private void newLineStringToArrayList(String stringToParse)
+        {
+                StringTokenizer tokens = new StringTokenizer(stringToParse, "\n");
+                while(tokens.hasMoreTokens())
+                    genres.add(tokens.nextToken());
+               // albumName.setText(stringToParse);
+        }
     private void loadAndSetImage(){
         try {
             ImageManager imageManager = new ImageManager();
@@ -147,6 +164,9 @@ public class AddRecord extends AppCompatActivity {
             albumArtwork.setImageResource(R.mipmap.ic_report_black_24dp);
         }
     }
+
+
+
     //******************************************************************************************
     private void manageIfEdit(){
         Bundle extras = getIntent().getExtras();

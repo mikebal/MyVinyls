@@ -60,12 +60,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
             if(!album_id.equals("-1")) {
-                values = new ContentValues();
-                values.put(COLUMN_ALBUMID, album_id);
-                values.put(COLUMN_GENRE, "TEST");
-                db.insert(TABLE_GENRES, null, values);
-                values.put(COLUMN_GENRE, "TEST2");
-                db.insert(TABLE_GENRES, null, values);
+                for(int i = 0; i < record.get_genre().size(); i++)
+                {
+                    values = new ContentValues();
+                    values.put(COLUMN_ALBUMID, album_id);
+                    values.put(COLUMN_GENRE, record.get_genre().get(i));
+                    db.insert(TABLE_GENRES, null, values);
+                }
             }
         }
         c.close();
@@ -76,25 +77,21 @@ public class MyDBHandler extends SQLiteOpenHelper{
     private String getQuery(String request)
     {
         String relatedQuery = "";
-        String queryNewest = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
         final String baseQuery = "SELECT * FROM " + TABLE_RECORDS + " ORDER BY ";
 
         if(request.equals("ALBUM"))
             relatedQuery = baseQuery + COLUMN_ALBUMNAME;
         else if(request.equals("BAND"))
             relatedQuery = baseQuery + COLUMN_BANDNAME;
-        else if(request.equals("GENRES"))  // THis needs to be changed to
-            relatedQuery = queryNewest;
 
         return relatedQuery;
     }
 
     public ArrayList<Records> databaseToList(String request){
         SQLiteDatabase db = getWritableDatabase();
-        //String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE 1";
         String query = getQuery(request);
         ArrayList<Records> recordList = new ArrayList<>();
-        ArrayList<String> generes = new ArrayList<>();
+        ArrayList<String> generes;
         Records listEntry;
         //Cursor point to a location in your result
         Cursor c = db.rawQuery(query, null);
@@ -161,6 +158,23 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.close();
 
         return selectedRecord;
+    }
+    public ArrayList<String> getGeners(){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES;
+        ArrayList<String> genres = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        while (!c.isAfterLast())
+        {
+            if (c.getString(c.getColumnIndex("genre")) != null)
+                genres.add(c.getString(c.getColumnIndex("genre")));
+        c.moveToNext();
+        }
+
+        db.close();
+        return genres;
     }
 
     public void updateRecord(Records record){

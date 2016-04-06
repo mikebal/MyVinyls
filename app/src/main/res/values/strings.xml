@@ -11,5 +11,6 @@
     <string name="Underline_artists"><u>Artists</u></string>
     <string name="Underline_genres"><u>Genres</u></string>
     <string name="Underline_albums"><u>Albums</u></string>
+    <string name="search">Search..</string>
 
 </resources>
