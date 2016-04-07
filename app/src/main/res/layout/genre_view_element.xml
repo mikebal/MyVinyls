@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="2">
+<RelativeLayout
+    android:id="@+id/genreLayoutLeft"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+    android:paddingLeft="10dp"
+    android:layout_weight="1">
+
+    <ImageView
+        android:layout_marginLeft="10dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@android:color/holo_red_light"
+        android:id="@+id/imageViewGenreLarge"
+        android:layout_alignParentTop="true" />
+    <ImageView
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="15dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@android:color/holo_blue_light"
+        android:id="@+id/imageViewGenreMedium"
+        android:layout_alignParentTop="true" />
+
+    <ImageView
+        android:layout_marginTop="39dp"
+        android:layout_marginLeft="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:color/holo_green_dark"
+        android:id="@+id/imageViewGenreSmall"
+        android:layout_alignParentTop="true" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="170dp"
+        android:text="new text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/transparent"
+        android:textAlignment="center"
+        android:background="@android:color/transparent"
+        android:textSize="30dp"
+        android:onClick="genreSelected"
+        android:id="@+id/ButtonGenereOverlay"
+        android:layout_alignTop="@+id/imageViewGenreLarge"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:id="@+id/textViewGenreName"
+        android:layout_below="@+id/imageViewGenreSmall"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_weight="1"
+        android:id="@+id/genreLayoutRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:layout_marginLeft="10dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@android:color/holo_red_light"
+            android:id="@+id/imageViewGenreLargeRight"
+            android:layout_alignParentTop="true" />
+        <ImageView
+            android:layout_marginTop="22dp"
+            android:layout_marginLeft="15dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@android:color/holo_blue_light"
+            android:id="@+id/imageViewGenreMediumRight"
+            android:layout_alignParentTop="true" />
+
+        <ImageView
+            android:layout_marginTop="39dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@android:color/holo_green_dark"
+            android:id="@+id/imageViewGenreSmallRight"
+            android:layout_alignParentTop="true" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="170dp"
+            android:text="new text"
+            android:textAllCaps="false"
+            android:onClick="genreSelected"
+            android:textColor="@android:color/transparent"
+            android:textAlignment="center"
+            android:background="@android:color/transparent"
+            android:textSize="30dp"
+            android:id="@+id/ButtonGenereOverlayRight"
+            android:layout_alignTop="@+id/imageViewGenreLargeRight"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:id="@+id/textViewGenreNameRight"
+            android:layout_below="@+id/imageViewGenreSmallRight"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</LinearLayout>

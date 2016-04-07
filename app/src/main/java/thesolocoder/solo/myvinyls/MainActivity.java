@@ -17,7 +17,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     MyDBHandler dbHandler;
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
+    ListViewAdapterGenre customAdapterGener;
     int menuID_ADD;
     EditText inputSearch;
 
@@ -147,22 +147,29 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Records> recordList = new ArrayList<>();
         if(dbCall.equals("GENRES"))
         {
-            ArrayList<String> genreList;
+            ArrayList<GenreListItem> genreList;
             genreList = dbHandler.getGeners();
-            Records current;
-            for(int i = 0; i < genreList.size(); i++)
-            {
-                current = new Records();
-                current.set_albumname(genreList.get(i));
-                recordList.add(current);
-            }
-            populateList(recordList);
+
+            populateGenreList(genreList);
         }
         else {
 
             recordList = dbHandler.databaseToList(dbCall);
             populateList(recordList);
         }
+
+    }
+    private void populateGenreList(ArrayList<GenreListItem> genreList)
+    {
+     //   ArrayList<Records> blank = new ArrayList<>();
+      //  populateList(blank);
+        customAdapter = null;
+        recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
+        customAdapterGener = new ListViewAdapterGenre(this, genreList);
+        recordDisplayList.setAdapter(customAdapterGener);
+        customAdapterGener.notifyDataSetChanged();
+        recordDisplayList.setVerticalScrollBarEnabled(false);
+
 
     }
 
@@ -227,5 +234,9 @@ public class MainActivity extends AppCompatActivity
             genres.setPaintFlags(genres.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             populateArrayList("GENRES");
         }
+    }
+    public void genreSelected(View v)
+    {
+        finish();
     }
 }

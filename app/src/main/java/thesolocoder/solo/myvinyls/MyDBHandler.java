@@ -159,17 +159,26 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         return selectedRecord;
     }
-    public ArrayList<String> getGeners(){
+    public ArrayList<GenreListItem> getGeners(){
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES;
-        ArrayList<String> genres = new ArrayList<>();
-
+        ArrayList<GenreListItem> genres = new ArrayList<>();
+        GenreListItem item;
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         while (!c.isAfterLast())
         {
-            if (c.getString(c.getColumnIndex("genre")) != null)
-                genres.add(c.getString(c.getColumnIndex("genre")));
+            item = new GenreListItem();
+            if (c.getString(c.getColumnIndex("genre")) != null) {
+                item.genre = c.getString(c.getColumnIndex("genre"));
+                if(!c.isLast() ||  (c.getString(c.getColumnIndex("genre")) != null))
+                {
+                    c.moveToNext();
+                    if(!c.isAfterLast())
+                     item.genreRight = c.getString(c.getColumnIndex("genre"));
+                }
+            }
+            genres.add(item);
         c.moveToNext();
         }
 
