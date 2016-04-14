@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        populateArrayList("ALBUM");
+        populateArrayList("SELECT * FROM records ORDER BY albumname;");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -149,11 +149,9 @@ public class MainActivity extends AppCompatActivity
         {
             ArrayList<GenreListItem> genreList;
             genreList = dbHandler.getGeners();
-
             populateGenreList(genreList);
         }
         else {
-
             recordList = dbHandler.databaseToList(dbCall);
             populateList(recordList);
         }
@@ -196,7 +194,7 @@ public class MainActivity extends AppCompatActivity
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
                 if(arg3 == 0){
-                    populateArrayList("ALBUM");
+                    populateArrayList("SELECT * FROM records ORDER BY albumname;");
                 }
                 MainActivity.this.customAdapter.getFilter().filter(cs);
             }
@@ -224,10 +222,10 @@ public class MainActivity extends AppCompatActivity
 
         if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("BAND");
+            populateArrayList("SELECT * FROM records ORDER BY bandname");
         } else if (v.getId() == album.getId()) {
             album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("ALBUM");
+            populateArrayList("SELECT * FROM records ORDER BY albumname;");
         } else {
             genres.setPaintFlags(genres.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             populateArrayList("GENRES");

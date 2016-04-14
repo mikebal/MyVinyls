@@ -35,8 +35,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_RECORDS);
-        db.execSQL("DROP TABLE IF EXISTS" + TABLE_GENRES);
+        db.execSQL("DROP TABLE IF EXISTS records");
+        db.execSQL("DROP TABLE IF EXISTS genres");
         onCreate(db);
     }
 
@@ -66,29 +66,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return album_id;
     }
 
-    private String getQuery(String request)
-    {
-        String relatedQuery = "";
-        final String baseQuery = "SELECT * FROM " + TABLE_RECORDS + " ORDER BY ";
-
-        if(request.equals("ALBUM"))
-            relatedQuery = baseQuery + COLUMN_ALBUMNAME;
-        else if(request.equals("BAND"))
-            relatedQuery = baseQuery + COLUMN_BANDNAME;
-
-        return relatedQuery;
-    }
-
-    public ArrayList<Records> databaseToList(String request){
+    public ArrayList<Records> databaseToList(String query){
         SQLiteDatabase db = getWritableDatabase();
-        String query = getQuery(request);
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes;
         Records listEntry;
-        //Cursor point to a location in your result
         Cursor c = db.rawQuery(query, null);
         Cursor genre_cursor;
-        // Move to the first row in your result
         c.moveToFirst();
 
         while (!c.isAfterLast()){
@@ -167,44 +151,41 @@ public class MyDBHandler extends SQLiteOpenHelper{
             item = new GenreListItem();
             if (c.getString(c.getColumnIndex("genre")) != null) {
                 item.genre = c.getString(c.getColumnIndex("genre"));
-                final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + item.genre +"'";
-
-                Cursor imageCursor = db.rawQuery(MY_QUERY, null);
-                imageCursor.moveToFirst();
-                if(!imageCursor.isAfterLast()) {
-                    item.albumArt1 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
-                    imageCursor.moveToNext();
-                }
-                if(!imageCursor.isAfterLast()) {
-                    item.albumArt2 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
-                    imageCursor.moveToNext();
-                }
-                if(!imageCursor.isAfterLast()) {
-                    item.albumArt3 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
-                }
-
-          //      _id = c.getString(c.getColumnIndex(COLUMN_ALBUMID));
-                if(!c.isLast() ||  (c.getString(c.getColumnIndex("genre")) != null))
+                item = getImagesForGenreItem(item, true, db, item.genre);
+                if(!c.isLast() || (c.getString(c.getColumnIndex("genre")) != null))
                 {
                     c.moveToNext();
-                    if(!c.isAfterLast())
-                     item.genreRight = c.getString(c.getColumnIndex("genre"));
+                    if(!c.isAfterLast()) {
+                        item.genreRight = c.getString(c.getColumnIndex("genre"));
+                        item = getImagesForGenreItem(item, false, db, item.genreRight);
+                    }
                 }
             }
             genres.add(item);
-        c.moveToNext();
+            c.moveToNext();
         }
         c.close();
         db.close();
         return genres;
     }
+    private GenreListItem getImagesForGenreItem(GenreListItem item, boolean isLeftSide, SQLiteDatabase db, String genre){
+        final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + genre +"'";
+        Cursor imageCursor = db.rawQuery(MY_QUERY, null);
+        imageCursor.moveToFirst();
+        while (!imageCursor.isAfterLast() && (item.albumArt.size() < 3 || item.albumArtRight.size() < 3)) {
+            if(isLeftSide)
+                item.albumArt.add(imageCursor.getString(imageCursor.getColumnIndex("_id")));
+            else
+                item.albumArtRight.add(imageCursor.getString(imageCursor.getColumnIndex("_id")));
+            imageCursor.moveToNext();
+        }
+        imageCursor.close();
+        return item;
+    }
 
     public void updateRecord(Records record){
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c=  db.rawQuery("UPDATE " + TABLE_RECORDS + " SET " + COLUMN_BANDNAME + "='" +record.get_bandname() +
-                "', " + COLUMN_ALBUMNAME + "='" + record.get_albumname() +
-                "'," + COLUMN_RELEASEYEAR +"='" + record.get_releaseyear() +
-                "' WHERE _id='" + record.get_id() +"'", null);
+        Cursor c=  db.rawQuery("UPDATE "+TABLE_RECORDS+" SET "+COLUMN_BANDNAME+"='"+record.get_bandname()+"', "+COLUMN_ALBUMNAME+"='"+record.get_albumname()+"',"+COLUMN_RELEASEYEAR+"='"+record.get_releaseyear()+"' WHERE _id='"+ record.get_id() +"'", null);
         c.moveToFirst();
         c.close();
         db.close();
