@@ -161,8 +161,6 @@ public class MainActivity extends AppCompatActivity
     }
     private void populateGenreList(ArrayList<GenreListItem> genreList)
     {
-     //   ArrayList<Records> blank = new ArrayList<>();
-      //  populateList(blank);
         customAdapter = null;
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
         customAdapterGener = new ListViewAdapterGenre(this, genreList);

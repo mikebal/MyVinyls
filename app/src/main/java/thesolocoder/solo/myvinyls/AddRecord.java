@@ -56,6 +56,11 @@ public class AddRecord extends AppCompatActivity {
             newRecord.set_bandname(albumBand.getText().toString());
             newRecord.set_genre(genres);
 
+            if(albumCover != null)
+                newRecord.set_hasimage("true");
+            else
+                newRecord.set_hasimage("false");
+
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
             if(editCall.equals("-1"))

@@ -19,7 +19,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
     private static final String COLUMN_RELEASEYEAR = "releaseyear";
     private static final String COLUMN_ALBUMID ="album_id";
     private static final String COLUMN_GENRE = "genre";
-    private static final String COLUMN_URL ="imageurl";
+    private static final String COLUMN_HASIMAGE ="hasimage";
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -27,16 +27,10 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE " + TABLE_RECORDS + "(" + COLUMN_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        COLUMN_ALBUMNAME + " TEXT, " +
-                        COLUMN_BANDNAME + " TEXT, " +
-                        COLUMN_RELEASEYEAR + " INTEGER, " +
-                        COLUMN_URL +" TEXT" + ");";
-        db.execSQL(query);
-
-        query = "CREATE TABLE " + TABLE_GENRES + "(" + COLUMN_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_ALBUMID + " INTEGER,"+
-                COLUMN_GENRE + " TEXT" + ");";
-        db.execSQL(query);
+        final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
+        db.execSQL(queryTableRecords);
+        final String queryTableGenres = "CREATE TABLE genres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT);";
+        db.execSQL(queryTableGenres);
     }
 
     @Override
@@ -51,22 +45,20 @@ public class MyDBHandler extends SQLiteOpenHelper{
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
+        values.put(COLUMN_HASIMAGE, record.get_hasimage());
         String album_id = "-1";
-
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_RECORDS, null, values);
 
         Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
-            if(!album_id.equals("-1")) {
-                for(int i = 0; i < record.get_genre().size(); i++)
-                {
-                    values = new ContentValues();
-                    values.put(COLUMN_ALBUMID, album_id);
-                    values.put(COLUMN_GENRE, record.get_genre().get(i));
-                    db.insert(TABLE_GENRES, null, values);
-                }
+            for(int i = 0; i < record.get_genre().size(); i++)
+            {
+                values = new ContentValues();
+                values.put(COLUMN_ALBUMID, album_id);
+                values.put(COLUMN_GENRE, record.get_genre().get(i));
+                db.insert(TABLE_GENRES, null, values);
             }
         }
         c.close();
@@ -107,7 +99,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 listEntry.set_albumname(c.getString(c.getColumnIndex("albumname")));
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
-
+                listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
                 String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
                         COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));
                 genre_cursor = db.rawQuery(genre_querey, null);
@@ -118,11 +110,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
                     }
                     genre_cursor.moveToNext();
                 }
+                genre_cursor.close();
                 listEntry.set_genre(generes);
                 recordList.add(listEntry);
             }
             c.moveToNext();
         }
+        c.close();
         db.close();
         return recordList;
     }
@@ -152,9 +146,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 }
                 genre_cursor.moveToNext();
             }
+            genre_cursor.close();
             selectedRecord.set_genre(generes);
         }
         c.moveToNext();
+        c.close();
         db.close();
 
         return selectedRecord;
@@ -171,6 +167,23 @@ public class MyDBHandler extends SQLiteOpenHelper{
             item = new GenreListItem();
             if (c.getString(c.getColumnIndex("genre")) != null) {
                 item.genre = c.getString(c.getColumnIndex("genre"));
+                final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + item.genre +"'";
+
+                Cursor imageCursor = db.rawQuery(MY_QUERY, null);
+                imageCursor.moveToFirst();
+                if(!imageCursor.isAfterLast()) {
+                    item.albumArt1 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
+                    imageCursor.moveToNext();
+                }
+                if(!imageCursor.isAfterLast()) {
+                    item.albumArt2 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
+                    imageCursor.moveToNext();
+                }
+                if(!imageCursor.isAfterLast()) {
+                    item.albumArt3 = imageCursor.getString(imageCursor.getColumnIndex("_id"));
+                }
+
+          //      _id = c.getString(c.getColumnIndex(COLUMN_ALBUMID));
                 if(!c.isLast() ||  (c.getString(c.getColumnIndex("genre")) != null))
                 {
                     c.moveToNext();
@@ -181,7 +194,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
             genres.add(item);
         c.moveToNext();
         }
-
+        c.close();
         db.close();
         return genres;
     }

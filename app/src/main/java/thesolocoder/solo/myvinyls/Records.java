@@ -10,6 +10,7 @@ public class Records {
     private String    _releaseyear;
     private ArrayList<String> _genre;
     private String _imageurl;
+    private String _hasimage;
     private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
 
     public Records(String bandname){
@@ -41,6 +42,9 @@ public class Records {
     public void set_genre(ArrayList<String> _genre) {
         this._genre = _genre;
     }
+    public void set_hasimage(String hasImage){
+        _hasimage = hasImage;
+    }
 
     public void set_imageurl(String _imageurl){ this._imageurl = _imageurl; }
 
@@ -60,5 +64,6 @@ public class Records {
 
     public String get_imageurl() { return _imageurl; }
 
+    public String get_hasimage() { return  _hasimage;}
 
 }
