@@ -171,8 +171,6 @@ public class AddRecord extends AppCompatActivity {
         }
     }
 
-
-
     //******************************************************************************************
     private void manageIfEdit(){
         Bundle extras = getIntent().getExtras();

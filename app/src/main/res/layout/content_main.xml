@@ -61,7 +61,7 @@
         android:id="@+id/linearLayoutSearchBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:weightSum="0"
+        android:weightSum="10"
         android:visibility="gone"
         android:orientation="horizontal"
         android:layout_alignParentLeft="true"
@@ -75,14 +75,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageView3"
-            android:paddingTop="3dp"
             android:paddingLeft="3dp"
             android:background="@android:color/transparent"
             android:src="@mipmap/ic_search_white_36dp"/>
 
         <EditText
-            android:layout_width="288dp"
+            android:layout_width="match_parent"
             android:layout_height="25dp"
+            android:layout_weight="10"
             android:id="@+id/editTextSearchBox"
             android:layout_marginTop="7dp"
             android:paddingTop="3dp"

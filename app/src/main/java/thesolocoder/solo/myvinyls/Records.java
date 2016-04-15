@@ -13,13 +13,7 @@ public class Records {
     private String _hasimage;
     private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
 
-    public Records(String bandname){
-        this._bandname = bandname;
-    }
-
-    public Records(){
-
-    }
+    public Records(){}
 
     public void set_id(String _id) {
         this._id = _id;

@@ -15,15 +15,15 @@
         android:layout_marginLeft="10dp"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:background="@android:color/holo_red_light"
         android:id="@+id/imageViewGenreLarge"
+        android:src="@mipmap/default_noartwork"
         android:layout_alignParentTop="true" />
     <ImageView
         android:layout_marginTop="22dp"
         android:layout_marginLeft="15dp"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:background="@android:color/holo_blue_light"
+        android:visibility="gone"
         android:id="@+id/imageViewGenreMedium"
         android:layout_alignParentTop="true" />
 
@@ -32,7 +32,7 @@
         android:layout_marginLeft="20dp"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@android:color/holo_green_dark"
+        android:visibility="gone"
         android:id="@+id/imageViewGenreSmall"
         android:layout_alignParentTop="true" />
 
@@ -54,11 +54,10 @@
         android:layout_width="150dp"
         android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:gravity="center"
         android:textSize="30dp"
         android:id="@+id/textViewGenreName"
-        android:layout_below="@+id/imageViewGenreSmall"
+        android:layout_below="@+id/imageViewGenreLarge"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
     <RelativeLayout
@@ -73,7 +72,7 @@
             android:layout_marginLeft="10dp"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@android:color/holo_red_light"
+            android:src="@mipmap/default_noartwork"
             android:id="@+id/imageViewGenreLargeRight"
             android:layout_alignParentTop="true" />
         <ImageView
@@ -81,7 +80,7 @@
             android:layout_marginLeft="15dp"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:background="@android:color/holo_blue_light"
+            android:visibility="gone"
             android:id="@+id/imageViewGenreMediumRight"
             android:layout_alignParentTop="true" />
 
@@ -90,7 +89,7 @@
             android:layout_marginLeft="20dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@android:color/holo_green_dark"
+            android:visibility="gone"
             android:id="@+id/imageViewGenreSmallRight"
             android:layout_alignParentTop="true" />
 
@@ -112,11 +111,10 @@
             android:layout_width="150dp"
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            android:text="New Text"
             android:gravity="center"
             android:textSize="30dp"
             android:id="@+id/textViewGenreNameRight"
-            android:layout_below="@+id/imageViewGenreSmallRight"
+            android:layout_below="@+id/imageViewGenreLargeRight"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </LinearLayout>

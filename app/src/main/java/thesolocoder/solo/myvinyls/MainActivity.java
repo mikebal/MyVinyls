@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     MyDBHandler dbHandler;
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
-    ListViewAdapterGenre customAdapterGener;
+    ListViewAdapterGenre customAdapterGenre;
     int menuID_ADD;
     EditText inputSearch;
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_my_collection) {
             // Handle the camera action
         } else if (id == R.id.nav_wishlist) {
-
+            displayWishList();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_settings) {
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity
 
     private void populateArrayList(String dbCall)
     {
-        ArrayList<Records> recordList = new ArrayList<>();
+        ArrayList<Records> recordList;
         if(dbCall.equals("GENRES"))
         {
             ArrayList<GenreListItem> genreList;
@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity
     {
         customAdapter = null;
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-        customAdapterGener = new ListViewAdapterGenre(this, genreList);
-        recordDisplayList.setAdapter(customAdapterGener);
-        customAdapterGener.notifyDataSetChanged();
+        customAdapterGenre = new ListViewAdapterGenre(this, genreList);
+        recordDisplayList.setAdapter(customAdapterGenre);
+        customAdapterGenre.notifyDataSetChanged();
         recordDisplayList.setVerticalScrollBarEnabled(false);
 
 
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
-                if(arg3 == 0){
+                if (arg3 == 0) {
                     populateArrayList("SELECT * FROM records ORDER BY albumname;");
                 }
                 MainActivity.this.customAdapter.getFilter().filter(cs);
@@ -233,6 +233,12 @@ public class MainActivity extends AppCompatActivity
     }
     public void genreSelected(View v)
     {
-        finish();
+        String selectedGenre = (String) v.getTag();
+        String dbRequest = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE genre='" + selectedGenre +"'";
+        populateArrayList(dbRequest);
+    }
+
+    private void displayWishList(){
+
     }
 }
