@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.ContentValues;
 import java.util.ArrayList;
 
-public class MyDBHandler extends SQLiteOpenHelper{
+public class MyDBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "records.db";
@@ -17,9 +17,9 @@ public class MyDBHandler extends SQLiteOpenHelper{
     private static final String COLUMN_BANDNAME = "bandname";
     private static final String COLUMN_ALBUMNAME = "albumname";
     private static final String COLUMN_RELEASEYEAR = "releaseyear";
-    private static final String COLUMN_ALBUMID ="album_id";
+    private static final String COLUMN_ALBUMID = "album_id";
     private static final String COLUMN_GENRE = "genre";
-    private static final String COLUMN_HASIMAGE ="hasimage";
+    private static final String COLUMN_HASIMAGE = "hasimage";
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -29,8 +29,18 @@ public class MyDBHandler extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
         db.execSQL(queryTableRecords);
-        final String queryTableGenres = "CREATE TABLE genres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT);";
+        final String queryTableGenres = "CREATE TABLE genres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (4,-1,'Jazz','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (5,-1,'Latin','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (6,-1,'Metal','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (7,-1,'Pop','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (8,-1,'R&B','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (9,-1,'Rock','');");
+        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (10,-1,'World','');");
     }
 
     @Override
@@ -40,7 +50,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public String addRecord(Records record){
+    public String addRecord(Records record) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
@@ -53,8 +63,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
-            for(int i = 0; i < record.get_genre().size(); i++)
-            {
+            for (int i = 0; i < record.get_genre().size(); i++) {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, record.get_genre().get(i));
@@ -66,7 +75,7 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return album_id;
     }
 
-    public ArrayList<Records> databaseToList(String query){
+    public ArrayList<Records> databaseToList(String query) {
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes;
@@ -75,8 +84,8 @@ public class MyDBHandler extends SQLiteOpenHelper{
         Cursor genre_cursor;
         c.moveToFirst();
 
-        while (!c.isAfterLast()){
-            if(c.getString(c.getColumnIndex("bandname")) != null){
+        while (!c.isAfterLast()) {
+            if (c.getString(c.getColumnIndex("bandname")) != null) {
                 listEntry = new Records();
                 generes = new ArrayList<>();
                 listEntry.set_bandname(c.getString(c.getColumnIndex("bandname")));
@@ -85,11 +94,11 @@ public class MyDBHandler extends SQLiteOpenHelper{
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
                 String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
-                        COLUMN_ALBUMID +"=" + c.getString(c.getColumnIndex("_id"));
+                        COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
                 genre_cursor = db.rawQuery(genre_querey, null);
                 genre_cursor.moveToFirst();
-                while (!genre_cursor.isAfterLast()){
-                    if(genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null){
+                while (!genre_cursor.isAfterLast()) {
+                    if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
                         generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
                     }
                     genre_cursor.moveToNext();
@@ -139,23 +148,22 @@ public class MyDBHandler extends SQLiteOpenHelper{
 
         return selectedRecord;
     }
-    public ArrayList<GenreListItem> getGeners(){
+
+    public ArrayList<GenreListItem> getGenres() {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES;
         ArrayList<GenreListItem> genres = new ArrayList<>();
         GenreListItem item;
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-        while (!c.isAfterLast())
-        {
+        while (!c.isAfterLast()) {
             item = new GenreListItem();
             if (c.getString(c.getColumnIndex("genre")) != null) {
                 item.genre = c.getString(c.getColumnIndex("genre"));
                 item = getImagesForGenreItem(item, true, db, item.genre);
-                if(!c.isLast() || (c.getString(c.getColumnIndex("genre")) != null))
-                {
+                if (!c.isLast() || (c.getString(c.getColumnIndex("genre")) != null)) {
                     c.moveToNext();
-                    if(!c.isAfterLast()) {
+                    if (!c.isAfterLast()) {
                         item.genreRight = c.getString(c.getColumnIndex("genre"));
                         item = getImagesForGenreItem(item, false, db, item.genreRight);
                     }
@@ -168,12 +176,13 @@ public class MyDBHandler extends SQLiteOpenHelper{
         db.close();
         return genres;
     }
-    private GenreListItem getImagesForGenreItem(GenreListItem item, boolean isLeftSide, SQLiteDatabase db, String genre){
-        final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + genre +"'";
+
+    private GenreListItem getImagesForGenreItem(GenreListItem item, boolean isLeftSide, SQLiteDatabase db, String genre) {
+        final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + genre + "'";
         Cursor imageCursor = db.rawQuery(MY_QUERY, null);
         imageCursor.moveToFirst();
         while (!imageCursor.isAfterLast() && (item.albumArt.size() < 3 || item.albumArtRight.size() < 3)) {
-            if(isLeftSide)
+            if (isLeftSide)
                 item.albumArt.add(imageCursor.getString(imageCursor.getColumnIndex("_id")));
             else
                 item.albumArtRight.add(imageCursor.getString(imageCursor.getColumnIndex("_id")));
@@ -183,17 +192,39 @@ public class MyDBHandler extends SQLiteOpenHelper{
         return item;
     }
 
-    public void updateRecord(Records record){
+    public void updateRecord(Records record) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c=  db.rawQuery("UPDATE "+TABLE_RECORDS+" SET "+COLUMN_BANDNAME+"='"+record.get_bandname()+"', "+COLUMN_ALBUMNAME+"='"+record.get_albumname()+"',"+COLUMN_RELEASEYEAR+"='"+record.get_releaseyear()+"' WHERE _id='"+ record.get_id() +"'", null);
+        Cursor c = db.rawQuery("UPDATE " + TABLE_RECORDS + " SET " + COLUMN_BANDNAME + "='" + record.get_bandname() + "', " + COLUMN_ALBUMNAME + "='" + record.get_albumname() + "'," + COLUMN_RELEASEYEAR + "='" + record.get_releaseyear() + "' WHERE _id='" + record.get_id() + "'", null);
         c.moveToFirst();
         c.close();
         db.close();
     }
+
     //Delete a record from the database
-    public void deleteRecord(String _id)
-    {
+    public void deleteRecord(String _id) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
+    }
+
+    public ArrayList<String> dbReturnListStrings(String query, String targetCol) {
+        ArrayList<String> queryResponse = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            queryResponse.add(cursor.getString(cursor.getColumnIndex(targetCol)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return queryResponse;
+    }
+
+    public void runRawQueryNoResult(String query) {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        c.close();
+        db.close();
     }
 }

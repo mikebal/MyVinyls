@@ -6,15 +6,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -159,7 +163,6 @@ public class AddRecord extends AppCompatActivity {
                 StringTokenizer tokens = new StringTokenizer(stringToParse, "\n");
                 while(tokens.hasMoreTokens())
                     genres.add(tokens.nextToken());
-               // albumName.setText(stringToParse);
         }
     private void loadAndSetImage(){
         try {
@@ -183,6 +186,7 @@ public class AddRecord extends AppCompatActivity {
         loadRecordToEdit(_id);
         changeButtonTextToSave();
     }
+
     private void loadRecordToEdit(String _id){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         Records recordToEdit = dbHandler.getRecordByID(_id);
@@ -190,6 +194,12 @@ public class AddRecord extends AppCompatActivity {
         albumBand.setText(recordToEdit.get_bandname());
         albumYear.setText(recordToEdit.get_releaseyear());
         mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
+        loadImage(albumArtwork, _id);
+    }
+    private void loadImage(ImageView albumCover, String fileName) {
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
+        Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
+        albumCover.setImageBitmap(bitmap);
     }
     private void changeButtonTextToSave()
     {

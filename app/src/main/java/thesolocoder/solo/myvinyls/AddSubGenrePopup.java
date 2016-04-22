@@ -16,7 +16,6 @@ public class AddSubGenrePopup extends AppCompatActivity {
 
     Spinner primaryCategorySpinner;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +24,8 @@ public class AddSubGenrePopup extends AppCompatActivity {
         populateSpinner();
     }
     private void populateSpinner(){
-        GenreFileManager fileManager = new GenreFileManager(getApplicationContext());
-        ArrayList<String> genres = fileManager.readInGenres("#genre.txt");
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        ArrayList<String> genres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM genres ORDER BY genre;","genre");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, genres);
         primaryCategorySpinner.setAdapter(adapter);
@@ -37,10 +36,9 @@ public class AddSubGenrePopup extends AppCompatActivity {
         if(input.equals("") || input.charAt(0) == '#')
             finish();
 
-        String filename = "#" + primaryCategorySpinner.getSelectedItem().toString() + ".txt";
-
-        GenreFileManager fileManager = new GenreFileManager(getApplicationContext());
-        fileManager.addAlphabetically(input, filename);
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        dbHandler.runRawQueryNoResult("insert into genres (genre,subgenre) values ('"+ primaryCategorySpinner.getSelectedItem().toString()
+                +"','" + input +"');");
         finish();
     }
 }

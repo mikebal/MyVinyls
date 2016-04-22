@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity
         if(dbCall.equals("GENRES"))
         {
             ArrayList<GenreListItem> genreList;
-            genreList = dbHandler.getGeners();
+            genreList = dbHandler.getGenres();
             populateGenreList(genreList);
         }
         else {

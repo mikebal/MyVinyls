@@ -22,7 +22,6 @@ public class AddGenre extends AppCompatActivity {
     LinearLayout selectedView;
     TextView selectedCategoryTextView;
     ImageButton upArrow;
-    private static final String PRIMARY_GENRE_FILE = "#genre.txt";
     GenreAdapter customAdapter;
     ArrayList<String> selectedGenres = new ArrayList<String>();
 
@@ -70,17 +69,11 @@ public class AddGenre extends AppCompatActivity {
         upArrow = (ImageButton) findViewById(R.id.imageButton_genre_pullUp);
     }
     private void populateList(){
-
-        ArrayList<String> primaryGenres;
-        GenreFileManager fileManager = new GenreFileManager(getApplicationContext());
-
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
-
-        primaryGenres = fileManager.readInGenres(PRIMARY_GENRE_FILE);
-
+        ArrayList<String> primaryGenres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM genres ORDER BY genre;","genre");
         customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView, checkboxHolder);
         genre_list.setAdapter(customAdapter);
-
     }
 
     public void closeSelectedCategoryView(View view){
@@ -116,8 +109,8 @@ public class AddGenre extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String value = input.getText().toString();
                     if (!value.equals("")) {
-                        GenreFileManager genreManager = new GenreFileManager(getApplicationContext());
-                        genreManager.addAlphabetically(value, "#genre.txt");
+                        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+                        dbHandler.runRawQueryNoResult("insert into genres (genre,subgenre) values ('"+ value +"','');");
                         closeOpenMenu();
                     } else
                         finish();

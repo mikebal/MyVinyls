@@ -19,10 +19,12 @@ public class GenreAdapter  extends BaseAdapter {
     LinearLayout checkboxHolder;
     TextView selectedTextView;
     ArrayList<String> checkedItems  = new ArrayList<>();
+    MyDBHandler dbHandler;
 
     public GenreAdapter(Context context, ArrayList<String> data, LinearLayout selectedLayout, TextView slectedTextView,
                         LinearLayout checkboxArea) {
         inflator = LayoutInflater.from(context);
+        dbHandler = new MyDBHandler(context, null, null, 1);
         this.genreCategories = data;
         this.selectedLayout = selectedLayout;
         this.selectedTextView = slectedTextView;
@@ -108,9 +110,12 @@ public class GenreAdapter  extends BaseAdapter {
         LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
         LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
 
-        String categoryFileName = "#" + genreCategories.get(position).toString() + ".txt";
-        GenreFileManager fileManager = new GenreFileManager(parent.getContext());
-        ArrayList<String> sub_genreElements = fileManager.readInGenres(categoryFileName);
+        String genreName = genreCategories.get(position).toString();
+        String getSubGenres = "SELECT DISTINCT subgenre FROM genres WHERE genre='" + genreName +"';";
+        ArrayList<String> sub_genreElements = dbHandler.dbReturnListStrings(getSubGenres, "subgenre");
+
+        if(sub_genreElements.get(0).equals(""))
+            sub_genreElements.remove(0);
 
         for (int i = 0; i < sub_genreElements.size(); i++) {
             CheckBox cb = new CheckBox(parent.getContext());
