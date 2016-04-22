@@ -161,8 +161,13 @@ public class AddRecord extends AppCompatActivity {
     private void newLineStringToArrayList(String stringToParse)
         {
                 StringTokenizer tokens = new StringTokenizer(stringToParse, "\n");
-                while(tokens.hasMoreTokens())
-                    genres.add(tokens.nextToken());
+                while(tokens.hasMoreTokens()) {
+                    String current = tokens.nextToken();
+                    if(current.equals("###"))
+                        genres.add("");
+                    else
+                        genres.add(current);
+                }
         }
     private void loadAndSetImage(){
         try {

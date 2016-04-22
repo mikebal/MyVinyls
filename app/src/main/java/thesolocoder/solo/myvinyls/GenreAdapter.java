@@ -55,10 +55,15 @@ public class GenreAdapter  extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 CheckBox checkedItem = (CheckBox)v;
-                if(checkedItem.isChecked())
+                if(checkedItem.isChecked()) {
                     checkedItems.add(category.getText().toString());
-                else
-                    checkedItems.remove(category.getText().toString());
+                    checkedItems.add("###");
+                }
+                else {
+                    int listLocation = findIndexOfString(checkedItems, category.getText().toString());
+                    checkedItems.remove(listLocation); // Remove Genre
+                    checkedItems.remove(listLocation); // Remove Sub-Genre
+                }
             }
         });
         String item = getItem(position);
@@ -93,6 +98,7 @@ public class GenreAdapter  extends BaseAdapter {
                 CheckBox checkedItem = (CheckBox) v;
                 if (checkedItem.isChecked()) {
                     checkedItems.add(selectedTextView.getText().toString());
+                    checkedItems.add("###");
                     CheckBox parentBox = (CheckBox) parent.getChildAt(position).findViewById(R.id.checkBox);
                     parentBox.setChecked(true);
                 }
@@ -125,13 +131,16 @@ public class GenreAdapter  extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     CheckBox checkedItem = (CheckBox)v;
-                    if(checkedItem.isChecked())
+                    if(checkedItem.isChecked()) {
+                        checkedItems.add(selectedTextView.getText().toString());
                         checkedItems.add(checkedItem.getText().toString());
-                    else
-                        checkedItems.remove(checkedItem.getText().toString());
+                    }
+                    else {
+                        int listLocation = findIndexOfString(checkedItems, checkedItem.getText().toString());
+                        checkedItems.remove(listLocation - 1); // Remove Genre
+                        checkedItems.remove(listLocation - 1); // Remove Sub-Genre
+                    }
                 }
-
-
             });
             if (i % 2 == 0)
                 checkboxArea1.addView(cb);
@@ -139,5 +148,19 @@ public class GenreAdapter  extends BaseAdapter {
                 checkboxArea2.addView(cb);
             checkboxHolder.setVisibility(View.VISIBLE);
         }
+    }
+
+    private int findIndexOfString(ArrayList<String> list, String target)
+    {
+        int result = -1;
+        for(int i = 0; i < list.size(); i++)
+        {
+            if(list.get(i).equals(target))
+            {
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 }

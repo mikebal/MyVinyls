@@ -63,10 +63,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
-            for (int i = 0; i < record.get_genre().size(); i++) {
+            for (int i = 0; i < record.get_genre().size(); i += 2) {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, record.get_genre().get(i));
+
+                values.put("subgenre", record.get_genre().get(i + 1));
                 db.insert(TABLE_GENRES, null, values);
             }
         }
@@ -151,7 +153,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public ArrayList<GenreListItem> getGenres() {
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES;
+        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES + " WHERE album_id!='-1'";
         ArrayList<GenreListItem> genres = new ArrayList<>();
         GenreListItem item;
         Cursor c = db.rawQuery(query, null);
