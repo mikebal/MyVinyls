@@ -23,13 +23,15 @@ public class AddGenre extends AppCompatActivity {
     TextView selectedCategoryTextView;
     ImageButton upArrow;
     GenreAdapter customAdapter;
-    ArrayList<String> selectedGenres = new ArrayList<String>();
+    ArrayList<String> selectedGenres = new ArrayList<>();
+    String toEditID = "-1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.genre);
         setupVariables();
+        manageIfEdit();
         populateList();
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -45,8 +47,7 @@ public class AddGenre extends AppCompatActivity {
                 fab.setImageResource(R.mipmap.ic_clear_white_36dp);
             }
         });
-
- }
+    }
     public void menuBackgroundClicked(View v){
         closeOpenMenu();
     }
@@ -72,7 +73,7 @@ public class AddGenre extends AppCompatActivity {
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
         ArrayList<String> primaryGenres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM genres ORDER BY genre;","genre");
-        customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView, checkboxHolder);
+        customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView, checkboxHolder, toEditID);
         genre_list.setAdapter(customAdapter);
     }
 
@@ -132,5 +133,13 @@ public class AddGenre extends AppCompatActivity {
         setResult(RESULT_OK,intent);
         finish();
     }
-
+    private void manageIfEdit(){
+        Bundle extras = getIntent().getExtras();
+        String _id = extras.getString("toEditID");
+        if(_id == null || _id.equals("New Entry"))
+            return;
+        toEditID = _id;
+        if(!toEditID.equals("-1"))
+            findViewById(R.id.button4).setVisibility(View.GONE);
+    }
 }

@@ -94,6 +94,7 @@ public class AddRecord extends AppCompatActivity {
 
     public void addGenreClicked(View v) {
         Intent open_AddGenre = new Intent(AddRecord.this, AddGenre.class);
+        open_AddGenre.putExtra("toEditID", String.valueOf(editCall));
         startActivityForResult(open_AddGenre, 111);
     }
 

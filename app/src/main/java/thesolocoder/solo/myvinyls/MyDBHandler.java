@@ -229,4 +229,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
     }
+    public String runRawQueryIfExists(String query) {
+        String result;
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        if(c.getCount() == 0)
+            result = "-1";
+        else
+            result = c.getString(c.getColumnIndex(COLUMN_ALBUMID));
+        c.close();
+        db.close();
+        return result;
+    }
 }
