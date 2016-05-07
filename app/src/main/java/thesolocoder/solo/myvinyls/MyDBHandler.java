@@ -31,6 +31,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableRecords);
         final String queryTableGenres = "CREATE TABLE genres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
+        final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
+        db.execSQL(queryTableWishlist);
+        final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
+        db.execSQL(queryTableWishlistGenre);
         db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
         db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
         db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
@@ -47,10 +51,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS records");
         db.execSQL("DROP TABLE IF EXISTS genres");
+        db.execSQL("DROP TABLE IF EXISTS wishlist");
         onCreate(db);
     }
 
-    public String addRecord(Records record) {
+    public String addRecord(Records record, String recordTableName, String genreTableName) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
@@ -58,18 +63,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
         String album_id = "-1";
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_RECORDS, null, values);
+        db.insert(recordTableName, null, values);
 
-        Cursor c = db.rawQuery("SELECT _id from " + TABLE_RECORDS + " order by ROWID DESC limit 1", null);
+        Cursor c = db.rawQuery("SELECT _id from " + recordTableName + " order by ROWID DESC limit 1", null);
         if (c.moveToFirst()) {
             album_id = c.getString(c.getColumnIndex("_id"));
             for (int i = 0; i < record.get_genre().size(); i += 2) {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, record.get_genre().get(i));
-
                 values.put("subgenre", record.get_genre().get(i + 1));
-                db.insert(TABLE_GENRES, null, values);
+                db.insert(genreTableName, null, values);
             }
         }
         c.close();

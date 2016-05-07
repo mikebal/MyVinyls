@@ -53,42 +53,28 @@ public class GenreAdapter  extends BaseAdapter {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         final View customView = inflator.inflate(R.layout.genrelistview, parent, false);
         final TextView category = (TextView) customView.findViewById(R.id.genreMainCat);
-        final CheckBox mainGenereCheckBox = (CheckBox) customView.findViewById(R.id.checkBox);
-        mainGenereCheckBox.setOnClickListener(new View.OnClickListener() {
+        final CheckBox mainGenreCheckBox = (CheckBox) customView.findViewById(R.id.checkBox);
+        mainGenreCheckBox.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 CheckBox checkedItem = (CheckBox) v;
                 if (checkedItem.isChecked()) {
-                    checkedItems.add(category.getText().toString());
-                    checkedItems.add("###");
-                    handleEdit("insert into genres (album_id,genre,subgenre) values ('" + editAlbumID + "','" + category.getText().toString() + "','');", "");
+                    handleEdit(true, category.getText().toString(), "");
                 } else {
-                    if (editAlbumID.equals("-1")) {
-                        int listLocation = findIndexOfString(checkedItems, category.getText().toString());
-                        checkedItems.remove(listLocation); // Remove Genre
-                        checkedItems.remove(listLocation); // Remove Sub-Genre
-                    } else
-                        handleEdit("DELETE FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + category.getText().toString()
-                                + "' AND subgenre='';", "");
+                    handleEdit(false, category.getText().toString(), "");
                 }
             }
         });
         String item = getItem(position);
-        category.setText(item);
-
-        if (!editAlbumID.equals("-1")) {
-            String queryResult = dbHandler.runRawQueryIfExists("SELECT * FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + item + "' AND subgenre=''");
-            if (queryResult.equals(editAlbumID))
-                mainGenereCheckBox.setChecked(true);
-        }
+        category.setText(item); // Set the subgenre Header text
+        mainGenreCheckBox.setChecked(shouldBeChecked(item,"")); // Check if the header should be checked off
         ImageButton dropDown = (ImageButton) customView.findViewById(R.id.imageButton_genre_dropdown);
-
         dropDown.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                boolean isChecked = mainGenereCheckBox.isChecked();
+                boolean isChecked = mainGenreCheckBox.isChecked();
                 handleCategoryExpansion(v, position, convertView, parent, isChecked);
             }
         });
@@ -110,8 +96,7 @@ public class GenreAdapter  extends BaseAdapter {
             public void onClick(View v) {
                 CheckBox checkedItem = (CheckBox) v;
                 if (checkedItem.isChecked()) {
-                    checkedItems.add(selectedTextView.getText().toString());
-                    checkedItems.add("###");
+                    handleEdit(true, selectedTextView.getText().toString(), "");
                     CheckBox parentBox = (CheckBox) parent.getChildAt(position).findViewById(R.id.checkBox);
                     parentBox.setChecked(true);
 
@@ -139,30 +124,16 @@ public class GenreAdapter  extends BaseAdapter {
         for (int i = 0; i < sub_genreElements.size(); i++) {
             CheckBox cb = new CheckBox(parent.getContext());
             cb.setText(sub_genreElements.get(i));
-            if (!editAlbumID.equals("-1")) {
-                String queryResult = dbHandler.runRawQueryIfExists("SELECT * FROM genres WHERE album_id='" + editAlbumID + "' AND genre='"
-                        + selectedTextView.getText().toString() + "' AND subgenre='" + sub_genreElements.get(i) + "'");
-                if (queryResult.equals(editAlbumID))
-                    cb.setChecked(true);
-            }
+            cb.setChecked(shouldBeChecked(selectedTextView.getText().toString(),sub_genreElements.get(i)));
             cb.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     CheckBox checkedItem = (CheckBox) v;
                     if (checkedItem.isChecked()) {
-                        checkedItems.add(selectedTextView.getText().toString());
-                        checkedItems.add(checkedItem.getText().toString());
-                        handleEdit("insert into genres (album_id,genre,subgenre) values ('" + editAlbumID + "','" + selectedTextView.getText().toString() + "','"
-                                + checkedItem.getText().toString() + "');", "");
+                        handleEdit(true, selectedTextView.getText().toString(), checkedItem.getText().toString());
                     } else {
-                        if (editAlbumID.equals("-1")) {
-                            int listLocation = findIndexOfString(checkedItems, checkedItem.getText().toString());
-                            checkedItems.remove(listLocation - 1); // Remove Genre
-                            checkedItems.remove(listLocation - 1); // Remove Sub-Genre
-                        } else
-                            handleEdit("DELETE FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + selectedTextView.getText().toString()
-                                    + "' AND subgenre='" + checkedItem.getText().toString() + "';", "");
+                        handleEdit(false, selectedTextView.getText().toString(), checkedItem.getText().toString());
                     }
                 }
             });
@@ -185,43 +156,47 @@ public class GenreAdapter  extends BaseAdapter {
         return result;
     }
 
-    private void handleEdit(String request, String data) {
-        if (!editAlbumID.equals("-1"))
-            dbHandler.runRawQueryNoResult(request);
-    }
-
-    private void handleEndit2(boolean isAdd, String genre, String subGenre)
+    private void handleEdit(boolean isAdd, String genre, String subGenre)
     {
-
         if (!editAlbumID.equals("-1"))
             dbHandler.runRawQueryNoResult(getRawQuery(isAdd,genre,subGenre));
         else{
-            if(isAdd)
-            {
-                checkedItems.add(selectedTextView.getText().toString());
+            if(isAdd){
+                if(subGenre.equals(""))
+                    subGenre = "###";
+                checkedItems.add(genre);
                 checkedItems.add(subGenre);
             }
-            else
-            {
+            else{
                 int listLocation = findIndexOfString(checkedItems, subGenre);
                 checkedItems.remove(listLocation - 1); // Remove Genre
                 checkedItems.remove(listLocation - 1); // Remove Sub-Genre
             }
         }
-
     }
 
     private String getRawQuery(boolean isAdd, String genre, String subGenre)
     {
         String addPart1 = "insert into genres (album_id,genre,subgenre) values ('" + editAlbumID + "','";
         String deletePart1 =  "DELETE FROM genres WHERE album_id='" + editAlbumID + "' AND genre='";
-        String queryEnd = "');";
         String result;
 
         if(isAdd)
-            result = addPart1 + genre + "','" + subGenre + queryEnd;
+            result = addPart1 + genre + "','" + subGenre + "');";
         else
             result = deletePart1 + genre + "' AND subgenre='" + subGenre +"';";
         return result;
+    }
+
+    private boolean shouldBeChecked(String genre, String subGenre)
+    {
+        boolean mustBeChecked = false;
+        if(!editAlbumID.equals("-1")) {
+            String query = "SELECT * FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + genre + "' AND subgenre='" + subGenre + "'";
+            String queryResult = dbHandler.runRawQueryIfExists(query);
+            if (queryResult.equals(editAlbumID))
+                mustBeChecked = true;
+        }
+        return mustBeChecked;
     }
 }

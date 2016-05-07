@@ -68,7 +68,7 @@ public class AddRecord extends AppCompatActivity {
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
             if(editCall.equals("-1"))
-                newAlbumID = dbHandler.addRecord(newRecord);
+                newAlbumID = dbHandler.addRecord(newRecord, "records", "genres");
             else{
                 newAlbumID = editCall;
                 newRecord.set_id(editCall);

@@ -10,6 +10,10 @@
             android:id="@+id/nav_wishlist"
             android:icon="@mipmap/ic_cake_black_24dp"
             android:title="Wishlist" />
+        <item
+            android:id="@+id/nav_lentout"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Lent Out" />
 
     </group>
 

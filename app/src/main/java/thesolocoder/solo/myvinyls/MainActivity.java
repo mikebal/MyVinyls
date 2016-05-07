@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
     ListViewAdapterGenre customAdapterGenre;
-    int menuID_ADD;
+  //  int menuID_ADD;
+    String databaseTable = "records";
     EditText inputSearch;
 
     @Override
@@ -87,13 +88,21 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_my_collection) {
-            // Handle the camera action
+            databaseTable = "records";
+            reloadListView();
+
         } else if (id == R.id.nav_wishlist) {
-            displayWishList();
+            databaseTable = "wishlist";
+            reloadListView();
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_settings) {
 
+        } else if(id == R.id.nav_lentout)
+        {
+            Intent open_addLentOut = new Intent(MainActivity.this, AddLentOut.class);
+            startActivity(open_addLentOut);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -105,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         MenuItem item=menu.add("Title"); //your desired title here
         item.setIcon(R.mipmap.ic_search_white_48dp); //your desired icon here
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        menuID_ADD = item.getItemId();
+       // menuID_ADD = item.getItemId();
         return super.onCreateOptionsMenu(menu);
     }
     @Override
@@ -165,8 +174,6 @@ public class MainActivity extends AppCompatActivity
         recordDisplayList.setAdapter(customAdapterGenre);
         customAdapterGenre.notifyDataSetChanged();
         recordDisplayList.setVerticalScrollBarEnabled(false);
-
-
     }
 
    private void populateList(ArrayList<Records> recordList) {
@@ -210,7 +217,24 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+    public void reloadListView()
+    {
+        Button artist = (Button) findViewById(R.id.buttonArtists);
+        Button album = (Button) findViewById(R.id.buttonAlbums);
+        Button genres = (Button) findViewById(R.id.buttonGeneres);
+        Button lastClicked = null;
 
+        if(artist.getPaintFlags() != 0)
+            lastClicked = artist;
+        else if(album.getPaintFlags() != 0)
+            lastClicked = album;
+        else if(genres.getPaintFlags() != 0)
+            lastClicked = genres;
+
+        if(lastClicked != null)
+            tabButtonClicked(lastClicked);
+
+    }
     public void tabButtonClicked(View v) {
         Button artist = (Button) findViewById(R.id.buttonArtists);
         Button album = (Button) findViewById(R.id.buttonAlbums);
@@ -222,23 +246,18 @@ public class MainActivity extends AppCompatActivity
 
         if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("SELECT * FROM records ORDER BY bandname");
+            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY bandname");
         } else if (v.getId() == album.getId()) {
             album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("SELECT * FROM records ORDER BY albumname;");
+            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY albumname;");
         } else {
             genres.setPaintFlags(genres.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             populateArrayList("GENRES");
         }
     }
-    public void genreSelected(View v)
-    {
+  /* public void genreSelected(View v) {
         String selectedGenre = (String) v.getTag();
-        String dbRequest = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE genre='" + selectedGenre +"'";
+        String dbRequest = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE genre='" + selectedGenre + "'";
         populateArrayList(dbRequest);
-    }
-
-    private void displayWishList(){
-
-    }
+    }*/
 }
