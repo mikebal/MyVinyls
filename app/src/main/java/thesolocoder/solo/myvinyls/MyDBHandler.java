@@ -29,22 +29,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
         db.execSQL(queryTableRecords);
-        final String queryTableGenres = "CREATE TABLE genres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
+        final String queryTableGenres = "CREATE TABLE recordsgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
         final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
         db.execSQL(queryTableWishlist);
+        final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentto TEXT, dateout TEXT, dueback TEXT);";
+        db.execSQL(queryTableLentout);
         final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableWishlistGenre);
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (4,-1,'Jazz','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (5,-1,'Latin','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (6,-1,'Metal','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (7,-1,'Pop','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (8,-1,'R&B','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (9,-1,'Rock','');");
-        db.execSQL("insert into genres (_id,album_id,genre,subgenre) values (10,-1,'World','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (4,-1,'Jazz','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (5,-1,'Latin','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (6,-1,'Metal','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (7,-1,'Pop','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (8,-1,'R&B','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (9,-1,'Rock','');");
+        db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (10,-1,'World','');");
     }
 
     @Override

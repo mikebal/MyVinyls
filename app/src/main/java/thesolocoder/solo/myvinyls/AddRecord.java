@@ -30,6 +30,7 @@ public class AddRecord extends AppCompatActivity {
     Uri mPhotoUri = null;
     int imageOrientation = 0;
     String editCall = "-1";
+    String dbTableReferenced;
     ArrayList<String> genres = new ArrayList<>();
 
     @Override
@@ -38,7 +39,10 @@ public class AddRecord extends AppCompatActivity {
         setContentView(R.layout.addrecord);
         setupVariables();
         manageIfEdit();
+        Bundle extras = getIntent().getExtras();
+        dbTableReferenced = extras.getString("toAddToTable");
     }
+
 
     private void setupVariables() {
         albumName = (EditText) findViewById(R.id.editText_albumName);
@@ -67,8 +71,9 @@ public class AddRecord extends AppCompatActivity {
 
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-            if(editCall.equals("-1"))
-                newAlbumID = dbHandler.addRecord(newRecord, "records", "genres");
+            if(editCall.equals("-1")) {
+                newAlbumID = dbHandler.addRecord(newRecord, dbTableReferenced , dbTableReferenced + "genres");
+            }
             else{
                 newAlbumID = editCall;
                 newRecord.set_id(editCall);
@@ -187,6 +192,7 @@ public class AddRecord extends AppCompatActivity {
         if(_id == null || _id.equals("New Entry"))
             return;
         editCall = _id;
+
         ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonDelete);
         deleteButton.setVisibility(View.VISIBLE);
         loadRecordToEdit(_id);

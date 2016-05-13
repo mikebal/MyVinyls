@@ -52,9 +52,17 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 view.startAnimation(animRotate);
-                Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-                open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
-                startActivity(open_AddRecords);
+                if(databaseTable.equals("lentout"))
+                {
+                    Intent open_addLentOut = new Intent(MainActivity.this, AddLentOut.class);
+                    startActivity(open_addLentOut);
+                }
+                else {
+                    Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                    open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
+                    open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
+                    startActivity(open_AddRecords);
+                }
             }
         });
 
@@ -101,8 +109,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if(id == R.id.nav_lentout)
         {
-            Intent open_addLentOut = new Intent(MainActivity.this, AddLentOut.class);
-            startActivity(open_addLentOut);
+            databaseTable = "lentout";
+            reloadListView();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -244,7 +252,11 @@ public class MainActivity extends AppCompatActivity
         album.setPaintFlags(0);
         genres.setPaintFlags(0);
 
-        if (v.getId() == artist.getId()) {
+        if(databaseTable.equals("lentout"))
+        {
+            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY _id");
+        }
+        else if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY bandname");
         } else if (v.getId() == album.getId()) {
