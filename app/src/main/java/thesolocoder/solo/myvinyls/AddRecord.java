@@ -201,7 +201,7 @@ public class AddRecord extends AppCompatActivity {
 
     private void loadRecordToEdit(String _id){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        Records recordToEdit = dbHandler.getRecordByID(_id);
+        Records recordToEdit = dbHandler.getRecordByID(_id, "records");
         albumName.setText(recordToEdit.get_albumname());
         albumBand.setText(recordToEdit.get_bandname());
         albumYear.setText(recordToEdit.get_releaseyear());

@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
     ListViewAdapterGenre customAdapterGenre;
-  //  int menuID_ADD;
     String databaseTable = "records";
     EditText inputSearch;
 
@@ -122,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         MenuItem item=menu.add("Title"); //your desired title here
         item.setIcon(R.mipmap.ic_search_white_48dp); //your desired icon here
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-       // menuID_ADD = item.getItemId();
         return super.onCreateOptionsMenu(menu);
     }
     @Override
@@ -165,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         if(dbCall.equals("GENRES"))
         {
             ArrayList<GenreListItem> genreList;
-            genreList = dbHandler.getGenres();
+            genreList = dbHandler.getGenres(databaseTable);
             populateGenreList(genreList);
         }
         else {
@@ -186,7 +184,6 @@ public class MainActivity extends AppCompatActivity
 
    private void populateList(ArrayList<Records> recordList) {
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-
         customAdapter = new ListViewAdapterMain(this, recordList);
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
@@ -198,7 +195,8 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3) {
                 Records selected = (Records) adapter.getItemAtPosition(position);
-                Intent open_EditRecords = new Intent(MainActivity.this, AddRecord.class);
+               // Intent open_EditRecords = new Intent(MainActivity.this, AddRecord.class);
+                Intent open_EditRecords = new Intent(MainActivity.this, LendoreditPopup.class);
                 open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
                 startActivity(open_EditRecords);
             }
@@ -254,7 +252,7 @@ public class MainActivity extends AppCompatActivity
 
         if(databaseTable.equals("lentout"))
         {
-            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY _id");
+            populateArrayList("SELECT * FROM "+ databaseTable + " ORDER BY _id");
         }
         else if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -267,9 +265,4 @@ public class MainActivity extends AppCompatActivity
             populateArrayList("GENRES");
         }
     }
-  /* public void genreSelected(View v) {
-        String selectedGenre = (String) v.getTag();
-        String dbRequest = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE genre='" + selectedGenre + "'";
-        populateArrayList(dbRequest);
-    }*/
 }

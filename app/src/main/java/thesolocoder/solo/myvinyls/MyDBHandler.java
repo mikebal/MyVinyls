@@ -101,7 +101,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
-                String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
+                String genre_querey = "SELECT * FROM " + TABLE_RECORDS + TABLE_GENRES + " WHERE " +
                         COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
                 genre_cursor = db.rawQuery(genre_querey, null);
                 genre_cursor.moveToFirst();
@@ -122,7 +122,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return recordList;
     }
 
-    public Records getRecordByID(String id) {
+    public Records getRecordByID(String id, String TABLE_NAME) {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=" + id;
         Records selectedRecord = new Records();
@@ -137,7 +137,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
             selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
 
-            String genre_querey = "SELECT * FROM " + TABLE_GENRES + " WHERE " +
+            String genre_querey = "SELECT * FROM " + TABLE_NAME + TABLE_GENRES + " WHERE " +
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_querey, null);
             genre_cursor.moveToFirst();
@@ -157,9 +157,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return selectedRecord;
     }
 
-    public ArrayList<GenreListItem> getGenres() {
+    public ArrayList<GenreListItem> getGenres(String callingTable) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + TABLE_GENRES + " WHERE album_id!='-1'";
+        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + callingTable + TABLE_GENRES + " WHERE album_id!='-1'";
         ArrayList<GenreListItem> genres = new ArrayList<>();
         GenreListItem item;
         Cursor c = db.rawQuery(query, null);
