@@ -20,12 +20,16 @@ import java.util.ArrayList;
  * Created by Michael on 2/25/2016.
  */
 class ListViewAdapterMain extends BaseAdapter implements Filterable {
-    private LayoutInflater inflator;
+    private LayoutInflater inflater;
     private ArrayList<Records> records;
+    private ArrayList<LentOut> lentOut;
+    private Context context;
 
-    public ListViewAdapterMain(Context context, ArrayList<Records> data){
-       inflator = LayoutInflater.from(context);
-       this.records = data;
+    public ListViewAdapterMain(Context context, ArrayList<Records> data, ArrayList<LentOut> dataLentOut){
+        inflater = LayoutInflater.from(context);
+        this.records = data;
+        this.lentOut = dataLentOut;
+        this.context = context;
     }
 
     public int getCount() {
@@ -40,8 +44,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        View customView = inflator.inflate(R.layout.albumlistview, parent, false);
-
+        View customView = inflater.inflate(R.layout.albumlistview, parent, false);
         TextView albumName = (TextView) customView.findViewById(R.id.textViewAlbumName);
         TextView bandName = (TextView) customView.findViewById(R.id.textViewBandName);
         TextView albumYear = (TextView) customView.findViewById(R.id.textViewYear);
@@ -53,8 +56,24 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         albumYear.setText(record.get_releaseyear());
         loadImage(albumCover, record.get_imageurl());
 
+        if(lentOut != null)
+            loadLentOutData(customView, position);
+
         return customView;
     }
+
+    private void loadLentOutData(View customView, int position){
+        TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
+        TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
+        header.setVisibility(View.VISIBLE);
+        lentOutToName.setVisibility(View.VISIBLE);
+        lentOutToName.setText(lentOut.get(position).name);
+        if(lentOut.get(position).isOverDue()){
+            header.setTextColor(context.getResources().getColor(R.color.darkRed));
+            lentOutToName.setTextColor(context.getResources().getColor(R.color.darkRed));
+        }
+    }
+
     private void loadImage(ImageView albumCover, String fileName) {
         String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);

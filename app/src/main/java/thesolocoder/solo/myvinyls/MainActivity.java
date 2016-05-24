@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         populateArrayList("SELECT * FROM records ORDER BY albumname;");
-
+        underlineAlbum();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity
 
    private void populateList(ArrayList<Records> recordList) {
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-        customAdapter = new ListViewAdapterMain(this, recordList);
+        customAdapter = new ListViewAdapterMain(this, recordList, null);
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
     }
@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void afterTextChanged(Editable arg0) {
             }
-
         });
 
     }
@@ -237,9 +236,11 @@ public class MainActivity extends AppCompatActivity
         else if(genres.getPaintFlags() != 0)
             lastClicked = genres;
 
-        if(lastClicked != null)
-            tabButtonClicked(lastClicked);
-
+        if(lastClicked == null) {
+            lastClicked = album;
+            album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+        tabButtonClicked(lastClicked);
     }
     public void tabButtonClicked(View v) {
         Button artist = (Button) findViewById(R.id.buttonArtists);
@@ -264,5 +265,11 @@ public class MainActivity extends AppCompatActivity
             genres.setPaintFlags(genres.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             populateArrayList("GENRES");
         }
+    }
+
+    private void underlineAlbum()
+    {
+        Button album = (Button) findViewById(R.id.buttonAlbums);
+        album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
     }
 }

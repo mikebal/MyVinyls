@@ -33,10 +33,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableGenres);
         final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
         db.execSQL(queryTableWishlist);
-        final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentto TEXT, dateout TEXT, dueback TEXT);";
+        final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout DATE, dueback DATE);";
         db.execSQL(queryTableLentout);
         final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableWishlistGenre);
+     //   db.execSQL("insert into lentout (_id,album_id,lentout,dateout,dueback) values (0,-1,'','','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
@@ -212,6 +213,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void deleteRecord(String _id) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
+        db.execSQL("DELETE FROM " +"recordsgenres WHERE album_id=\"" + _id + "\";");
+        db.execSQL("DELETE FROM " + "lentout WHERE album_id=\"" + _id + "\";");
     }
 
     public ArrayList<String> dbReturnListStrings(String query, String targetCol) {

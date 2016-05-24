@@ -24,12 +24,14 @@ public class LendoreditPopup extends AppCompatActivity{
         Intent open_EditRecords = new Intent(LendoreditPopup.this, AddLentOut.class);
         open_EditRecords.putExtra("toEditID", targetURL);
         startActivity(open_EditRecords);
+        finish();
     }
 
     public void switchViewToEdit(View v){
         Intent open_EditRecords = new Intent(LendoreditPopup.this, AddRecord.class);
         open_EditRecords.putExtra("toEditID", targetURL);
         startActivity(open_EditRecords);
+        finish();
     }
 
 }
