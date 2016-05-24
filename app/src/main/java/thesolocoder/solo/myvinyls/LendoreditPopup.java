@@ -9,7 +9,6 @@ import android.view.View;
  * Created by Michael on 5/17/2016.
  */
 public class LendoreditPopup extends AppCompatActivity{
-
     String targetURL;
 
     @Override
@@ -20,7 +19,7 @@ public class LendoreditPopup extends AppCompatActivity{
         targetURL = extras.getString("toEditID");
     }
 
-    public void switchViewToLendout(View v){
+    public void switchViewToLendOut(View v){
         Intent open_EditRecords = new Intent(LendoreditPopup.this, AddLentOut.class);
         open_EditRecords.putExtra("toEditID", targetURL);
         startActivity(open_EditRecords);
@@ -33,5 +32,4 @@ public class LendoreditPopup extends AppCompatActivity{
         startActivity(open_EditRecords);
         finish();
     }
-
 }

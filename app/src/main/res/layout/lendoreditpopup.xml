@@ -27,7 +27,7 @@
             android:shadowDx="15"
             android:shadowDy="0"
             android:shadowRadius="5"
-            android:onClick="switchViewToLendout"
+            android:onClick="switchViewToLendOut"
             />
 
         <Button

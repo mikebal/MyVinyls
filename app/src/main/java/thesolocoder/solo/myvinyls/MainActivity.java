@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     ListViewAdapterGenre customAdapterGenre;
     String databaseTable = "records";
     EditText inputSearch;
+    MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,9 +119,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuItem item=menu.add("Title"); //your desired title here
-        item.setIcon(R.mipmap.ic_search_white_48dp); //your desired icon here
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        menuItem=menu.add("Title"); //your desired title here
+        menuItem.setIcon(R.mipmap.ic_search_white_48dp); //your desired icon here
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }
     @Override
@@ -132,10 +133,14 @@ public class MainActivity extends AppCompatActivity
         final LinearLayout tabBar = (LinearLayout) findViewById(R.id.linearLayout);
         final LinearLayout searchArea = (LinearLayout) findViewById(R.id.linearLayoutSearchBar);
 
-        if(tabBar.getVisibility() == View.GONE)
+        if(tabBar.getVisibility() == View.GONE) {
             searchBarAnimation(searchArea, tabBar);
-        else
+            menuItem.setIcon(R.mipmap.ic_search_white_48dp);
+        }
+        else {
             searchBarAnimation(tabBar, searchArea);
+            menuItem.setIcon(R.mipmap.ic_clear_white_36dp);
+        }
     }
 
     private void searchBarAnimation(final LinearLayout fadeoutElement, final LinearLayout fadeInElement){
@@ -184,7 +189,12 @@ public class MainActivity extends AppCompatActivity
 
    private void populateList(ArrayList<Records> recordList) {
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-        customAdapter = new ListViewAdapterMain(this, recordList, null);
+       if(!databaseTable.equals("lentout"))
+            customAdapter = new ListViewAdapterMain(this, recordList, null);
+       else{
+           ArrayList<LentOut> lentOutList = dbHandler.getLentOut();
+           customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);
+       }
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
     }
@@ -253,7 +263,7 @@ public class MainActivity extends AppCompatActivity
 
         if(databaseTable.equals("lentout"))
         {
-            populateArrayList("SELECT * FROM "+ databaseTable + " ORDER BY _id");
+            populateArrayList("SELECT * FROM records INNER JOIN lentout ON  records._id=lentout.album_id ORDER BY album_id");
         }
         else if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

@@ -85,6 +85,7 @@
             android:layout_weight="10"
             android:id="@+id/editTextSearchBox"
             android:layout_marginTop="7dp"
+            android:layout_marginLeft="3dp"
             android:paddingTop="3dp"
             android:hint="@string/search"
             android:background="@android:color/darker_gray"
@@ -92,10 +93,11 @@
             android:focusable="true"
             />
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_width="8dp"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@mipmap/ic_clear_white_36dp"/>
+            android:src="@mipmap/ic_clear_white_36dp"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <ListView

@@ -5,7 +5,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
@@ -250,5 +255,32 @@ public class MyDBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return result;
+    }
+    // "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout DATE, dueback DATE);";
+    public ArrayList<LentOut> getLentOut() {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM lentout ORDER BY album_id";
+        ArrayList<LentOut> lentOutList = new ArrayList<>();
+        LentOut item;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+            item = new LentOut();
+            if (c.getString(c.getColumnIndex("lentout")) != null) {
+                item.name = c.getString(c.getColumnIndex("lentout"));
+                DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+                try {
+                    item.lentout  = df.parse(c.getString(c.getColumnIndex("dateout")));
+                    item.dueBack  = df.parse( c.getString(c.getColumnIndex("dueback")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            lentOutList.add(item);
+            c.moveToNext();
+        }
+        c.close();
+        db.close();
+        return lentOutList;
     }
 }
