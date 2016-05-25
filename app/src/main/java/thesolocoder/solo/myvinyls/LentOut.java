@@ -1,20 +1,102 @@
 package thesolocoder.solo.myvinyls;
 
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by Michael on 5/23/2016.
  */
 public class LentOut {
     String name;
-    Date   lentout;
-    Date   dueBack;
+    Calendar    lentout = new Calendar() {
+        @Override
+        public void add(int field, int value) {
 
-  /*  public boolean isOverDue(){
-        boolean overDue = false;
-        Date date = new Date();
-        if(date.after(dueBack))
-            overDue = true;
-        return overDue;
-    }*/
+        }
+
+        @Override
+        protected void computeFields() {
+
+        }
+
+        @Override
+        protected void computeTime() {
+
+        }
+
+        @Override
+        public int getGreatestMinimum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getLeastMaximum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getMaximum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getMinimum(int field) {
+            return 0;
+        }
+
+        @Override
+        public void roll(int field, boolean increment) {
+
+        }
+    };
+    Calendar    dueBack = new Calendar() {
+        @Override
+        public void add(int field, int value) {
+
+        }
+
+        @Override
+        protected void computeFields() {
+
+        }
+
+        @Override
+        protected void computeTime() {
+
+        }
+
+        @Override
+        public int getGreatestMinimum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getLeastMaximum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getMaximum(int field) {
+            return 0;
+        }
+
+        @Override
+        public int getMinimum(int field) {
+            return 0;
+        }
+
+        @Override
+        public void roll(int field, boolean increment) {
+
+        }
+    };
+
+  public boolean isOverDue(){
+      boolean overDue = false;
+      Calendar c = Calendar.getInstance();
+      long dueBackTime = dueBack.getTimeInMillis();
+      long otherTime = c.getTimeInMillis();
+      if(dueBackTime < otherTime)
+        overDue = true;
+      return overDue;
+    }
 }

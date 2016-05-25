@@ -36,7 +36,6 @@ public class AddLentOut extends AppCompatActivity {
         String currentIDStr = String.valueOf(currentID);
         String dateOutStr = dateOut.getText().toString();
         String dateDueStr = dateDue.getText().toString();
-
         dbHandler.runRawQueryNoResult("insert into lentout (_id,album_id,lentout,dateout,dueback) values ("+currentIDStr+","+recordID+",'"+nameStr+"','"+dateOutStr+"','"+dateDueStr+"');");
         finish();
     }

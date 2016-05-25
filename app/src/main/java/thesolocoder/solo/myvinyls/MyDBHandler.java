@@ -11,6 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.StringTokenizer;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
@@ -38,7 +40,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableGenres);
         final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
         db.execSQL(queryTableWishlist);
-        final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout DATE, dueback DATE);";
+        final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout TEXT, dueback TEXT);";
         db.execSQL(queryTableLentout);
         final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableWishlistGenre);
@@ -268,13 +270,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
             item = new LentOut();
             if (c.getString(c.getColumnIndex("lentout")) != null) {
                 item.name = c.getString(c.getColumnIndex("lentout"));
-                DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
-                try {
-                    item.lentout  = df.parse(c.getString(c.getColumnIndex("dateout")));
-                    item.dueBack  = df.parse( c.getString(c.getColumnIndex("dueback")));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                String dateString = c.getString(c.getColumnIndex("dueback"));
+                int[] date = getdate(dateString);
+
+               // DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+
+                    Date calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();//new Date(date[2],date[1],date[0]);
+                    item.dueBack.setTime(calDate);
+                   // String dateString = c.getString(c.getColumnIndex("dateout"));
+                    //item.lentout.setDate(df.parse(c.getString(c.getColumnIndex("dateout"))));
+                   // item.dueBack.setTime(df.parse(c.getString(c.getColumnIndex("dueback"))));
+
             }
             lentOutList.add(item);
             c.moveToNext();
@@ -282,5 +288,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return lentOutList;
+    }
+    private int[] getdate(String dateString)
+    {
+        int[] date = new int[3];
+        int count = 0;
+        StringTokenizer tokens = new StringTokenizer(dateString, "/");
+        while(tokens.hasMoreTokens()) {
+            String current = tokens.nextToken();
+            date[count] = Integer.valueOf(current);
+            count++;
+        }
+        return date;
     }
 }

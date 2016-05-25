@@ -63,15 +63,18 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     }
 
     private void loadLentOutData(View customView, int position){
+
+        if(position > lentOut.size())
+            return;
         TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
         TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
         header.setVisibility(View.VISIBLE);
         lentOutToName.setVisibility(View.VISIBLE);
         lentOutToName.setText(lentOut.get(position).name);
-       /* if(lentOut.get(position).isOverDue()){
+        if(lentOut.get(position).isOverDue()){
             header.setTextColor(context.getResources().getColor(R.color.darkRed));
             lentOutToName.setTextColor(context.getResources().getColor(R.color.darkRed));
-        }*/
+        }
     }
 
     private void loadImage(ImageView albumCover, String fileName) {
