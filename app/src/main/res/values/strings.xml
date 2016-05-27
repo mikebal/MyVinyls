@@ -12,5 +12,9 @@
     <string name="Underline_genres"><u>Genres</u></string>
     <string name="Underline_albums"><u>Albums</u></string>
     <string name="search">Search..</string>
+    <string name="lentTo">Lent to:</string>
+    <string name="lentOn">Lent on:</string>
+    <string name="DueBack">Back by:</string>
+    <string name="returnAlbum">Record Returned</string>
 
 </resources>

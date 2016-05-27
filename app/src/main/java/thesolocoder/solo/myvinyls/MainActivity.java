@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     String databaseTable = "records";
     EditText inputSearch;
     MenuItem menuItem;
+    View lastClickedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +46,17 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
         dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        populateArrayList("SELECT * FROM records ORDER BY albumname;");
-        underlineAlbum();
+        setupDefaultAppearance();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(animRotate);
-                if(databaseTable.equals("lentout"))
-                {
-                    Intent open_addLentOut = new Intent(MainActivity.this, AddLentOut.class);
-                    startActivity(open_addLentOut);
-                }
-                else {
-                    Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-                    open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
-                    open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
-                    startActivity(open_AddRecords);
-                }
+                Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
+                open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
+                startActivity(open_AddRecords);
             }
         });
 
@@ -92,8 +86,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
 
         if (id == R.id.nav_my_collection) {
             databaseTable = "records";
@@ -111,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         {
             databaseTable = "lentout";
             reloadListView();
+            fab.setVisibility(View.GONE);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -204,11 +200,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position,
                                     long arg3) {
-                Records selected = (Records) adapter.getItemAtPosition(position);
-               // Intent open_EditRecords = new Intent(MainActivity.this, AddRecord.class);
-                Intent open_EditRecords = new Intent(MainActivity.this, LendoreditPopup.class);
-                open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
-                startActivity(open_EditRecords);
+                if(databaseTable.equals("lentout")){
+                    Records selected = (Records) adapter.getItemAtPosition(position);
+                    Intent open_EditRecords = new Intent(MainActivity.this, RecordReturn.class);
+                    open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
+                    startActivity(open_EditRecords);
+                }
+                else {
+                    Records selected = (Records) adapter.getItemAtPosition(position);
+                    Intent open_EditRecords = new Intent(MainActivity.this, LendoreditPopup.class);
+                    open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
+                    startActivity(open_EditRecords);
+                }
             }
         });
         inputSearch.addTextChangedListener(new TextWatcher() {
@@ -256,10 +259,10 @@ public class MainActivity extends AppCompatActivity
         Button artist = (Button) findViewById(R.id.buttonArtists);
         Button album = (Button) findViewById(R.id.buttonAlbums);
         Button genres = (Button) findViewById(R.id.buttonGeneres);
-
         artist.setPaintFlags(0);
         album.setPaintFlags(0);
         genres.setPaintFlags(0);
+        lastClickedButton = v;
 
         if(databaseTable.equals("lentout"))
         {
@@ -277,9 +280,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void underlineAlbum()
+    private void setupDefaultAppearance()
     {
         Button album = (Button) findViewById(R.id.buttonAlbums);
         album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        lastClickedButton = album;
+        tabButtonClicked(lastClickedButton);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(lastClickedButton != null)
+            tabButtonClicked(lastClickedButton);
     }
 }

@@ -5,10 +5,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
 import android.content.Context;
 import android.content.ContentValues;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -44,7 +40,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableLentout);
         final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableWishlistGenre);
-     //   db.execSQL("insert into lentout (_id,album_id,lentout,dateout,dueback) values (0,-1,'','','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (2,-1,'Electronica','');");
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (3,-1,'Hip-Hop','');");
@@ -62,6 +57,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS records");
         db.execSQL("DROP TABLE IF EXISTS genres");
         db.execSQL("DROP TABLE IF EXISTS wishlist");
+        db.execSQL("DROP TABLE IF EXISTS lentout");
         onCreate(db);
     }
 
@@ -109,9 +105,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
-                String genre_querey = "SELECT * FROM " + TABLE_RECORDS + TABLE_GENRES + " WHERE " +
+                String genre_query = "SELECT * FROM " + TABLE_RECORDS + TABLE_GENRES + " WHERE " +
                         COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
-                genre_cursor = db.rawQuery(genre_querey, null);
+                genre_cursor = db.rawQuery(genre_query, null);
                 genre_cursor.moveToFirst();
                 while (!genre_cursor.isAfterLast()) {
                     if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
@@ -134,7 +130,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=" + id;
         Records selectedRecord = new Records();
-        ArrayList<String> generes = new ArrayList<>();
+        ArrayList<String> genres = new ArrayList<>();
 
         Cursor c = db.rawQuery(query, null);
         Cursor genre_cursor;
@@ -145,18 +141,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
             selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
             selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
 
-            String genre_querey = "SELECT * FROM " + TABLE_NAME + TABLE_GENRES + " WHERE " +
+            String genre_query = "SELECT * FROM " + TABLE_NAME + TABLE_GENRES + " WHERE " +
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
-            genre_cursor = db.rawQuery(genre_querey, null);
+            genre_cursor = db.rawQuery(genre_query, null);
             genre_cursor.moveToFirst();
             while (!genre_cursor.isAfterLast()) {
                 if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
-                    generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
+                    genres.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
                 }
                 genre_cursor.moveToNext();
             }
             genre_cursor.close();
-            selectedRecord.set_genre(generes);
+            selectedRecord.set_genre(genres);
         }
         c.moveToNext();
         c.close();
@@ -258,7 +254,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
         return result;
     }
-    // "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout DATE, dueback DATE);";
+
     public ArrayList<LentOut> getLentOut() {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT * FROM lentout ORDER BY album_id";
@@ -270,17 +266,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
             item = new LentOut();
             if (c.getString(c.getColumnIndex("lentout")) != null) {
                 item.name = c.getString(c.getColumnIndex("lentout"));
+
                 String dateString = c.getString(c.getColumnIndex("dueback"));
                 int[] date = getdate(dateString);
+                Date calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();
+                item.dueBack.setTime(calDate);
 
-               // DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
-                    Date calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();//new Date(date[2],date[1],date[0]);
-                    item.dueBack.setTime(calDate);
-                   // String dateString = c.getString(c.getColumnIndex("dateout"));
-                    //item.lentout.setDate(df.parse(c.getString(c.getColumnIndex("dateout"))));
-                   // item.dueBack.setTime(df.parse(c.getString(c.getColumnIndex("dueback"))));
-
+                dateString = c.getString(c.getColumnIndex("dateout"));
+                date = getdate(dateString);
+                calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();
+                item.lentout.setTime(calDate);
             }
             lentOutList.add(item);
             c.moveToNext();
