@@ -255,9 +255,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return result;
     }
 
-    public ArrayList<LentOut> getLentOut() {
+    public ArrayList<LentOut> getLentOut(String query) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT * FROM lentout ORDER BY album_id";
         ArrayList<LentOut> lentOutList = new ArrayList<>();
         LentOut item;
         Cursor c = db.rawQuery(query, null);
@@ -266,7 +265,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             item = new LentOut();
             if (c.getString(c.getColumnIndex("lentout")) != null) {
                 item.name = c.getString(c.getColumnIndex("lentout"));
-
+                item.id = c.getString(c.getColumnIndex("album_id"));
                 String dateString = c.getString(c.getColumnIndex("dueback"));
                 int[] date = getdate(dateString);
                 Date calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();

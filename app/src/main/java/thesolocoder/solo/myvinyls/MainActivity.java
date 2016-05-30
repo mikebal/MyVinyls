@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
        if(!databaseTable.equals("lentout"))
             customAdapter = new ListViewAdapterMain(this, recordList, null);
        else{
-           ArrayList<LentOut> lentOutList = dbHandler.getLentOut();
+           ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
            customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);
        }
         recordDisplayList.setAdapter(customAdapter);

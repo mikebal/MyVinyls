@@ -4,7 +4,6 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/imageButton"
-        android:onClick="albumCoverClicked"
         android:src="@mipmap/ic_add_a_photo_black_48dp"
         android:layout_marginTop="15dp"
         android:layout_alignParentTop="true"

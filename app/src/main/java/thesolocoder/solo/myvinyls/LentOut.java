@@ -6,6 +6,7 @@ import java.util.Calendar;
  * Created by Michael on 5/23/2016.
  */
 public class LentOut {
+    String id;
     String name;
     Calendar    lentout = new Calendar() {
         @Override
@@ -98,5 +99,17 @@ public class LentOut {
       if(dueBackTime < otherTime)
         overDue = true;
       return overDue;
+    }
+
+    public String getDateString(Calendar calendar)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(calendar.getTimeInMillis());
+
+        String date;
+        date = String.valueOf(cal.get(Calendar.DAY_OF_MONTH)) + "/";
+        date += String.valueOf(cal.get(Calendar.MONTH)) + "/";
+        date += String.valueOf(cal.get(Calendar.YEAR));
+        return date;
     }
 }
