@@ -72,7 +72,7 @@ public class AddGenre extends AppCompatActivity {
     private void populateList(){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
-        ArrayList<String> primaryGenres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM genres ORDER BY genre;","genre");
+        ArrayList<String> primaryGenres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM recordsgenres ORDER BY genre;","genre");
         customAdapter = new GenreAdapter(this, primaryGenres, selectedView, selectedCategoryTextView, checkboxHolder, toEditID);
         genre_list.setAdapter(customAdapter);
     }

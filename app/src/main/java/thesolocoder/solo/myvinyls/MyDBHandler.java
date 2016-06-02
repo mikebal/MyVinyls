@@ -190,7 +190,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     private GenreListItem getImagesForGenreItem(GenreListItem item, boolean isLeftSide, SQLiteDatabase db, String genre) {
-        final String MY_QUERY = "SELECT * FROM records INNER JOIN genres ON  records._id=genres.album_id WHERE  records.hasimage='true' AND genre='" + genre + "'";
+        final String MY_QUERY = "SELECT * FROM records INNER JOIN recordsgenres ON  records._id=recordsgenres.album_id WHERE  records.hasimage='true' AND genre='" + genre + "'";
         Cursor imageCursor = db.rawQuery(MY_QUERY, null);
         imageCursor.moveToFirst();
         while (!imageCursor.isAfterLast() && (item.albumArt.size() < 3 || item.albumArtRight.size() < 3)) {
