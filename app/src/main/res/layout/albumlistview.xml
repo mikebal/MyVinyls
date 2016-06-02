@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
+        android:paddingStart="2dp"
         android:paddingLeft="2dp"
+        android:paddingEnd="2dp"
         android:paddingTop="2dp">
 
         <ImageView
-            android:paddingLeft="10dp"
+            android:contentDescription="@string/albumArt"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="#000000"
@@ -20,31 +23,37 @@
 
         <TextView
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Album Name Here"
             android:id="@+id/textViewAlbumName"
-            android:textSize="25dp"
+            android:textSize="20sp"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageView2" />
+            android:layout_toRightOf="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2"/>
 
         <TextView
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Band Name Here"
             android:id="@+id/textViewBandName"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_below="@+id/textViewAlbumName"
             android:layout_toRightOf="@+id/imageView2"
             android:layout_toEndOf="@+id/imageView2" />
 
         <TextView
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="YEAR"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:id="@+id/textViewYear"
             android:layout_below="@+id/textViewBandName"
             android:layout_toRightOf="@+id/imageView2"
@@ -54,21 +63,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Lent to: "
+            android:text="@string/lentTo"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:paddingLeft="5dp"
             android:id="@+id/textViewLentOutHeader"
             android:layout_below="@+id/textViewYear"
             android:layout_alignLeft="@+id/textViewYear"
             android:layout_alignStart="@+id/textViewYear"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:visibility="gone"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BOB LAWBLAW"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:id="@+id/textViewLentOutName"
             android:layout_alignTop="@+id/textViewLentOutHeader"
             android:layout_toRightOf="@+id/textViewLentOutHeader"
@@ -76,6 +84,7 @@
             android:visibility="gone"/>
 
         <ImageButton
+            android:contentDescription="@string/threeDotDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/imageButton3"
@@ -85,6 +94,5 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
-
     </RelativeLayout>
 </LinearLayout>

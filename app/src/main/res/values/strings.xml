@@ -16,5 +16,7 @@
     <string name="lentOn">Lent on:</string>
     <string name="DueBack">Back by:</string>
     <string name="returnAlbum">Record Returned</string>
+    <string name="albumArt">Album Art/Cover</string>
+    <string name="threeDotDescription">Button to expand menu</string>
 
 </resources>
