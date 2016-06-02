@@ -13,9 +13,6 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by Michael on 5/27/2016.
- */
 public class RecordReturn extends AppCompatActivity{
 
     ImageView albumArtwork;

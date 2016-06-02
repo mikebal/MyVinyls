@@ -1,8 +1,12 @@
 package thesolocoder.solo.myvinyls;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,14 +15,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by Michael on 2/25/2016.
- */
 class ListViewAdapterMain extends BaseAdapter implements Filterable {
     private LayoutInflater inflater;
     private ArrayList<Records> records;
@@ -49,12 +51,15 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         TextView bandName = (TextView) customView.findViewById(R.id.textViewBandName);
         TextView albumYear = (TextView) customView.findViewById(R.id.textViewYear);
         ImageView albumCover = (ImageView) customView.findViewById(R.id.imageView2);
+        ImageButton moreMenu = (ImageButton) customView.findViewById(R.id.imageButton3);
+        moreMenu.setOnClickListener(expandMenuChoices);
 
         Records record = records.get(position);
         albumName.setText(record.get_albumname());
         bandName.setText(record.get_bandname());
         albumYear.setText(record.get_releaseyear());
         loadImage(albumCover, record.get_imageurl());
+        moreMenu.setTag(record.get_imageurl());
 
         if(lentOut != null)
             loadLentOutData(customView, position);
@@ -64,23 +69,26 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
 
     private void loadLentOutData(View customView, int position){
 
-        if(position > lentOut.size())
-            return;
+       // if(position > lentOut.size())
+        //    return;
         TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
         TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
         header.setVisibility(View.VISIBLE);
         lentOutToName.setVisibility(View.VISIBLE);
         lentOutToName.setText(lentOut.get(position).name);
         if(lentOut.get(position).isOverDue()){
-            header.setTextColor(context.getResources().getColor(R.color.darkRed));
-            lentOutToName.setTextColor(context.getResources().getColor(R.color.darkRed));
+            header.setTextColor(Color.parseColor("#990000"));
+            lentOutToName.setTextColor(Color.parseColor("#990000"));
         }
     }
 
     private void loadImage(ImageView albumCover, String fileName) {
         String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
-        albumCover.setImageBitmap(bitmap);
+        if(bitmap != null)
+            albumCover.setImageBitmap(bitmap);
+        else
+            albumCover.setImageResource(R.mipmap.default_noartwork);
     }
 
     @Override
@@ -131,5 +139,38 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
             }
         };
         return filter;
+    }
+    private View.OnClickListener expandMenuChoices = new View.OnClickListener() {
+        public void onClick(View v) {
+              final CharSequence[] items = {"Edit", "Lend out"};
+            final String recordID = (String) v.getTag();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Record Options");
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                    Intent startActivity = new Intent();
+                    if(item == 0) {
+                        startActivity.setClass(context, AddRecord.class);
+                        startActivity.setAction(AddLentOut.class.getName());
+                    }
+                    else if(item == 1) {
+                        startActivity.setClass(context, AddLentOut.class);
+                        startActivity.setAction(AddLentOut.class.getName());
+                    }
+                    switchView(startActivity, recordID);
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    };
+
+    private void switchView(Intent startActivity, String recordID){
+
+        startActivity.setFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity.putExtra("toEditID", recordID);
+        context.startActivity(startActivity);
     }
 }
