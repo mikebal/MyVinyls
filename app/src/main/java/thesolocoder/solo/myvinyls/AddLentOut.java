@@ -1,5 +1,7 @@
 package thesolocoder.solo.myvinyls;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,23 +23,13 @@ public class AddLentOut extends AppCompatActivity {
     }
 
     public void lentOutDone(View v){
-        int currentID = 1;
         EditText name = (EditText) findViewById(R.id.editTextLendoutName);
-        EditText dateOut = (EditText) findViewById(R.id.editTextLentoutDateOut);
-        EditText dateDue = (EditText) findViewById(R.id.editTextLentoutDue);
         String nameStr = name.getText().toString();
         if(nameStr.equals(""))
                   return;
 
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        ArrayList<String> listOfIDs = dbHandler.dbReturnListStrings("SELECT * FROM lentout","_id");
-        if(listOfIDs != null && listOfIDs.size()!=0)
-            currentID += findLargestString(listOfIDs);
-        String currentIDStr = String.valueOf(currentID);
-        String dateOutStr = dateOut.getText().toString();
-        String dateDueStr = dateDue.getText().toString();
-        dbHandler.runRawQueryNoResult("insert into lentout (_id,album_id,lentout,dateout,dueback) values ("+currentIDStr+","+recordID+",'"+nameStr+"','"+dateOutStr+"','"+dateDueStr+"');");
-        finish();
+        manageDuplicate(dbHandler);
     }
 
     private int findLargestString(ArrayList<String> list)
@@ -51,5 +43,52 @@ public class AddLentOut extends AppCompatActivity {
                 highest = current;
         }
         return highest;
+    }
+    private void manageDuplicate(final MyDBHandler dbHandler){
+        String result = dbHandler.runRawQueryIfExists("SELECT * FROM lentout WHERE album_id='" + recordID +"'", "album_id");
+        if(!result.equals("-1")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Duplicate Lent Out");
+            builder.setMessage("This record is show as already out, would you like override?");
+
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dbHandler.runRawQueryNoResult("DELETE FROM " + "lentout WHERE album_id=\"" + recordID + "\";");
+                    dialog.dismiss();
+                    lendOutRecord(dbHandler);
+                }
+            });
+
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        else
+            lendOutRecord(dbHandler);
+    }
+    private void lendOutRecord(MyDBHandler dbHandler){
+
+        int currentID = 1;
+        EditText name = (EditText) findViewById(R.id.editTextLendoutName);
+        EditText dateOut = (EditText) findViewById(R.id.editTextLentoutDateOut);
+        EditText dateDue = (EditText) findViewById(R.id.editTextLentoutDue);
+        String nameStr = name.getText().toString();
+
+        ArrayList<String> listOfIDs = dbHandler.dbReturnListStrings("SELECT * FROM lentout", "_id");
+        if (listOfIDs != null && listOfIDs.size() != 0)
+            currentID += findLargestString(listOfIDs);
+        String currentIDStr = String.valueOf(currentID);
+        String dateOutStr = dateOut.getText().toString();
+        String dateDueStr = dateDue.getText().toString();
+        dbHandler.runRawQueryNoResult("insert into lentout (_id,album_id,lentout,dateout,dueback) values (" + currentIDStr + "," + recordID + ",'" + nameStr + "','" + dateOutStr + "','" + dateDueStr + "');");
+        finish();
     }
 }

@@ -241,7 +241,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
     }
-    public String runRawQueryIfExists(String query) {
+    public String runRawQueryIfExists(String query, String target) {
         String result;
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.rawQuery(query, null);
@@ -249,7 +249,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if(c.getCount() == 0)
             result = "-1";
         else
-            result = c.getString(c.getColumnIndex(COLUMN_ALBUMID));
+            result = c.getString(c.getColumnIndex(target));
         c.close();
         db.close();
         return result;

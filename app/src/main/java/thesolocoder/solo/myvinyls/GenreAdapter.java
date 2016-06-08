@@ -193,7 +193,7 @@ public class GenreAdapter  extends BaseAdapter {
         boolean mustBeChecked = false;
         if(!editAlbumID.equals("-1")) {
             String query = "SELECT * FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + genre + "' AND subgenre='" + subGenre + "'";
-            String queryResult = dbHandler.runRawQueryIfExists(query);
+            String queryResult = dbHandler.runRawQueryIfExists(query, "album_id");
             if (queryResult.equals(editAlbumID))
                 mustBeChecked = true;
         }
