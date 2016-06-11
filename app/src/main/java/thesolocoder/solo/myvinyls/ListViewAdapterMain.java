@@ -26,6 +26,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     private ArrayList<Records> records;
     private ArrayList<LentOut> lentOut;
     private Context context;
+    public boolean isOnLendoutScreen = false;
 
     public ListViewAdapterMain(Context context, ArrayList<Records> data, ArrayList<LentOut> dataLentOut){
         inflater = LayoutInflater.from(context);
@@ -42,6 +43,11 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     }
     public long getItemId(int position) {
         return position;
+    }
+
+    public void setIsOnLendOutScreen(boolean setTo)
+    {
+        isOnLendoutScreen = setTo;
     }
 
     @Override
@@ -142,7 +148,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     }
     private View.OnClickListener expandMenuChoices = new View.OnClickListener() {
         public void onClick(View v) {
-              final CharSequence[] items = {"Edit", "Lend out"};
+            final CharSequence[] items = {"Edit", "Lend out"};
             final String recordID = (String) v.getTag();
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Record Options");
@@ -154,8 +160,14 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
                         startActivity.setAction(AddLentOut.class.getName());
                     }
                     else if(item == 1) {
-                        startActivity.setClass(context, AddLentOut.class);
-                        startActivity.setAction(AddLentOut.class.getName());
+                        if(!isOnLendoutScreen) {
+                            startActivity.setClass(context, AddLentOut.class);
+                            startActivity.setAction(AddLentOut.class.getName());
+                        }
+                        else{
+                            startActivity.setClass(context, RecordReturn.class);
+                            startActivity.setAction(RecordReturn.class.getName());
+                        }
                     }
                     switchView(startActivity, recordID);
                 }

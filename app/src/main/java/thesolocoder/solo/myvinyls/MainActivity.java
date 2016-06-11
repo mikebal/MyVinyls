@@ -92,10 +92,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_my_collection) {
             databaseTable = "records";
+            customAdapter.isOnLendoutScreen = false;
             reloadListView();
 
         } else if (id == R.id.nav_wishlist) {
             databaseTable = "wishlist";
+            customAdapter.isOnLendoutScreen = false;
             reloadListView();
 
         } else if (id == R.id.nav_share) {
@@ -190,30 +192,14 @@ public class MainActivity extends AppCompatActivity
        else{
            ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
            customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);
+           customAdapter.setIsOnLendOutScreen(true);
        }
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
+
     }
 
     private void setListClickListener(){
-        recordDisplayList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position,
-                                    long arg3) {
-                if(databaseTable.equals("lentout")){
-                    Records selected = (Records) adapter.getItemAtPosition(position);
-                    Intent open_EditRecords = new Intent(MainActivity.this, RecordReturn.class);
-                    open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
-                    startActivity(open_EditRecords);
-                }
-                else {
-                    Records selected = (Records) adapter.getItemAtPosition(position);
-                    Intent open_EditRecords = new Intent(MainActivity.this, LendoreditPopup.class);
-                    open_EditRecords.putExtra("toEditID", String.valueOf(selected.get_imageurl()));
-                    startActivity(open_EditRecords);
-                }
-            }
-        });
         inputSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
