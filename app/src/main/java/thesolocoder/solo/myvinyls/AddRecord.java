@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -46,6 +47,9 @@ public class AddRecord extends AppCompatActivity {
 
     private void setupVariables() {
         albumName = (EditText) findViewById(R.id.editText_albumName);
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        String text = dbHandler.getDBpath();
+        albumName.setText(text);
         albumYear = (EditText) findViewById(R.id.editText_year);
         albumBand = (EditText) findViewById(R.id.editText_bandName);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);

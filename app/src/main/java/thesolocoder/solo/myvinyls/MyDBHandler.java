@@ -1,10 +1,10 @@
 package thesolocoder.solo.myvinyls;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.Cursor;
-import android.content.Context;
-import android.content.ContentValues;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,9 +23,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ALBUMID = "album_id";
     private static final String COLUMN_GENRE = "genre";
     private static final String COLUMN_HASIMAGE = "hasimage";
+    private Context appContext;
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+        appContext = context;
     }
 
     @Override
@@ -294,5 +296,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
             count++;
         }
         return date;
+    }
+
+    public String getDBpath(){
+        String path = appContext.getDatabasePath(DATABASE_NAME).getAbsolutePath().toString();
+        SQLiteDatabase db = getWritableDatabase();
+        return path;
     }
 }
