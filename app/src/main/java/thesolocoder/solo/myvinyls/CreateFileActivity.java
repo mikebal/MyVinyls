@@ -16,6 +16,7 @@ package thesolocoder.solo.myvinyls;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -24,7 +25,12 @@ import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder.DriveFileResult;
 import com.google.android.gms.drive.MetadataChangeSet;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -61,17 +67,36 @@ public class CreateFileActivity extends BaseDemoActivity {
                     // write content to DriveContents
                     OutputStream outputStream = driveContents.getOutputStream();
                     Writer writer = new OutputStreamWriter(outputStream);
+                    MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+                    String databaseLocaton = dbHandler.getDBpath();
+                    String input;
                     try {
-                        writer.write("Hello World!");
+                        try {
+                            File file = new File(databaseLocaton);
+                            BufferedReader inputReader = new BufferedReader(new FileReader(file));
+                            //BufferedReader inputReader = new BufferedReader(new InputStreamReader(getApplicationContext().openFileInput("records.db")));
+
+                            while ((input = inputReader.readLine()) != null){
+                                writer.write(input);
+                            }
+                            inputReader.close();
+                        }
+                        catch (IOException e) {}
                         writer.close();
                     } catch (IOException e) {
                         Log.e(TAG, e.getMessage());
                     }
 
+                    //change the metadata of the file. by setting title, setMimeType.
+                    String mimeType = MimeTypeMap.getSingleton().getExtensionFromMimeType("db");
                     MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                            .setTitle("recodrs")
+                            .setMimeType(mimeType)
+                            .build();
+                  /*  MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                             .setTitle("New file")
                             .setMimeType("text/plain")
-                            .setStarred(true).build();
+                            .setStarred(true).build();*/
 
                     // create a file on root folder
                     Drive.DriveApi.getRootFolder(getGoogleApiClient())
