@@ -25,10 +25,11 @@ public class AddLentOut extends AppCompatActivity {
 
     public void lentOutDone(View v){
         EditText name = (EditText) findViewById(R.id.editTextLendoutName);
-        String nameStr = name.getText().toString();
-        if(nameStr.equals(""))
-                  return;
-
+        if(name != null) {
+            String nameStr = name.getText().toString();
+            if (nameStr.equals(""))
+                return;
+        }
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         manageDuplicate(dbHandler);
     }
@@ -81,8 +82,11 @@ public class AddLentOut extends AppCompatActivity {
         EditText name = (EditText) findViewById(R.id.editTextLendoutName);
         EditText dateOut = (EditText) findViewById(R.id.editTextLentoutDateOut);
         EditText dateDue = (EditText) findViewById(R.id.editTextLentoutDue);
-        String nameStr = name.getText().toString();
 
+        if(name == null || dateDue == null || dateOut == null)
+            return;
+
+        String nameStr = name.getText().toString();
         ArrayList<String> listOfIDs = dbHandler.dbReturnListStrings("SELECT * FROM lentout", "_id");
         if (listOfIDs != null && listOfIDs.size() != 0)
             currentID += findLargestString(listOfIDs);

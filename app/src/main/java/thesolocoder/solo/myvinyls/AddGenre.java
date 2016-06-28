@@ -36,15 +36,13 @@ public class AddGenre extends AppCompatActivity {
         populateList();
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(fab != null)
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Button   button = (Button) findViewById(R.id.buttonBackGround);
-                button.setVisibility(View.VISIBLE);
-                button = (Button) findViewById(R.id.button2);
-                button.setVisibility(View.VISIBLE);
-                button = (Button) findViewById(R.id.button3);
-                button.setVisibility(View.VISIBLE);
+                showButton(findViewById(R.id.buttonBackGround));
+                showButton(findViewById(R.id.button2));
+                showButton(findViewById(R.id.button3));
                 fab.setImageResource(R.mipmap.ic_clear_white_36dp);
             }
         });
@@ -53,16 +51,23 @@ public class AddGenre extends AppCompatActivity {
         closeOpenMenu();
     }
     private void closeOpenMenu(){
-        Button   button = (Button) findViewById(R.id.buttonBackGround);
-        button.setVisibility(View.GONE);
-        button = (Button) findViewById(R.id.button2);
-        button.setVisibility(View.GONE);
-        button = (Button) findViewById(R.id.button3);
-        button.setVisibility(View.GONE);
+        hideButton(findViewById(R.id.buttonBackGround));
+        hideButton(findViewById(R.id.button2));
+        hideButton(findViewById(R.id.button3));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.mipmap.ic_add_white_36dp);
+        if(fab!= null)
+            fab.setImageResource(R.mipmap.ic_add_white_36dp);
     }
-
+    private void hideButton(View button)
+    {
+        if(button != null)
+            button.setVisibility(View.GONE);
+    }
+    private void showButton(View button)
+    {
+        if(button != null)
+            button.setVisibility(View.VISIBLE);
+    }
 
     private void setupVariables(){
         genre_list = (ListView) findViewById(R.id.listView_genre);
@@ -84,10 +89,12 @@ public class AddGenre extends AppCompatActivity {
         ArrayList<String> selected = customAdapter.getCheckedItems();
         selectedGenres.addAll(selected);
         LinearLayout checkboxHolder = (LinearLayout) findViewById(R.id.LinearLayoutCheckboxAreaHolder);
-        LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
-        LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
-        checkboxArea1.removeAllViews();
-        checkboxArea2.removeAllViews();
+        if(checkboxHolder != null){
+            LinearLayout checkboxArea1 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea1);
+            LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
+            checkboxArea1.removeAllViews();
+            checkboxArea2.removeAllViews();
+        }
     }
     public void addSubGenreClicked(View v)
     {
@@ -140,7 +147,10 @@ public class AddGenre extends AppCompatActivity {
         if(_id == null || _id.equals("New Entry"))
             return;
         toEditID = _id;
-        if(!toEditID.equals("-1"))
-            findViewById(R.id.button4).setVisibility(View.GONE);
+        if(!toEditID.equals("-1")) {
+            Button button = (Button) findViewById(R.id.button4);
+            if(button != null)
+                button.setVisibility(View.GONE);
+        }
     }
 }

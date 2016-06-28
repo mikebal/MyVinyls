@@ -27,11 +27,15 @@ public class AddSubGenrePopup extends AppCompatActivity {
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         ArrayList<String> genres = dbHandler.dbReturnListStrings("SELECT DISTINCT genre FROM genres ORDER BY genre;","genre");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, genres);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, genres);
         primaryCategorySpinner.setAdapter(adapter);
     }
     public void addSubGenre(View v){
         EditText subGenreInput = (EditText) findViewById(R.id.editTextNewSubGenre);
+
+        if(subGenreInput == null)
+            return;
+
         String input = subGenreInput.getText().toString();
         if(input.equals("") || input.charAt(0) == '#')
             finish();

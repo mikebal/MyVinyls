@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 view.startAnimation(animRotate);
                 Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-                open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
+           //     open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
                 open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
                 startActivity(open_AddRecords);
             }
@@ -105,8 +105,9 @@ public class MainActivity extends AppCompatActivity
             customAdapter.isOnLendoutScreen = false;
             reloadListView();
 
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.nav_backup) {
+            Intent open_BackupMenu = new Intent(MainActivity.this, BackupRestore.class);
+            startActivity(open_BackupMenu);
         } else if (id == R.id.nav_settings) {
 
         } else if(id == R.id.nav_lentout)

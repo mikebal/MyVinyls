@@ -84,6 +84,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateFileActivity" />
+        <activity android:name=".BackupRestore" />
         <activity android:name=".EditRecord" />
         <activity android:name=".RetrieveContentsWithProgressDialogActivity"/>
     </application>
