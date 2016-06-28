@@ -76,8 +76,6 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
 
     private void loadLentOutData(View customView, int position){
 
-       // if(position > lentOut.size())
-        //    return;
         TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
         TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
         header.setVisibility(View.VISIBLE);
@@ -157,7 +155,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
                 public void onClick(DialogInterface dialog, int item) {
                     Intent startActivity = new Intent();
                     if(item == 0) {
-                        startActivity.setClass(context, AddRecord.class);
+                        startActivity.setClass(context, EditRecord.class);
                         startActivity.setAction(AddLentOut.class.getName());
                     }
                     else if(item == 1) {

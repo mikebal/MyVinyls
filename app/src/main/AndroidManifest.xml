@@ -84,9 +84,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateFileActivity" />
-        <activity android:name=".CreateFileInFolderActivity" />
-        <activity android:name=".CreateFolderActivity"/>
-        <activity android:name=".PickFolderWithOpenerActivity"/>
+        <activity android:name=".EditRecord" />
         <activity android:name=".RetrieveContentsWithProgressDialogActivity"/>
     </application>
 </manifest>

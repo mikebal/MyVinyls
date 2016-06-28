@@ -5,55 +5,13 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class AddRecord extends AppCompatActivity {
-
-    EditText albumName, albumYear, albumBand;
-    ImageButton albumArtwork;
-    Bitmap albumCover;
-    Uri mPhotoUri = null;
-    int imageOrientation = 0;
-    String editCall = "-1";
-    String dbTableReferenced;
-    ArrayList<String> genres = new ArrayList<>();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.addrecord);
-        setupVariables();
-        manageIfEdit();
-        Bundle extras = getIntent().getExtras();
-        dbTableReferenced = extras.getString("toAddToTable");
-    }
-
-
-    private void setupVariables() {
-        albumName = (EditText) findViewById(R.id.editText_albumName);
-        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        String text = dbHandler.getDBpath();
-        albumName.setText(text);
-        albumYear = (EditText) findViewById(R.id.editText_year);
-        albumBand = (EditText) findViewById(R.id.editText_bandName);
-        albumArtwork = (ImageButton) findViewById(R.id.imageButton);
-    }
+public class AddRecord extends RecordBaseActivity {
 
     public void addRecordClicked(View v) {
         String  newAlbumID;
@@ -187,67 +145,5 @@ public class AddRecord extends AppCompatActivity {
         }catch (Exception e){
             albumArtwork.setImageResource(R.mipmap.ic_report_black_24dp);
         }
-    }
-
-    //******************************************************************************************
-    private void manageIfEdit(){
-        Bundle extras = getIntent().getExtras();
-        String _id = extras.getString("toEditID");
-        if(_id == null || _id.equals("New Entry"))
-            return;
-        editCall = _id;
-
-        ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonDelete);
-        deleteButton.setVisibility(View.VISIBLE);
-        loadRecordToEdit(_id);
-        changeButtonTextToSave();
-    }
-
-    private void loadRecordToEdit(String _id){
-        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        Records recordToEdit = dbHandler.getRecordByID(_id, "records");
-        albumName.setText(recordToEdit.get_albumname());
-        albumBand.setText(recordToEdit.get_bandname());
-        albumYear.setText(recordToEdit.get_releaseyear());
-        mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
-        loadImage(albumArtwork, _id);
-    }
-    private void loadImage(ImageView albumCover, String fileName) {
-        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
-        Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
-        albumCover.setImageBitmap(bitmap);
-    }
-    private void changeButtonTextToSave()
-    {
-        Button saveButton = (Button) findViewById(R.id.button);
-        saveButton.setText(R.string.save);
-    }
-
-    public void deleteClicked(View v){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Confirm Delete");
-        builder.setMessage("Are you sure?\nThis can't be undone.");
-
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-                dbHandler.deleteRecord(editCall);
-                dialog.dismiss();
-                finish();
-            }
-
-        });
-
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 }

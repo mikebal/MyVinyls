@@ -84,7 +84,7 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
         try {
             startIntentSenderForResult(intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
         } catch (SendIntentException e) {
-          Log.w(TAG, "Unable to send intent", e);
+            Log.w(TAG, "Unable to send intent", e);
         }
     }
 
@@ -113,34 +113,34 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
         };
         DriveFile driveFile =  mSelectedFileDriveId.asDriveFile();
         driveFile.open(getGoogleApiClient(), DriveFile.MODE_READ_ONLY, listener)
-            .setResultCallback(driveContentsCallback);
+                .setResultCallback(driveContentsCallback);
         mSelectedFileDriveId = null;
     }
 
     private ResultCallback<DriveContentsResult> driveContentsCallback =
             new ResultCallback<DriveContentsResult>() {
-        @Override
-        public void onResult(DriveContentsResult result) {
-            if (!result.getStatus().isSuccess()) {
-                showMessage("Error while opening the file contents");
-                return;
-            }
-            showMessage("File contents opened");
+                @Override
+                public void onResult(DriveContentsResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        showMessage("Error while opening the file contents");
+                        return;
+                    }
+                    showMessage("File contents opened");
 
-            DriveContents contents = result.getDriveContents();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line;
-            TextView downloadText = (TextView) findViewById(R.id.textViewDownload);
-            try {
-                while ((line = reader.readLine()) != null) {
-                    builder.append(line);
-                    downloadText.setText(builder);
+                    DriveContents contents = result.getDriveContents();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+                    TextView downloadText = (TextView) findViewById(R.id.textViewDownload);
+                    try {
+                        while ((line = reader.readLine()) != null) {
+                            builder.append(line);
+                            downloadText.setText(builder);
+                        }
+                    }
+                    catch (Exception e){}
+                    String contentsAsString = builder.toString();
+
                 }
-            }
-            catch (Exception e){}
-            String contentsAsString = builder.toString();
-
-        }
-    };
+            };
 }

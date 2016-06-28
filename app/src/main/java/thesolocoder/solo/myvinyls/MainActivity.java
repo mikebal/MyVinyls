@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 view.startAnimation(animRotate);
-                Intent open_AddRecords = new Intent(MainActivity.this, CreateFileActivity.class);
-               // open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
-               // open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
+                Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
+                open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
+                open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
                 startActivity(open_AddRecords);
             }
         });
