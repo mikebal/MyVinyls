@@ -21,7 +21,7 @@
         <menu>
             <item
                 android:id="@+id/nav_backup"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@mipmap/ic_cloud_black_24dp"
                 android:title="Backup" />
             <item
                 android:id="@+id/nav_settings"

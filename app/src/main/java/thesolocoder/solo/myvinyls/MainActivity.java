@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,25 +53,28 @@ public class MainActivity extends AppCompatActivity
         backupAgent = new MyBackupAgent();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if(fab != null)
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(animRotate);
                 Intent open_AddRecords = new Intent(MainActivity.this, AddRecord.class);
-           //     open_AddRecords.putExtra("toEditID", String.valueOf("New Entry"));
                 open_AddRecords.putExtra("toAddToTable", String.valueOf(databaseTable));
                 startActivity(open_AddRecords);
             }
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer == null)
+            return;
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if(navigationView != null)
+            navigationView.setNavigationItemSelectedListener(this);
 
         inputSearch = (EditText) findViewById(R.id.editTextSearchBox);
         setListClickListener();
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -234,6 +236,9 @@ public class MainActivity extends AppCompatActivity
         Button genres = (Button) findViewById(R.id.buttonGeneres);
         Button lastClicked = null;
 
+        if(album == null || artist == null || genres == null)
+            return;
+
         if(artist.getPaintFlags() != 0)
             lastClicked = artist;
         else if(album.getPaintFlags() != 0)
@@ -251,6 +256,10 @@ public class MainActivity extends AppCompatActivity
         Button artist = (Button) findViewById(R.id.buttonArtists);
         Button album = (Button) findViewById(R.id.buttonAlbums);
         Button genres = (Button) findViewById(R.id.buttonGeneres);
+
+        if(album == null || artist == null || genres == null)
+            return;
+
         artist.setPaintFlags(0);
         album.setPaintFlags(0);
         genres.setPaintFlags(0);
@@ -275,9 +284,11 @@ public class MainActivity extends AppCompatActivity
     private void setupDefaultAppearance()
     {
         Button album = (Button) findViewById(R.id.buttonAlbums);
-        album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        lastClickedButton = album;
-        tabButtonClicked(lastClickedButton);
+        if(album != null) {
+            album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            lastClickedButton = album;
+            tabButtonClicked(lastClickedButton);
+        }
     }
 
     @Override

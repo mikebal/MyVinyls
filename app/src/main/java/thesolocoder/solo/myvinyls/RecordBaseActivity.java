@@ -34,9 +34,6 @@ public class RecordBaseActivity extends Activity {
 
     private void setupVariables() {
         albumName = (EditText) findViewById(R.id.editText_albumName);
-        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        String text = dbHandler.getDBpath();
-        albumName.setText(text);
         albumYear = (EditText) findViewById(R.id.editText_year);
         albumBand = (EditText) findViewById(R.id.editText_bandName);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);

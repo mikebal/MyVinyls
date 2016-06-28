@@ -1,12 +1,10 @@
 package thesolocoder.solo.myvinyls;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-/**
- * Created by Michael on 6/24/2016.
- */
 public class BackupRestore extends AppCompatActivity {
 
     @Override
@@ -16,10 +14,12 @@ public class BackupRestore extends AppCompatActivity {
     }
 
     public void backupClicked(View v){
-
+        Intent startBackup = new Intent(BackupRestore.this, CreateFileActivity.class);
+        startActivity(startBackup);
     }
 
     public void restoreClicked(View v){
-
+        Intent startRestore = new Intent(BackupRestore.this, RetrieveContentsWithProgressDialogActivity.class);
+        startActivity(startRestore);
     }
 }
