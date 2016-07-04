@@ -29,7 +29,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    MyDBHandler dbHandler;
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
     ListViewAdapterGenre customAdapterGenre;
@@ -37,7 +36,6 @@ public class MainActivity extends AppCompatActivity
     EditText inputSearch;
     MenuItem menuItem;
     View lastClickedButton;
-    MyBackupAgent backupAgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +44,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
-        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         setupDefaultAppearance();
-
-        backupAgent = new MyBackupAgent();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab != null)
@@ -170,6 +164,7 @@ public class MainActivity extends AppCompatActivity
 
     private void populateArrayList(String dbCall)
     {
+        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         ArrayList<Records> recordList;
         if(dbCall.equals("GENRES"))
         {
@@ -181,6 +176,7 @@ public class MainActivity extends AppCompatActivity
             recordList = dbHandler.databaseToList(dbCall);
             populateList(recordList);
         }
+        dbHandler.close();
 
     }
     private void populateGenreList(ArrayList<GenreListItem> genreList)
@@ -194,6 +190,7 @@ public class MainActivity extends AppCompatActivity
     }
 
    private void populateList(ArrayList<Records> recordList) {
+       MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
        if(!databaseTable.equals("lentout"))
             customAdapter = new ListViewAdapterMain(this, recordList, null);
@@ -204,7 +201,7 @@ public class MainActivity extends AppCompatActivity
        }
         recordDisplayList.setAdapter(customAdapter);
         customAdapter.notifyDataSetChanged();
-
+        dbHandler.close();
     }
 
     private void setListClickListener(){

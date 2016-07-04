@@ -18,10 +18,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -31,9 +29,6 @@ import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFile.DownloadProgressListener;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * An activity to illustrate how to open contents and listen

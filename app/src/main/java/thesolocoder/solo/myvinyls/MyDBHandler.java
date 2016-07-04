@@ -114,6 +114,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 while (!genre_cursor.isAfterLast()) {
                     if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
                         generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
+                        generes.add(genre_cursor.getString(genre_cursor.getColumnIndex("subgenre")));
                     }
                     genre_cursor.moveToNext();
                 }
