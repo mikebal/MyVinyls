@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -79,7 +80,7 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
         // no files selected by the user.
         IntentSender intentSender = Drive.DriveApi
                 .newOpenFileActivityBuilder()
-                .setMimeType(new String[]{ "text/plain", "image/jpeg" })
+                .setMimeType(new String[]{ "text/plain"})
                 .build(getGoogleApiClient());
         try {
             startIntentSenderForResult(intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
@@ -128,19 +129,8 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
                     showMessage("File contents opened");
 
                     DriveContents contents = result.getDriveContents();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
-                    StringBuilder builder = new StringBuilder();
-                    String line;
-                    TextView downloadText = (TextView) findViewById(R.id.textViewDownload);
-                    try {
-                        while ((line = reader.readLine()) != null) {
-                            builder.append(line);
-                            downloadText.setText(builder);
-                        }
-                    }
-                    catch (Exception e){}
-                    String contentsAsString = builder.toString();
-
+                    FileImporter importer = new FileImporter();
+                    importer.acceptDriveVersion(contents, getApplicationContext());
                 }
             };
 }

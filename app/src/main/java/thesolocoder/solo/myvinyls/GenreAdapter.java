@@ -116,7 +116,7 @@ public class GenreAdapter  extends BaseAdapter {
         LinearLayout checkboxArea2 = (LinearLayout) checkboxHolder.findViewById(R.id.LinearLayoutCheckboxArea2);
 
         String genreName = genreCategories.get(position);
-        String getSubGenres = "SELECT DISTINCT subgenre FROM genres WHERE genre='" + genreName + "';";
+        String getSubGenres = "SELECT DISTINCT subgenre FROM recordsgenres WHERE genre='" + genreName + "';";
         ArrayList<String> sub_genreElements = dbHandler.dbReturnListStrings(getSubGenres, "subgenre");
 
         if (sub_genreElements.get(0).equals(""))
