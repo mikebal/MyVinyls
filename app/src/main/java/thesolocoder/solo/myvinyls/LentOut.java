@@ -8,6 +8,8 @@ import java.util.Calendar;
 public class LentOut {
     String id;
     String name;
+    String dateOutStr;
+    String duebackStr;
     Calendar    lentout = new Calendar() {
         @Override
         public void add(int field, int value) {

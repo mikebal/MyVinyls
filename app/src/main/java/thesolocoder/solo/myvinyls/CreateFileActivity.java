@@ -62,8 +62,13 @@ public class CreateFileActivity extends BaseDemoActivity {
                             OutputStream outputStream = driveContents.getOutputStream();
                             Writer writer = new OutputStreamWriter(outputStream);
                             FileExportHelper exportHelper = new FileExportHelper();
-                            String recordData = exportHelper.getRecordData(getApplicationContext());
+
                             try {
+                                String recordData = exportHelper.getRecordData(getApplicationContext(), "records");
+                                writer.write(recordData);
+                                recordData = exportHelper.getRecordData(getApplicationContext(), "wishlist");
+                                writer.write(recordData);
+                                recordData = exportHelper.getLentoutData(getApplicationContext());
                                 writer.write(recordData);
                                 writer.close();
                             } catch (IOException e) {

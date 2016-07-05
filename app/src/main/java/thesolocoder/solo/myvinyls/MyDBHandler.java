@@ -40,6 +40,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableWishlist);
         final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout TEXT, dueback TEXT);";
         db.execSQL(queryTableLentout);
+        final String queryTableLentoutG = "CREATE TABLE lentoutgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout TEXT, dueback TEXT);";
+        db.execSQL(queryTableLentoutG);
         final String queryTableWishlistGenre = "CREATE TABLE wishlistgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableWishlistGenre);
         db.execSQL("insert into recordsgenres (_id,album_id,genre,subgenre) values (1,-1,'Classical','');");
@@ -89,7 +91,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return album_id;
     }
 
-    public ArrayList<Records> databaseToList(String query) {
+    public ArrayList<Records> databaseToList(String query, String table) {
         SQLiteDatabase db = getWritableDatabase();
         ArrayList<Records> recordList = new ArrayList<>();
         ArrayList<String> generes;
@@ -107,7 +109,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
-                String genre_query = "SELECT * FROM " + TABLE_RECORDS + TABLE_GENRES + " WHERE " +
+                String genre_query = "SELECT * FROM " + table + TABLE_GENRES + " WHERE " +
                         COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
                 genre_cursor = db.rawQuery(genre_query, null);
                 genre_cursor.moveToFirst();
@@ -270,11 +272,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 item.name = c.getString(c.getColumnIndex("lentout"));
                 item.id = c.getString(c.getColumnIndex("album_id"));
                 String dateString = c.getString(c.getColumnIndex("dueback"));
+                item.duebackStr = dateString;
                 int[] date = getdate(dateString);
                 Date calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();
                 item.dueBack.setTime(calDate);
 
                 dateString = c.getString(c.getColumnIndex("dateout"));
+                item.dateOutStr = dateString;
                 date = getdate(dateString);
                 calDate = new GregorianCalendar(date[2], date[1], date[0]).getTime();
                 item.lentout.setTime(calDate);

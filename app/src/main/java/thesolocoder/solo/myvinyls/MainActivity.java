@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity
             populateGenreList(genreList);
         }
         else {
-            recordList = dbHandler.databaseToList(dbCall);
+            recordList = dbHandler.databaseToList(dbCall, databaseTable);
             populateList(recordList);
         }
         dbHandler.close();
