@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void populateArrayList(String dbCall)
+    private void populateArrayList(String dbCall, boolean artistMode)
     {
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         ArrayList<Records> recordList;
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity
         }
         else {
             recordList = dbHandler.databaseToList(dbCall, databaseTable);
-            populateList(recordList);
+            populateList(recordList, artistMode);
         }
         dbHandler.close();
 
@@ -189,19 +190,34 @@ public class MainActivity extends AppCompatActivity
         recordDisplayList.setVerticalScrollBarEnabled(false);
     }
 
-   private void populateList(ArrayList<Records> recordList) {
-       MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+   private void populateList(ArrayList<Records> recordList, boolean artistMode) {
+       final MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
+
        if(!databaseTable.equals("lentout")) {
            customAdapter = new ListViewAdapterMain(this, recordList, null);
+           customAdapter.artistView = artistMode;
            customAdapter.callingTable = databaseTable;
        }
+
        else{
            ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
            customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);
            customAdapter.setIsOnLendOutScreen(true);
        }
-        recordDisplayList.setAdapter(customAdapter);
+
+       recordDisplayList.setAdapter(customAdapter);
+       recordDisplayList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+           @Override
+
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+               Records selectedRecord = customAdapter.getItem(position);
+               String selectedBandName = selectedRecord.get_bandname();
+               populateArrayList("SELECT * FROM "+ databaseTable +" WHERE bandname='" + selectedBandName +"';", false);
+           }
+
+       });
         customAdapter.notifyDataSetChanged();
         dbHandler.close();
     }
@@ -213,7 +229,7 @@ public class MainActivity extends AppCompatActivity
             public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                 // When user changed the Text
                 if (arg3 == 0) {
-                    populateArrayList("SELECT * FROM records ORDER BY albumname;");
+                    populateArrayList("SELECT * FROM records ORDER BY albumname;", false);
                 }
                 MainActivity.this.customAdapter.getFilter().filter(cs);
             }
@@ -266,17 +282,17 @@ public class MainActivity extends AppCompatActivity
 
         if(databaseTable.equals("lentout"))
         {
-            populateArrayList("SELECT * FROM records INNER JOIN lentout ON  records._id=lentout.album_id ORDER BY album_id");
+            populateArrayList("SELECT * FROM records INNER JOIN lentout ON  records._id=lentout.album_id ORDER BY album_id", false);
         }
         else if (v.getId() == artist.getId()) {
             artist.setPaintFlags(artist.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY bandname");
+            populateArrayList("SELECT * FROM "+ databaseTable +" GROUP BY bandname", true);
         } else if (v.getId() == album.getId()) {
             album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY albumname;");
+            populateArrayList("SELECT * FROM "+ databaseTable +" ORDER BY albumname;", false);
         } else {
             genres.setPaintFlags(genres.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            populateArrayList("GENRES");
+            populateArrayList("GENRES", false);
         }
     }
 

@@ -4,7 +4,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         >
-<RelativeLayout
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="center_horizontal">
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relativeLayoutAddNoQueue">
@@ -61,6 +68,7 @@
         android:id="@+id/editText_albumName"
         android:maxLength="30"
         android:maxLines="1"
+        android:singleLine="true"
         android:layout_above="@+id/textView3"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView" />
@@ -155,5 +163,5 @@
         android:layout_toEndOf="@+id/imageButton" />
 
 </RelativeLayout>
-
+</ScrollView>
 </RelativeLayout>

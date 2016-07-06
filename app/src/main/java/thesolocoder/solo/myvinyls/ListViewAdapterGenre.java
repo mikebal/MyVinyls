@@ -51,6 +51,7 @@ public class ListViewAdapterGenre extends BaseAdapter{
         genreName.setText(genreItem.genre);
         genreButton.setText(genreItem.genre);
         genreButton.setTag(genreItem.genre);
+
         for (int i = 0; i < genreItem.albumArt.size(); i++)
             loadImage(albumCoverArray[i], genreItem.albumArt.get(i));
 

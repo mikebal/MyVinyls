@@ -29,6 +29,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     private Context context;
     public String callingTable = "";
     public boolean isOnLendoutScreen = false;
+    public boolean artistView = false;
 
     public ListViewAdapterMain(Context context, ArrayList<Records> data, ArrayList<LentOut> dataLentOut){
         inflater = LayoutInflater.from(context);
@@ -68,6 +69,16 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         albumYear.setText(record.get_releaseyear());
         loadImage(albumCover, record.get_imageurl());
         moreMenu.setTag(record.get_imageurl());
+
+
+
+        if(artistView)
+        {
+            albumName.setVisibility(View.GONE);
+            albumYear.setVisibility(View.GONE);
+            moreMenu.setVisibility(View.GONE);
+
+        }
 
         if(lentOut != null)
             loadLentOutData(customView, position);
