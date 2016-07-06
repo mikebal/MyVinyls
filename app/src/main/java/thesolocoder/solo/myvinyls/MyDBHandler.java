@@ -59,19 +59,37 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS records");
-        db.execSQL("DROP TABLE IF EXISTS genres");
+        db.execSQL("DROP TABLE IF EXISTS recordsgenres");
         db.execSQL("DROP TABLE IF EXISTS wishlist");
+        db.execSQL("DROP TABLE IF EXISTS wishlistgenres");
         db.execSQL("DROP TABLE IF EXISTS lentout");
+        db.execSQL("DROP TABLE IF EXISTS lentoutgenres");
         onCreate(db);
     }
 
-    public String addRecord(Records record, String recordTableName, String genreTableName) {
+    public void dropAndRemake()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS records");
+        db.execSQL("DROP TABLE IF EXISTS recordsgenres");
+        db.execSQL("DROP TABLE IF EXISTS wishlist");
+        db.execSQL("DROP TABLE IF EXISTS wishlistgenres");
+        db.execSQL("DROP TABLE IF EXISTS lentout");
+        db.execSQL("DROP TABLE IF EXISTS lentoutgenres");
+        onCreate(db);
+    }
+
+    public String addRecord(Records record, String recordTableName, String genreTableName, boolean hasID) {
+        String album_id = "-1";
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
-        String album_id = "-1";
+
+        if(hasID)
+            values.put(COLUMN_ID, record.get_imageurl());
+
         SQLiteDatabase db = getWritableDatabase();
         db.insert(recordTableName, null, values);
 
@@ -131,9 +149,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return recordList;
     }
 
-    public Records getRecordByID(String id, String TABLE_NAME) {
+    public Records getRecordByID(String id, String callingTable) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=" + id;
+        String query = "SELECT * FROM " + callingTable + " WHERE " + COLUMN_ID + "=" + id;
         Records selectedRecord = new Records();
         ArrayList<String> genres = new ArrayList<>();
 
@@ -146,7 +164,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
             selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
 
-            String genre_query = "SELECT * FROM " + TABLE_NAME + TABLE_GENRES + " WHERE " +
+            String genre_query = "SELECT * FROM " + callingTable + TABLE_GENRES + " WHERE " +
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_query, null);
             genre_cursor.moveToFirst();
@@ -218,10 +236,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     //Delete a record from the database
-    public void deleteRecord(String _id) {
+    public void deleteRecord(String _id, String table) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_RECORDS + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
-        db.execSQL("DELETE FROM " +"recordsgenres WHERE album_id=\"" + _id + "\";");
+        db.execSQL("DELETE FROM " + table + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
+        db.execSQL("DELETE FROM " + table + "genres WHERE album_id=\"" + _id + "\";");
         db.execSQL("DELETE FROM " + "lentout WHERE album_id=\"" + _id + "\";");
     }
 

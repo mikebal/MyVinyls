@@ -34,7 +34,7 @@ public class AddRecord extends RecordBaseActivity {
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
             if(editCall.equals("-1")) {
-                newAlbumID = dbHandler.addRecord(newRecord, dbTableReferenced , dbTableReferenced + "genres");
+                newAlbumID = dbHandler.addRecord(newRecord, dbTableReferenced , dbTableReferenced + "genres", false);
             }
             else{
                 newAlbumID = editCall;

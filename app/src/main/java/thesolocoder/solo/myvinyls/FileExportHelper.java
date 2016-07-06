@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class FileExportHelper {
 
     public String getRecordData(Context context, String tableName){
-        String data = "";
+        String data;
         MyDBHandler dbHandler = new MyDBHandler(context, null, null, 1);
         ArrayList<Records> recordList = dbHandler.databaseToList("SELECT * FROM " + tableName + " ORDER BY bandname", tableName);
         data = convertRecordListToString(recordList, tableName);
@@ -16,7 +16,7 @@ public class FileExportHelper {
 
     private String convertRecordListToString(ArrayList<Records> records, String tableName)
     {
-        String data = tableName + "\n";
+        String data = "";
         for (int i = 0; i < records.size(); i++)
         {
             data += records.get(i).get_imageurl() + ",";
@@ -28,16 +28,16 @@ public class FileExportHelper {
         return data;
     }
 
-    public String getLentoutData(Context context){
-        String data = "";
+    public String getLentOutData(Context context){
+        String data;
         MyDBHandler dbHandler = new MyDBHandler(context, null, null, 1);
-        ArrayList<LentOut> lentoutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
-        data = convertLentOutListToString(lentoutList);
+        ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
+        data = convertLentOutListToString(lentOutList);
         return data;
     }
 
     private String convertLentOutListToString(ArrayList<LentOut> lentout){
-        String data = "lentout\n";
+        String data = "";
         for(int i = 0; i < lentout.size(); i++){
             data += lentout.get(i).id + ",";
             data += lentout.get(i).name + ",";

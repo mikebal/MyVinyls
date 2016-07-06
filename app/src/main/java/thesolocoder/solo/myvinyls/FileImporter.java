@@ -12,43 +12,41 @@ public class FileImporter {
 
     public void acceptDriveVersion(DriveContents contents, Context context){
 
-        final int BAND_NAME = 0;
-        final int ALBUM_NAME = 1;
-        final int RELEASE_YEAR = 2;
         BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
         StringBuilder builder = new StringBuilder();
         String line;
         String tableName = "records";
         ArrayList<String> lineParsed;
-        Records newRecord;
+        int lentOutID = 1;
 
         MyDBHandler dbHandler = new MyDBHandler(context, null, null, 1);
         try {
+            dbHandler.dropAndRemake();
             while ((line = reader.readLine()) != null) {
                 builder.setLength(0);
                 builder.append(line);
                 lineParsed = lineToColumb(builder.toString());
 
                 if(lineParsed.size() == 1) {
-                    if (lineParsed.get(0).toLowerCase().equals("records") || lineParsed.get(0).toLowerCase().equals("wishlist")) {
+                    if (lineParsed.get(0).toLowerCase().equals("wishlist") || lineParsed.get(0).toLowerCase().equals("lentout")) {
                         tableName = lineParsed.get(0).toLowerCase();
-                        dbHandler.runRawQueryNoResult("DELETE * FROM " + tableName + ";");
+                      //  dropAndRemake
+                       // dbHandler.runRawQueryNoResult("DELETE * FROM TABLE " + tableName + ";");
+                    }
+                    else{
+                        Toast toast = Toast.makeText(context, "Record Category is wrong: " + lineParsed.get(0), Toast.LENGTH_LONG);
+                        toast.show();
+                        return;
                     }
                 }
-                else{
+                else {
                     lineParsed = lineToColumb(builder.toString());
-                    newRecord = new Records();
-                    newRecord.set_bandname(lineParsed.get(BAND_NAME));
-                    newRecord.set_albumname(lineParsed.get(ALBUM_NAME));
-                    newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
-
-                    lineParsed.remove(RELEASE_YEAR);
-                    lineParsed.remove(ALBUM_NAME);
-                    lineParsed.remove(BAND_NAME);
-
-                    newRecord.set_genre(insertUserParentGenre(lineParsed));
-
-                    dbHandler.addRecord(newRecord, tableName, tableName+"genres");
+                    if (!tableName.equals("lentout"))
+                        addRecord(lineParsed, tableName, dbHandler);
+                    else{
+                        addLentOut(lentOutID, lineParsed, dbHandler);
+                        lentOutID++;
+                    }
                 }
             }
         }
@@ -56,6 +54,37 @@ public class FileImporter {
             Toast toast = Toast.makeText(context, e.getClass().getName(), Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    private void addRecord(ArrayList<String> lineParsed, String tableName, MyDBHandler dbHandler){
+        Records newRecord;
+        final int _ID = 0;
+        final int BAND_NAME = 1;
+        final int ALBUM_NAME = 2;
+        final int RELEASE_YEAR = 3;
+
+        newRecord = new Records();
+        newRecord.set_imageurl(lineParsed.get(_ID));
+        newRecord.set_bandname(lineParsed.get(BAND_NAME));
+        newRecord.set_albumname(lineParsed.get(ALBUM_NAME));
+        newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
+
+        lineParsed.remove(RELEASE_YEAR);
+        lineParsed.remove(ALBUM_NAME);
+        lineParsed.remove(BAND_NAME);
+        lineParsed.remove(_ID);
+
+        newRecord.set_genre(insertUserParentGenre(lineParsed));
+        dbHandler.addRecord(newRecord, tableName, tableName+"genres", true);
+    }
+
+    private void addLentOut(int id, ArrayList<String> lineParsed, MyDBHandler dbHandler)
+    {
+        String idString = String.valueOf(id);
+        while (lineParsed.size() < 4)
+            lineParsed.add("");
+        dbHandler.runRawQueryNoResult("insert into lentout (_id,album_id,lentout,dateout,dueback) values (" + idString + "," + lineParsed.get(0) + ",'" + lineParsed.get(1)
+                + "','" + lineParsed.get(2) + "','" + lineParsed.get(3) + "');");
     }
 
     private ArrayList lineToColumb(String stringToParse)

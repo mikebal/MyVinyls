@@ -192,8 +192,10 @@ public class MainActivity extends AppCompatActivity
    private void populateList(ArrayList<Records> recordList) {
        MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-       if(!databaseTable.equals("lentout"))
-            customAdapter = new ListViewAdapterMain(this, recordList, null);
+       if(!databaseTable.equals("lentout")) {
+           customAdapter = new ListViewAdapterMain(this, recordList, null);
+           customAdapter.callingTable = databaseTable;
+       }
        else{
            ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
            customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);

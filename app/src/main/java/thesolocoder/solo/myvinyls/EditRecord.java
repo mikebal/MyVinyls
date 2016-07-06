@@ -14,10 +14,9 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-/**
- * Created by Michael on 6/28/2016.
- */
 public class EditRecord extends RecordBaseActivity {
+
+    String callingTable;
 
     @Override
     public void onStart(){
@@ -26,6 +25,7 @@ public class EditRecord extends RecordBaseActivity {
         String _id = extras.getString("toEditID");
         if(_id == null || _id.equals("New Entry"))
             return;
+        callingTable = extras.getString("callingTable");
         editCall = _id;
 
         ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonDelete);
@@ -36,7 +36,7 @@ public class EditRecord extends RecordBaseActivity {
 
     private void loadRecordToEdit(String _id){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        Records recordToEdit = dbHandler.getRecordByID(_id, "records");
+        Records recordToEdit = dbHandler.getRecordByID(_id, callingTable);
         albumName.setText(recordToEdit.get_albumname());
         albumBand.setText(recordToEdit.get_bandname());
         albumYear.setText(recordToEdit.get_releaseyear());
@@ -63,7 +63,7 @@ public class EditRecord extends RecordBaseActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-                dbHandler.deleteRecord(editCall);
+                dbHandler.deleteRecord(editCall, callingTable);
                 dialog.dismiss();
                 finish();
             }

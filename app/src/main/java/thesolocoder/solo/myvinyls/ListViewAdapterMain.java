@@ -27,6 +27,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
     private ArrayList<Records> records;
     private ArrayList<LentOut> lentOut;
     private Context context;
+    public String callingTable = "";
     public boolean isOnLendoutScreen = false;
 
     public ListViewAdapterMain(Context context, ArrayList<Records> data, ArrayList<LentOut> dataLentOut){
@@ -182,6 +183,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
                 Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivity.putExtra("toEditID", recordID);
+        startActivity.putExtra("callingTable", callingTable);
         context.startActivity(startActivity);
     }
 }

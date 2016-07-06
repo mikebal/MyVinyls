@@ -66,9 +66,11 @@ public class CreateFileActivity extends BaseDemoActivity {
                             try {
                                 String recordData = exportHelper.getRecordData(getApplicationContext(), "records");
                                 writer.write(recordData);
+                                writer.write("wishlist\n");
                                 recordData = exportHelper.getRecordData(getApplicationContext(), "wishlist");
                                 writer.write(recordData);
-                                recordData = exportHelper.getLentoutData(getApplicationContext());
+                                writer.write("lentout\n");
+                                recordData = exportHelper.getLentOutData(getApplicationContext());
                                 writer.write(recordData);
                                 writer.close();
                             } catch (IOException e) {
@@ -76,7 +78,7 @@ public class CreateFileActivity extends BaseDemoActivity {
                             }
 
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                                    .setTitle("New file")
+                                    .setTitle("MyVinyls Records Backup")
                                     .setMimeType("text/plain")
                                     .setStarred(true).build();
 
