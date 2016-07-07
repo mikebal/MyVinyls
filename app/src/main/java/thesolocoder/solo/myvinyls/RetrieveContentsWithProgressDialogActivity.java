@@ -121,11 +121,11 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
                         showMessage("Error while opening the file contents");
                         return;
                     }
-                    showMessage("File contents opened");
 
                     DriveContents contents = result.getDriveContents();
                     FileImporter importer = new FileImporter();
                     importer.acceptDriveVersion(contents, getApplicationContext());
+                    finish();
                 }
             };
 }

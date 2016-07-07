@@ -3,24 +3,53 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:layout_marginTop="20dp">
+    android:background="#f5f5f5">
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:text="MyVinyls uses google drive for backing up your data.\nYour record catolog will be saved as an editable text file.\n"
+        android:textSize="20dp"
+        android:id="@+id/textView12" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Backup "
+        android:layout_marginTop="10dp"
+        android:layout_width="349dp"
+        android:layout_height="110dp"
+        android:text="Backup"
+        android:textAllCaps="false"
+        android:textSize="40dp"
         android:id="@+id/buttonBackup"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.40"
-        android:onClick="backupClicked"/>
+        android:drawablePadding="-50dp"
+        android:drawableLeft="@mipmap/ic_cloud_upload_black_48dp"
+        android:onClick="backupClicked"
+        android:paddingLeft="50dp" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restored version of the record catalog will override existing application catalog.\nThis can not be undone."
+        android:textSize="20dp"
+        android:id="@+id/textView13" />
 
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Restore"
+        android:layout_marginTop="15dp"
         android:id="@+id/buttonRestore"
+        android:text="Restore"
+        android:layout_width="349dp"
+        android:layout_height="110dp"
+        android:textSize="40dp"
+        android:textAllCaps="false"
+        android:drawableLeft="@mipmap/ic_cloud_download_black_48dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.40"
-        android:onClick="restoreClicked"/>
+        android:onClick="restoreClicked"
+        android:paddingLeft="50dp" />
 
 </LinearLayout>

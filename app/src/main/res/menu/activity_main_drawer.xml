@@ -12,7 +12,7 @@
             android:title="Wishlist" />
         <item
             android:id="@+id/nav_lentout"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@mipmap/ic_face_black_24dp"
             android:title="Lent Out" />
 
     </group>
@@ -21,12 +21,8 @@
         <menu>
             <item
                 android:id="@+id/nav_backup"
-                android:icon="@mipmap/ic_cloud_black_24dp"
+                android:icon="@mipmap/ic_backup_black_24dp"
                 android:title="Backup" />
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@mipmap/ic_settings_black_24dp"
-                android:title="Settings" />
         </menu>
     </item>
 

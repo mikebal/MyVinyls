@@ -16,10 +16,12 @@ public class BackupRestore extends AppCompatActivity {
     public void backupClicked(View v){
         Intent startBackup = new Intent(BackupRestore.this, CreateFileActivity.class);
         startActivity(startBackup);
+        finish();
     }
 
     public void restoreClicked(View v){
         Intent startRestore = new Intent(BackupRestore.this, RetrieveContentsWithProgressDialogActivity.class);
         startActivity(startRestore);
+        finish();
     }
 }

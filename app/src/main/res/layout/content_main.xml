@@ -107,6 +107,7 @@
         android:id="@+id/listViewMainDisplay"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:scrollbars="none"
         android:layout_below="@+id/linearLayoutSearchBar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

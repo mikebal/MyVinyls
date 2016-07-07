@@ -105,8 +105,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_backup) {
             Intent open_BackupMenu = new Intent(MainActivity.this, BackupRestore.class);
             startActivity(open_BackupMenu);
-        } else if (id == R.id.nav_settings) {
-
         } else if(id == R.id.nav_lentout)
         {
             databaseTable = "lentout";

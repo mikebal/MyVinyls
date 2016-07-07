@@ -108,4 +108,11 @@ public class ImageManager {
         }
         return ret;
     }
+
+    public void deleteImage(String imageName){
+        File f = new File(Environment.getExternalStorageDirectory()
+                + File.separator + "/MyVinylsAlbumArt/" + imageName + ".jpg");
+        f.delete();
+    }
+
 }

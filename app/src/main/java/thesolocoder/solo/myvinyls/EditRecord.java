@@ -64,6 +64,8 @@ public class EditRecord extends RecordBaseActivity {
             public void onClick(DialogInterface dialog, int which) {
                 MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
                 dbHandler.deleteRecord(editCall, callingTable);
+                ImageManager imageManager = new ImageManager();
+                imageManager.deleteImage(editCall);
                 dialog.dismiss();
                 finish();
             }

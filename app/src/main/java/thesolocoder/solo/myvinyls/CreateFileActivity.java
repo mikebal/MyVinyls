@@ -100,6 +100,7 @@ public class CreateFileActivity extends BaseDemoActivity {
                         return;
                     }
                     showMessage("Created a file with content: " + result.getDriveFile().getDriveId());
+                    finish();
                 }
             };
 
