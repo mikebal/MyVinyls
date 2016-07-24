@@ -30,13 +30,13 @@ public class FileImporter {
                 if(lineParsed.size() == 1) {
                     if (lineParsed.get(0).toLowerCase().equals("wishlist") || lineParsed.get(0).toLowerCase().equals("lentout")) {
                         tableName = lineParsed.get(0).toLowerCase();
-                      //  dropAndRemake
-                       // dbHandler.runRawQueryNoResult("DELETE * FROM TABLE " + tableName + ";");
                     }
                     else{
-                        Toast toast = Toast.makeText(context, "Record Category is wrong: " + lineParsed.get(0), Toast.LENGTH_LONG);
-                        toast.show();
-                        return;
+                        if(!lineParsed.get(0).contains("records")) {    // correction for possible special symbole if edited by google drive
+                            Toast toast = Toast.makeText(context, "Record Category is wrong: " + lineParsed.get(0), Toast.LENGTH_LONG);
+                            toast.show();
+                            return;
+                        }
                     }
                 }
                 else {
@@ -74,7 +74,7 @@ public class FileImporter {
         lineParsed.remove(BAND_NAME);
         lineParsed.remove(_ID);
 
-        newRecord.set_genre(insertUserParentGenre(lineParsed));
+        newRecord.set_genre(lineParsed);
         dbHandler.addRecord(newRecord, tableName, tableName+"genres", true);
     }
 
@@ -95,17 +95,5 @@ public class FileImporter {
             lineSegments.add(tokens.nextToken());
         }
         return lineSegments;
-    }
-    private ArrayList insertUserParentGenre(ArrayList<String> genres)
-    {
-        ArrayList<String> formatedList = new ArrayList<>();
-        final String parentGenre = "User";
-
-        for(int i = 0; i < genres.size(); i++)
-        {
-            formatedList.add(parentGenre);
-            formatedList.add(genres.get(i));
-        }
-        return formatedList;
     }
 }

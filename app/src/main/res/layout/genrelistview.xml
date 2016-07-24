@@ -10,6 +10,7 @@
         android:layout_gravity="right"
         android:paddingTop="4dp"
         android:paddingRight="10dp"
+        android:visibility="invisible"
         android:id="@+id/imageButton_genre_dropdown"
         android:background="@android:color/transparent"
         android:src="@mipmap/ic_expand_more_black_24dp"/>

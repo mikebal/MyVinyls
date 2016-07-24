@@ -45,7 +45,6 @@
         android:textAlignment="center"
         android:background="@android:color/transparent"
         android:textSize="30dp"
-        android:onClick="genreSelected"
         android:id="@+id/ButtonGenereOverlay"
         android:layout_alignTop="@+id/imageViewGenreLarge"
         android:layout_centerHorizontal="true" />
@@ -98,7 +97,6 @@
             android:layout_height="170dp"
             android:text="new text"
             android:textAllCaps="false"
-            android:onClick="genreSelected"
             android:textColor="@android:color/transparent"
             android:textAlignment="center"
             android:background="@android:color/transparent"

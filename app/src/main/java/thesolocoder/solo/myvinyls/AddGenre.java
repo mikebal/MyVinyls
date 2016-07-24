@@ -40,10 +40,11 @@ public class AddGenre extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showButton(findViewById(R.id.buttonBackGround));
-                showButton(findViewById(R.id.button2));
-                showButton(findViewById(R.id.button3));
-                fab.setImageResource(R.mipmap.ic_clear_white_36dp);
+            //    showButton(findViewById(R.id.buttonBackGround));
+             //   showButton(findViewById(R.id.button2));
+             //   showButton(findViewById(R.id.button3));
+               // fab.setImageResource(R.mipmap.ic_clear_white_36dp);
+                addNewGenre();
             }
         });
     }
@@ -51,14 +52,14 @@ public class AddGenre extends AppCompatActivity {
         closeOpenMenu();
     }
     private void closeOpenMenu(){
-        hideButton(findViewById(R.id.buttonBackGround));
-        hideButton(findViewById(R.id.button2));
-        hideButton(findViewById(R.id.button3));
+       // hideButton(findViewById(R.id.buttonBackGround));
+        //hideButton(findViewById(R.id.button2));
+        //hideButton(findViewById(R.id.button3));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab!= null)
             fab.setImageResource(R.mipmap.ic_add_white_36dp);
     }
-    private void hideButton(View button)
+ /*   private void hideButton(View button)
     {
         if(button != null)
             button.setVisibility(View.GONE);
@@ -67,7 +68,7 @@ public class AddGenre extends AppCompatActivity {
     {
         if(button != null)
             button.setVisibility(View.VISIBLE);
-    }
+    }*/
 
     private void setupVariables(){
         genre_list = (ListView) findViewById(R.id.listView_genre);
@@ -102,7 +103,7 @@ public class AddGenre extends AppCompatActivity {
         startActivityForResult(open_AddSubGenrePopup, 1);
         closeOpenMenu();
     }
-    public void addNewGenre(View v){
+    public void addNewGenre(){
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
             alert.setTitle("Adding Genre!");

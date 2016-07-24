@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity
 
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
-    ListViewAdapterGenre customAdapterGenre;
     String databaseTable = "records";
     EditText inputSearch;
     MenuItem menuItem;
@@ -167,9 +166,8 @@ public class MainActivity extends AppCompatActivity
         ArrayList<Records> recordList;
         if(dbCall.equals("GENRES"))
         {
-            ArrayList<GenreListItem> genreList;
-            genreList = dbHandler.getGenres(databaseTable);
-            populateGenreList(genreList);
+            recordList = dbHandler.getGenres(databaseTable);
+            populateGenreList(recordList);
         }
         else {
             recordList = dbHandler.databaseToList(dbCall, databaseTable);
@@ -178,14 +176,25 @@ public class MainActivity extends AppCompatActivity
         dbHandler.close();
 
     }
-    private void populateGenreList(ArrayList<GenreListItem> genreList)
+    private void populateGenreList(ArrayList<Records> recordList)
     {
-        customAdapter = null;
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
-        customAdapterGenre = new ListViewAdapterGenre(this, genreList);
-        recordDisplayList.setAdapter(customAdapterGenre);
-        customAdapterGenre.notifyDataSetChanged();
-        recordDisplayList.setVerticalScrollBarEnabled(false);
+
+        customAdapter = new ListViewAdapterMain(this, recordList, null);
+        customAdapter.artistView = true;
+        recordDisplayList.setAdapter(customAdapter);
+        recordDisplayList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                Records selectedRecord = customAdapter.getItem(position);
+                String selectedBandName = selectedRecord.get_bandname();
+                populateArrayList("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='" + selectedBandName + "' ORDER BY records._id;", false);
+            }
+
+        });
+
+        customAdapter.notifyDataSetChanged();
     }
 
    private void populateList(ArrayList<Records> recordList, boolean artistMode) {
