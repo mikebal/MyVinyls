@@ -2,6 +2,7 @@ package thesolocoder.solo.myvinyls;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -82,5 +83,11 @@ public class EditRecord extends RecordBaseActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void addGenreClicked(View v) {
+        Intent open_AddGenre = new Intent(EditRecord.this, AddGenre.class);
+        open_AddGenre.putExtra("toEditID", String.valueOf(editCall));
+        startActivityForResult(open_AddGenre, 111);
     }
 }

@@ -89,7 +89,7 @@ public class FileImporter {
 
     private ArrayList lineToColumb(String stringToParse)
     {
-        ArrayList<String> lineSegments = new ArrayList();
+        ArrayList<String> lineSegments = new ArrayList<>();
         StringTokenizer tokens = new StringTokenizer(stringToParse, ",");
         while(tokens.hasMoreTokens()) {
             lineSegments.add(tokens.nextToken());

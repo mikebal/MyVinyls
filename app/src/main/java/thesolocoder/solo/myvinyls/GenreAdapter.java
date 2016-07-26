@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -70,7 +69,7 @@ public class GenreAdapter  extends BaseAdapter {
         String item = getItem(position);
         category.setText(item); // Set the subgenre Header text
         mainGenreCheckBox.setChecked(shouldBeChecked(item,"")); // Check if the header should be checked off
-        ImageButton dropDown = (ImageButton) customView.findViewById(R.id.imageButton_genre_dropdown);
+      /*  ImageButton dropDown = (ImageButton) customView.findViewById(R.id.imageButton_genre_dropdown);
         dropDown.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -78,11 +77,11 @@ public class GenreAdapter  extends BaseAdapter {
                 boolean isChecked = mainGenreCheckBox.isChecked();
                 handleCategoryExpansion(v, position, convertView, parent, isChecked);
             }
-        });
+        });*/
         return customView;
     }
 
-    public void handleCategoryExpansion(View v, final int position, final View convertView, final ViewGroup parent, boolean isMainCategoryChecked) {
+ /*   public void handleCategoryExpansion(View v, final int position, final View convertView, final ViewGroup parent, boolean isMainCategoryChecked) {
         selectedTextView.setText(genreCategories.get(position));
         parent.setVisibility(View.GONE);
         selectedLayout.setVisibility(View.VISIBLE);
@@ -144,7 +143,7 @@ public class GenreAdapter  extends BaseAdapter {
                 checkboxArea2.addView(cb);
             checkboxHolder.setVisibility(View.VISIBLE);
         }
-    }
+    }*/
 
     private int findIndexOfString(ArrayList<String> list, String target) {
         int result = -1;
@@ -178,14 +177,14 @@ public class GenreAdapter  extends BaseAdapter {
 
     private String getRawQuery(boolean isAdd, String genre, String subGenre)
     {
-        String addPart1 = "insert into genres (album_id,genre,subgenre) values ('" + editAlbumID + "','";
-        String deletePart1 =  "DELETE FROM genres WHERE album_id='" + editAlbumID + "' AND genre='";
+        String addPart1 = "insert into recordsgenres (album_id,genre,subgenre) values ('" + editAlbumID + "','";
+        String deletePart1 =  "DELETE FROM recordsgenres WHERE album_id='" + editAlbumID + "' AND genre='";
         String result;
 
         if(isAdd)
             result = addPart1 + genre + "','" + subGenre + "');";
         else
-            result = deletePart1 + genre + "' AND subgenre='" + subGenre +"';";
+            result = deletePart1 + genre + "'";
         return result;
     }
 
@@ -193,7 +192,7 @@ public class GenreAdapter  extends BaseAdapter {
     {
         boolean mustBeChecked = false;
         if(!editAlbumID.equals("-1")) {
-            String query = "SELECT * FROM genres WHERE album_id='" + editAlbumID + "' AND genre='" + genre + "' AND subgenre='" + subGenre + "'";
+            String query = "SELECT * FROM recordsgenres WHERE album_id='" + editAlbumID + "' AND genre='" + genre + "'";
             String queryResult = dbHandler.runRawQueryIfExists(query, "album_id");
             if (queryResult.equals(editAlbumID))
                 mustBeChecked = true;
