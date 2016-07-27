@@ -5,8 +5,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-
 import java.util.ArrayList;
 
 public class AddLentOut extends AppCompatActivity {
@@ -80,8 +81,8 @@ public class AddLentOut extends AppCompatActivity {
 
         int currentID = 1;
         EditText name = (EditText) findViewById(R.id.editTextLendoutName);
-        EditText dateOut = (EditText) findViewById(R.id.editTextLentoutDateOut);
-        EditText dateDue = (EditText) findViewById(R.id.editTextLentoutDue);
+        Button dateOut = (Button) findViewById(R.id.editTextLentoutDateOut);
+        Button dateDue = (Button) findViewById(R.id.editTextLentoutDue);
 
         if(name == null || dateDue == null || dateOut == null)
             return;
@@ -92,8 +93,46 @@ public class AddLentOut extends AppCompatActivity {
             currentID += findLargestString(listOfIDs);
         String currentIDStr = String.valueOf(currentID);
         String dateOutStr = dateOut.getText().toString();
+        if(dateOutStr.equals("Today"))
+        {
+            dateOutStr = getDateFromDatePicker((DatePicker) findViewById(R.id.datePickerLentOut));
+        }
         String dateDueStr = dateDue.getText().toString();
+        if(dateDueStr.equals("Unset"))
+        {
+            dateDueStr = "12/12/2025";
+        }
         dbHandler.runRawQueryNoResult("insert into lentout (_id,album_id,lentout,dateout,dueback) values (" + currentIDStr + "," + recordID + ",'" + nameStr + "','" + dateOutStr + "','" + dateDueStr + "');");
         finish();
+    }
+
+    public void dateOutExpand(View v){
+        DatePicker dateOut = (DatePicker) findViewById(R.id.datePickerLentOut);
+        Button button = (Button) findViewById(R.id.editTextLentoutDateOut);
+        handleExpansion(button,dateOut);
+    }
+
+    public void dueBackExpand(View v){
+        DatePicker dateOut = (DatePicker) findViewById(R.id.datePickerDueBack);
+        Button button = (Button) findViewById(R.id.editTextLentoutDue);
+        handleExpansion(button,dateOut);
+    }
+
+    private void handleExpansion(Button buttonClicked, DatePicker datePicker){
+        if(datePicker.getVisibility() == View.GONE) {
+            datePicker.setVisibility(View.VISIBLE);
+        }
+        else{
+            String date = getDateFromDatePicker(datePicker);
+            buttonClicked.setText(date);
+        }
+    }
+    private String getDateFromDatePicker(DatePicker datePicker)
+    {
+        String date;
+        date = String.valueOf(datePicker.getMonth() + 1) + "/";
+        date += String.valueOf(datePicker.getDayOfMonth()) + "/";
+        date += String.valueOf(datePicker.getYear());
+        return date;
     }
 }
