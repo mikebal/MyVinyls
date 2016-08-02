@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
+import android.widget.TextView;
 import java.util.ArrayList;
 
-/**
- * Created by Michael on 6/28/2016.
- */
 public class RecordBaseActivity extends Activity {
 
     EditText albumName, albumYear, albumBand;
@@ -37,5 +35,37 @@ public class RecordBaseActivity extends Activity {
         albumYear = (EditText) findViewById(R.id.editText_year);
         albumBand = (EditText) findViewById(R.id.editText_bandName);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);
+    }
+
+    public boolean hasRequiredFields() {
+        boolean hasAllRequiredFields = true;
+        if (albumName.getText().toString().equals("")) {
+            hasAllRequiredFields = false;
+            TextView requiredAstrix = (TextView) findViewById(R.id.textView_RequiredAlbumName);
+            requiredAstrix.setVisibility(View.VISIBLE);
+        }
+        return hasAllRequiredFields;
+    }
+    public Records createRecord() {
+        Records newRecord = null;
+        if (hasRequiredFields())
+        {
+            newRecord = new Records();
+            newRecord.set_albumname(albumName.getText().toString());
+
+            if (!albumYear.getText().toString().equals(""))
+                newRecord.set_releaseyear(albumYear.getText().toString());
+            else
+                newRecord.set_releaseyear("");
+            newRecord.set_bandname(albumBand.getText().toString());
+            newRecord.set_genre(genres);
+
+            if (albumCover != null)
+                newRecord.set_hasimage("true");
+            else
+                newRecord.set_hasimage("false");
+
+        }
+        return newRecord;
     }
 }

@@ -14,6 +14,8 @@
 
 package thesolocoder.solo.myvinyls;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.IntentSender.SendIntentException;
@@ -124,8 +126,24 @@ public class RetrieveContentsWithProgressDialogActivity extends BaseDemoActivity
 
                     DriveContents contents = result.getDriveContents();
                     FileImporter importer = new FileImporter();
-                    importer.acceptDriveVersion(contents, getApplicationContext());
-                    finish();
+                    String rejectList = importer.acceptDriveVersion(contents, getApplicationContext());
+                    if(rejectList.equals(""))
+                        finish();
+                    else{
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RetrieveContentsWithProgressDialogActivity.this);
+                            dialogBuilder.setTitle("Format Error");
+                            dialogBuilder.setMessage(rejectList);
+
+                            dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            AlertDialog alert = dialogBuilder.create();
+                            alert.show();
+                        }
                 }
             };
 }

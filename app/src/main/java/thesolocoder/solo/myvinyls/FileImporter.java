@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 public class FileImporter {
 
-    public void acceptDriveVersion(DriveContents contents, Context context){
+    public String acceptDriveVersion(DriveContents contents, Context context){
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
         StringBuilder builder = new StringBuilder();
@@ -18,6 +18,9 @@ public class FileImporter {
         String tableName = "records";
         ArrayList<String> lineParsed;
         int lentOutID = 1;
+        int lineCount = 1;
+        ArrayList<String> badLineList = new ArrayList<>();
+        String errorMessage = "";
 
         MyDBHandler dbHandler = new MyDBHandler(context, null, null, 1);
         try {
@@ -35,18 +38,34 @@ public class FileImporter {
                         if(!lineParsed.get(0).contains("records")) {    // correction for possible special symbole if edited by google drive
                             Toast toast = Toast.makeText(context, "Record Category is wrong: " + lineParsed.get(0), Toast.LENGTH_LONG);
                             toast.show();
-                            return;
+                            break;
                         }
                     }
                 }
                 else {
                     lineParsed = lineToColumb(builder.toString());
-                    if (!tableName.equals("lentout"))
-                        addRecord(lineParsed, tableName, dbHandler);
-                    else{
-                        addLentOut(lentOutID, lineParsed, dbHandler);
-                        lentOutID++;
+                    if (isValidFormat(lineParsed)) {
+                        if (!tableName.equals("lentout"))
+                            addRecord(lineParsed, tableName, dbHandler);
+                         else {
+                            addLentOut(lentOutID, lineParsed, dbHandler);
+                            lentOutID++;
+                        }
                     }
+                    else{
+                         badLineList.add(String.valueOf(lineCount));
+                    }
+                }
+                lineCount++;
+            }
+            if(badLineList.size() >= 1)
+            {
+                errorMessage = "The Records on the following lines have been ignored:\n";
+                for(int i = 0; i < badLineList.size(); i++)
+                {
+                    if(i != 0)
+                        errorMessage += ",";
+                    errorMessage += String.valueOf(badLineList.get(i));
                 }
             }
         }
@@ -54,6 +73,7 @@ public class FileImporter {
             Toast toast = Toast.makeText(context, e.getClass().getName(), Toast.LENGTH_LONG);
             toast.show();
         }
+        return errorMessage;
     }
 
     private void addRecord(ArrayList<String> lineParsed, String tableName, MyDBHandler dbHandler){
@@ -95,5 +115,28 @@ public class FileImporter {
             lineSegments.add(tokens.nextToken());
         }
         return lineSegments;
+    }
+
+    private boolean isValidFormat(ArrayList<String> data)
+    {
+        boolean isValid = true;
+       if(data.size() < 3)
+            isValid = false;
+        if(isValid)
+            isValid = isInteger(data.get(0));
+        if(isValid)
+            isValid = isInteger(data.get(3));
+        return isValid;
+    }
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
     }
 }

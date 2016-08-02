@@ -123,6 +123,7 @@ public class AddLentOut extends AppCompatActivity {
             datePicker.setVisibility(View.VISIBLE);
         }
         else{
+            datePicker.setVisibility(View.GONE);
             String date = getDateFromDatePicker(datePicker);
             buttonClicked.setText(date);
         }

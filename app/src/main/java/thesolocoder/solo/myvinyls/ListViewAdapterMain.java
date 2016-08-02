@@ -68,31 +68,33 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         bandName.setText(record.get_bandname());
         albumYear.setText(record.get_releaseyear());
         loadImage(albumCover, record.get_imageurl());
+
+        if(lentOut != null)
+            record.set_imageurl(lentOut.get(position).id);
+
         moreMenu.setTag(record.get_imageurl());
-
-
 
         if(artistView)
         {
             albumName.setVisibility(View.GONE);
             albumYear.setVisibility(View.GONE);
             moreMenu.setVisibility(View.GONE);
-
         }
 
         if(lentOut != null)
-            loadLentOutData(customView, position);
+            loadLentOutData(customView, position, moreMenu);
 
         return customView;
     }
 
-    private void loadLentOutData(View customView, int position){
+    private void loadLentOutData(View customView, int position, ImageButton moreMenu){
 
         TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
         TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
         header.setVisibility(View.VISIBLE);
         lentOutToName.setVisibility(View.VISIBLE);
         lentOutToName.setText(lentOut.get(position).name);
+
         if(lentOut.get(position).isOverDue()){
             header.setTextColor(Color.parseColor("#990000"));
             lentOutToName.setTextColor(Color.parseColor("#990000"));

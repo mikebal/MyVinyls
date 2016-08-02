@@ -151,7 +151,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public Records getRecordByID(String id, String callingTable) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "SELECT * FROM " + callingTable + " WHERE " + COLUMN_ID + "=" + id;
+        String query = "SELECT * FROM " + callingTable + " WHERE " + COLUMN_ID + "='" + id +"'";
         Records selectedRecord = new Records();
         ArrayList<String> genres = new ArrayList<>();
 

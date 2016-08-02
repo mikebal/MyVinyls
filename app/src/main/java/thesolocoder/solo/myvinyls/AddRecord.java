@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.TextView;
-
 import java.util.StringTokenizer;
 
 public class AddRecord extends RecordBaseActivity {
@@ -47,16 +45,6 @@ public class AddRecord extends RecordBaseActivity {
             }
             finish();
         }
-    }
-
-    private boolean hasRequiredFields() {
-        boolean hasAllRequiredFields = true;
-        if (albumName.getText().toString().equals("")) {
-            hasAllRequiredFields = false;
-            TextView requiredAstrix = (TextView) findViewById(R.id.textView_RequiredAlbumName);
-            requiredAstrix.setVisibility(View.VISIBLE);
-        }
-        return hasAllRequiredFields;
     }
 
     public void addGenreClicked(View v) {

@@ -120,7 +120,8 @@ public class AddGenre extends AppCompatActivity {
                     String value = input.getText().toString();
                     if (!value.equals("")) {
                         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-                        dbHandler.runRawQueryNoResult("insert into genres (genre,subgenre) values ('"+ value +"','');");
+                        dbHandler.runRawQueryNoResult("insert into recordsgenres (genre,subgenre) values ('"+ value +"','');");
+                        populateList();
                         closeOpenMenu();
                     } else
                         finish();

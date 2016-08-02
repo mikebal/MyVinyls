@@ -27,6 +27,8 @@ public class EditRecord extends RecordBaseActivity {
         if(_id == null || _id.equals("New Entry"))
             return;
         callingTable = extras.getString("callingTable");
+        if(callingTable.equals("lentout"))
+            callingTable = "records";
         editCall = _id;
 
         ImageButton deleteButton = (ImageButton) findViewById(R.id.imageButtonDelete);
@@ -53,6 +55,24 @@ public class EditRecord extends RecordBaseActivity {
     {
         Button saveButton = (Button) findViewById(R.id.button);
         saveButton.setText(R.string.save);
+    }
+
+    public void addRecordClicked(View v) {
+        String  newAlbumID;
+        newAlbumID = editCall;
+        if (hasRequiredFields()) {
+            Records newRecord = createRecord();
+            if(newRecord != null){
+                MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+                newRecord.set_id(editCall);
+                dbHandler.updateRecord(newRecord);
+            }
+            if(albumCover != null) {
+                ImageManager imageManager = new ImageManager();
+                imageManager.saveImageToFile(albumCover, newAlbumID);
+            }
+            finish();
+        }
     }
 
     public void deleteClicked(View v){

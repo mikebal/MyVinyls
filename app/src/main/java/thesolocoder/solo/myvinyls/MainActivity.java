@@ -211,6 +211,7 @@ public class MainActivity extends AppCompatActivity
            ArrayList<LentOut> lentOutList = dbHandler.getLentOut("SELECT * FROM lentout ORDER BY album_id");
            customAdapter = new ListViewAdapterMain(this, recordList, lentOutList);
            customAdapter.setIsOnLendOutScreen(true);
+           customAdapter.callingTable = databaseTable;
        }
 
        recordDisplayList.setAdapter(customAdapter);
