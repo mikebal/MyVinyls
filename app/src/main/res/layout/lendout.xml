@@ -18,18 +18,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Lent to:"
+        android:text="Lend to:"
         android:id="@+id/textView7" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
+        android:maxLength="30"
         android:layout_marginLeft="25dp"
         android:ems="10"
         android:id="@+id/editTextLendoutName" />
 
     <TextView
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -53,14 +55,15 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         android:text="Today"
-        android:background="#80d3d3d3"
+        android:background="@drawable/buttonoutline"
         android:onClick="dateOutExpand"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="45dp"
         android:ems="10"
         android:id="@+id/editTextLentoutDateOut"
         />
 
     <TextView
+        android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -80,21 +83,21 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#80d3d3d3"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="45dp"
         android:textAllCaps="false"
         android:onClick="dueBackExpand"
         android:text="Unset"
+        android:background="@drawable/buttonoutline"
         android:ems="10"
         android:id="@+id/editTextLentoutDue" />
 
     <Button
-        android:layout_marginTop="25dp"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="45dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Done"
         android:id="@+id/buttonAddlentout"
+        android:background="@drawable/buttonoutline"
         android:onClick="lentOutDone"
         android:layout_gravity="center_horizontal" />
 

@@ -49,7 +49,8 @@ public class EditRecord extends RecordBaseActivity {
     private void loadImage(ImageView albumCover, String fileName) {
         String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
-        albumCover.setImageBitmap(bitmap);
+        if(bitmap != null)
+            albumCover.setImageBitmap(bitmap);
     }
     private void changeButtonTextToSave()
     {
