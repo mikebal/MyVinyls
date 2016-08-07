@@ -1,15 +1,19 @@
 package thesolocoder.solo.myvinyls;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -81,27 +85,18 @@ public class RecordBaseActivity extends Activity {
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(RecordBaseActivity.this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    mPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
-                    startActivityForResult(intent,666);
-                } else if (items[item].equals("Choose from Library")) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(intent, "Select File"),777);
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
+
+
+        if (ContextCompat.checkSelfPermission(RecordBaseActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(RecordBaseActivity.this,
+                    new String[]{Manifest.permission.CAMERA},
+                    789456);
+        }
+        checkWriteExternalStorage();
+        showAlbumArtMenu();
     }
 
     @Override
@@ -156,5 +151,85 @@ public class RecordBaseActivity extends Activity {
         } catch (Exception e) {
             albumArtwork.setImageResource(R.mipmap.ic_report_black_24dp);
         }
+    }
+    private void takePicture(){
+        mPhotoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+        startActivityForResult(intent,666);
+    }
+   @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 789456: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkWriteExternalStorage();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    showAlbumArtMenu();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case 132465798: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    showAlbumArtMenu();
+                }
+                else{
+
+                }
+                return;
+            }
+        }
+    }
+    private void checkWriteExternalStorage(){
+        if (ContextCompat.checkSelfPermission(RecordBaseActivity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(RecordBaseActivity.this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    132465798);
+        }
+    }
+    private void showAlbumArtMenu(){
+        if (ContextCompat.checkSelfPermission(RecordBaseActivity.this,
+                Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED)
+            if(ContextCompat.checkSelfPermission(RecordBaseActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED){
+
+                final CharSequence[] items = {"Take Photo", "Choose from Library", "Cancel"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecordBaseActivity.this);
+                builder.setTitle("Add Photo!");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (items[item].equals("Take Photo")) {
+                            // Here, thisActivity is the current activity
+
+                            takePicture();
+
+                        } else if (items[item].equals("Choose from Library")) {
+                            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            startActivityForResult(Intent.createChooser(intent, "Select File"),777);
+                        } else if (items[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            }
     }
 }
