@@ -121,6 +121,10 @@ public class FileImporter {
 
     private boolean isValidFormat(ArrayList<String> data)
     {
+        if(data.size() < 3)
+            if(data.get(3).equals("#RECORDFEILDMISSING#"))
+                return true;
+
         boolean isValid = true;
        if(data.size() < 3)
             isValid = false;
