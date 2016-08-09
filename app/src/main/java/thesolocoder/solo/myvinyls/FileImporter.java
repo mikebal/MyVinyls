@@ -85,9 +85,11 @@ public class FileImporter {
 
         newRecord = new Records();
         newRecord.set_imageurl(lineParsed.get(_ID));
-        newRecord.set_bandname(lineParsed.get(BAND_NAME));
+        if(!lineParsed.get(BAND_NAME).equals("#RECORDFEILDMISSING#"))
+            newRecord.set_bandname(lineParsed.get(BAND_NAME));
         newRecord.set_albumname(lineParsed.get(ALBUM_NAME));
-        newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
+        if(!lineParsed.get(RELEASE_YEAR).equals("#RECORDFEILDMISSING#"))
+            newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
 
         lineParsed.remove(RELEASE_YEAR);
         lineParsed.remove(ALBUM_NAME);

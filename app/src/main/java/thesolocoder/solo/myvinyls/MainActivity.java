@@ -3,12 +3,15 @@ package thesolocoder.solo.myvinyls;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -95,11 +98,16 @@ public class MainActivity extends AppCompatActivity
             databaseTable = "records";
             customAdapter.isOnLendoutScreen = false;
             reloadListView();
+            getSupportActionBar().setTitle("My Collection");
+            changeActionBarColor("#1c2f2f");
 
         } else if (id == R.id.nav_wishlist) {
             databaseTable = "wishlist";
             customAdapter.isOnLendoutScreen = false;
             reloadListView();
+            getSupportActionBar().setTitle("Wishlist");
+            changeActionBarColor("#2f1c2f");
+
 
         } else if (id == R.id.nav_backup) {
             Intent open_BackupMenu = new Intent(MainActivity.this, BackupRestore.class);
@@ -109,6 +117,8 @@ public class MainActivity extends AppCompatActivity
             databaseTable = "lentout";
             reloadListView();
             fab.setVisibility(View.GONE);
+            getSupportActionBar().setTitle("Lentout");
+            changeActionBarColor("#2f2f1c");
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -311,6 +321,7 @@ public class MainActivity extends AppCompatActivity
             album.setPaintFlags(album.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             lastClickedButton = album;
             tabButtonClicked(lastClickedButton);
+            getSupportActionBar().setTitle("My Collection");
         }
     }
 
@@ -319,5 +330,14 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         if(lastClickedButton != null)
             tabButtonClicked(lastClickedButton);
+    }
+    private void changeActionBarColor(String color){
+        ActionBar mActionBar = getSupportActionBar();
+        mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(true);
+
+        LinearLayout tabBar = (LinearLayout)findViewById(R.id.linearLayout);
+        tabBar.setBackgroundColor(Color.parseColor(color));
     }
 }

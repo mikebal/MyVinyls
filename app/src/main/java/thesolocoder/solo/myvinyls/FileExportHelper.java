@@ -17,12 +17,24 @@ public class FileExportHelper {
     private String convertRecordListToString(ArrayList<Records> records, String tableName)
     {
         String data = "";
+        String temp = "";
         for (int i = 0; i < records.size(); i++)
         {
             data += records.get(i).get_imageurl() + ",";
-            data += records.get(i).get_bandname() + ",";
+            temp =  records.get(i).get_bandname();
+            if(temp.isEmpty() || temp.equals(""))
+                temp = "#RECORDFEILDMISSING#,";
+            else
+                temp += ",";
+            data += temp;
             data += records.get(i).get_albumname() + ",";
-            data += records.get(i).get_releaseyear();
+
+            temp += records.get(i).get_releaseyear();
+            if(temp.isEmpty() || temp.equals(""))
+                temp = "#RECORDFEILDMISSING#,";
+            else
+                temp += ",";
+            data += temp;
             data += listToCommaString(records.get(i).get_genre()) + "\n";
         }
         return data;
