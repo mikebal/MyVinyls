@@ -109,7 +109,7 @@ public class FileImporter {
                 + "','" + lineParsed.get(2) + "','" + lineParsed.get(3) + "');");
     }
 
-    public ArrayList lineToColumb(String stringToParse)
+    private ArrayList lineToColumb(String stringToParse)
     {
         ArrayList<String> lineSegments = new ArrayList<>();
         StringTokenizer tokens = new StringTokenizer(stringToParse, ",");
@@ -119,7 +119,7 @@ public class FileImporter {
         return lineSegments;
     }
 
-    public boolean isValidFormat(ArrayList<String> data)
+    private boolean isValidFormat(ArrayList<String> data)
     {
         if(data.size() < 3)
             if(data.get(3).equals("#EMPTY#"))
@@ -134,7 +134,7 @@ public class FileImporter {
             isValid = isInteger(data.get(3));
         return isValid;
     }
-    public static boolean isInteger(String s) {
+    private static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
         } catch(NumberFormatException e) {
