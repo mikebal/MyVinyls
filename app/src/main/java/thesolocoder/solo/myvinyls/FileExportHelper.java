@@ -23,7 +23,7 @@ public class FileExportHelper {
             data += records.get(i).get_imageurl() + ",";
             temp =  records.get(i).get_bandname();
             if(temp.isEmpty() || temp.equals(""))
-                temp = "#RECORDFEILDMISSING#,";
+                temp = "#EMPTY#,";
             else
                 temp += ",";
             data += temp;
@@ -31,7 +31,7 @@ public class FileExportHelper {
 
             temp += records.get(i).get_releaseyear();
             if(temp.isEmpty() || temp.equals(""))
-                temp = "#RECORDFEILDMISSING#,";
+                temp = "#EMPTY#,";
             else
                 temp += ",";
             data += temp;
