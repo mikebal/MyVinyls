@@ -86,9 +86,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
-
         if(hasID)
-            values.put(COLUMN_ID, record.get_imageurl());
+           values.put(COLUMN_ID, Integer.valueOf(record.get_imageurl()));
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(recordTableName, null, values);
@@ -100,7 +99,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 values = new ContentValues();
                 values.put(COLUMN_ALBUMID, album_id);
                 values.put(COLUMN_GENRE, record.get_genre().get(i));
-             //   values.put("subgenre", record.get_genre().get(i + 1));
                 db.insert(genreTableName, null, values);
             }
         }

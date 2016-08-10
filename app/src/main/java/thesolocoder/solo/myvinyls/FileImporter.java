@@ -76,7 +76,7 @@ public class FileImporter {
         return errorMessage;
     }
 
-    private void addRecord(ArrayList<String> lineParsed, String tableName, MyDBHandler dbHandler){
+    public void addRecord(ArrayList<String> lineParsed, String tableName, MyDBHandler dbHandler){
         Records newRecord;
         final int _ID = 0;
         final int BAND_NAME = 1;
@@ -85,10 +85,14 @@ public class FileImporter {
 
         newRecord = new Records();
         newRecord.set_imageurl(lineParsed.get(_ID));
-        if(!lineParsed.get(BAND_NAME).equals("#EMPTY#"))
+        if(lineParsed.get(BAND_NAME).equals("#EMPTY#"))
+            newRecord.set_bandname("");
+        else
             newRecord.set_bandname(lineParsed.get(BAND_NAME));
         newRecord.set_albumname(lineParsed.get(ALBUM_NAME));
-        if(!lineParsed.get(RELEASE_YEAR).equals("#EMPTY#"))
+        if(lineParsed.get(RELEASE_YEAR).equals("#EMPTY#"))
+            newRecord.set_releaseyear("");
+        else
             newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
 
         lineParsed.remove(RELEASE_YEAR);
@@ -109,7 +113,7 @@ public class FileImporter {
                 + "','" + lineParsed.get(2) + "','" + lineParsed.get(3) + "');");
     }
 
-    private ArrayList lineToColumb(String stringToParse)
+    public ArrayList lineToColumb(String stringToParse)
     {
         ArrayList<String> lineSegments = new ArrayList<>();
         StringTokenizer tokens = new StringTokenizer(stringToParse, ",");
@@ -119,7 +123,7 @@ public class FileImporter {
         return lineSegments;
     }
 
-    private boolean isValidFormat(ArrayList<String> data)
+    public boolean isValidFormat(ArrayList<String> data)
     {
         if(data.size() < 3)
             if(data.get(3).equals("#EMPTY#"))

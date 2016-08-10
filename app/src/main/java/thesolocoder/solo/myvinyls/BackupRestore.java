@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import java.util.ArrayList;
+
 public class BackupRestore extends AppCompatActivity {
 
     @Override
@@ -22,6 +24,11 @@ public class BackupRestore extends AppCompatActivity {
     public void restoreClicked(View v){
         Intent startRestore = new Intent(BackupRestore.this, RetrieveContentsWithProgressDialogActivity.class);
         startActivity(startRestore);
+    /*    MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        FileImporter importer = new FileImporter();
+        ArrayList<String> parsed = importer.lineToColumb("10,#EMPTY#,lies,#EMPTY#,,");
+        if(importer.isValidFormat(parsed))
+            importer.addRecord(parsed, "records", dbHandler);*/
         finish();
     }
 }
