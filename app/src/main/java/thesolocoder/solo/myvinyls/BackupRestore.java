@@ -3,9 +3,9 @@ package thesolocoder.solo.myvinyls;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-
-import java.util.ArrayList;
 
 public class BackupRestore extends AppCompatActivity {
 
@@ -13,6 +13,21 @@ public class BackupRestore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backuprestore);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuItem menuItem;
+        menuItem=menu.add("Title"); //your desired title here
+        menuItem.setIcon(R.mipmap.ic_info_outline_white_48dp); //your desired icon here
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent showImportExplanation = new Intent(BackupRestore.this, ImportExplanation.class);
+        startActivity(showImportExplanation);
+        return super.onOptionsItemSelected(item);
     }
 
     public void backupClicked(View v){
@@ -24,11 +39,6 @@ public class BackupRestore extends AppCompatActivity {
     public void restoreClicked(View v){
         Intent startRestore = new Intent(BackupRestore.this, RetrieveContentsWithProgressDialogActivity.class);
         startActivity(startRestore);
-    /*    MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        FileImporter importer = new FileImporter();
-        ArrayList<String> parsed = importer.lineToColumb("10,#EMPTY#,lies,#EMPTY#,,");
-        if(importer.isValidFormat(parsed))
-            importer.addRecord(parsed, "records", dbHandler);*/
         finish();
     }
 }

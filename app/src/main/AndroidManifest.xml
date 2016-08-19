@@ -78,5 +78,6 @@
         <activity android:name=".BackupRestore" />
         <activity android:name=".EditRecord" />
         <activity android:name=".RetrieveContentsWithProgressDialogActivity"/>
+        <activity android:name=".ImportExplanation"/>
     </application>
 </manifest>
