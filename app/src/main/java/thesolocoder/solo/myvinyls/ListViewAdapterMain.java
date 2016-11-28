@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -62,6 +63,8 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         ImageView albumCover = (ImageView) customView.findViewById(R.id.imageView2);
         ImageButton moreMenu = (ImageButton) customView.findViewById(R.id.imageButton3);
         moreMenu.setOnClickListener(expandMenuChoices);
+        Button viewSelector = (Button) customView.findViewById(R.id.buttonViewAlbum);
+        viewSelector.setOnClickListener(viewRecord);
 
         Records record = records.get(position);
         albumName.setText(record.get_albumname());
@@ -73,9 +76,10 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
             record.set_imageurl(lentOut.get(position).id);
 
         moreMenu.setTag(record.get_imageurl());
-
+        viewSelector.setTag(record.get_imageurl());
         if(artistView)
         {
+            viewSelector.setVisibility(View.GONE);
             albumName.setVisibility(View.GONE);
             albumYear.setVisibility(View.GONE);
             moreMenu.setVisibility(View.GONE);
@@ -189,6 +193,19 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
             alert.show();
         }
     };
+
+    private View.OnClickListener viewRecord = new View.OnClickListener() {
+        public void onClick(View v) {
+            final CharSequence[] items = {"Edit", "Lend out"};
+            final String recordID = (String) v.getTag();
+
+            Intent startActivity = new Intent();
+            startActivity.setClass(context, ViewRecord.class);
+            startActivity.setAction(ViewRecord.class.getName());
+            switchView(startActivity,recordID);
+        }
+    };
+
 
     private void switchView(Intent startActivity, String recordID){
 

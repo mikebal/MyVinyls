@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "records.db";
     private static final String TABLE_RECORDS = "records";
     private static final String TABLE_GENRES = "genres";
@@ -23,6 +23,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_ALBUMID = "album_id";
     private static final String COLUMN_GENRE = "genre";
     private static final String COLUMN_HASIMAGE = "hasimage";
+    private static final String COLUMN_NOTES = "notes";
     private Context appContext;
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -32,7 +33,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
+        final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT);";
         db.execSQL(queryTableRecords);
         final String queryTableGenres = "CREATE TABLE recordsgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
@@ -58,13 +59,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS records");
-        db.execSQL("DROP TABLE IF EXISTS recordsgenres");
-        db.execSQL("DROP TABLE IF EXISTS wishlist");
-        db.execSQL("DROP TABLE IF EXISTS wishlistgenres");
-        db.execSQL("DROP TABLE IF EXISTS lentout");
-        db.execSQL("DROP TABLE IF EXISTS lentoutgenres");
-        onCreate(db);
+        if(oldVersion < 2)
+        {
+            db.execSQL("ALTER TABLE records ADD COLUMN notes TEXT");
+        }
     }
 
     public void dropAndRemake()
@@ -86,6 +84,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_RELEASEYEAR, record.get_releaseyear());
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
+        values.put(COLUMN_NOTES, record.get_notes());
         if(hasID)
            values.put(COLUMN_ID, Integer.valueOf(record.get_imageurl()));
 
@@ -125,6 +124,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
                 listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
+                listEntry.set_notes(c.getString(c.getColumnIndex(COLUMN_NOTES)));
                 String genre_query = "SELECT * FROM " + table + TABLE_GENRES + " WHERE " +
                         COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
                 genre_cursor = db.rawQuery(genre_query, null);
@@ -161,7 +161,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             selectedRecord.set_albumname(c.getString(c.getColumnIndex("albumname")));
             selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
             selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
-
+            selectedRecord.set_notes(c.getString(c.getColumnIndex(COLUMN_NOTES)));
             String genre_query = "SELECT * FROM " + callingTable + TABLE_GENRES + " WHERE " +
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_query, null);
@@ -217,7 +217,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void updateRecord(Records record) {
         SQLiteDatabase db = getWritableDatabase();
-        Cursor c = db.rawQuery("UPDATE " + TABLE_RECORDS + " SET " + COLUMN_BANDNAME + "='" + record.get_bandname() + "', " + COLUMN_ALBUMNAME + "='" + record.get_albumname() + "'," + COLUMN_RELEASEYEAR + "='" + record.get_releaseyear() + "' WHERE _id='" + record.get_id() + "'", null);
+        Cursor c = db.rawQuery("UPDATE " + TABLE_RECORDS + " SET " + COLUMN_BANDNAME + "='" + record.get_bandname() + "', " + COLUMN_ALBUMNAME + "='" + record.get_albumname() + "'," + COLUMN_RELEASEYEAR + "='" + record.get_releaseyear() + "'," + COLUMN_NOTES + "='" + record.get_notes() + "' WHERE _id='" + record.get_id() + "'", null);
         c.moveToFirst();
         c.close();
         db.close();

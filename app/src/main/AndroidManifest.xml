@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <application
+        android:installLocation="preferExternal"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -79,5 +80,6 @@
         <activity android:name=".EditRecord" />
         <activity android:name=".RetrieveContentsWithProgressDialogActivity"/>
         <activity android:name=".ImportExplanation"/>
+        <activity android:name=".ViewRecord"/>
     </application>
 </manifest>

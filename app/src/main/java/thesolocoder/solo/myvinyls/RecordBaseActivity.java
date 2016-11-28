@@ -23,7 +23,7 @@ import java.util.StringTokenizer;
 
 public class RecordBaseActivity extends Activity {
 
-    EditText albumName, albumYear, albumBand;
+    EditText albumName, albumYear, albumBand, notes;
     ImageButton albumArtwork;
     Bitmap albumCover;
     Uri mPhotoUri = null;
@@ -45,6 +45,7 @@ public class RecordBaseActivity extends Activity {
         albumName = (EditText) findViewById(R.id.editText_albumName);
         albumYear = (EditText) findViewById(R.id.editText_year);
         albumBand = (EditText) findViewById(R.id.editText_bandName);
+        notes = (EditText) findViewById(R.id.editTextNote);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);
     }
 
@@ -75,6 +76,11 @@ public class RecordBaseActivity extends Activity {
                 newRecord.set_hasimage("true");
             else
                 newRecord.set_hasimage("false");
+
+            if(!notes.getText().toString().equals(""))
+                newRecord.set_notes(notes.getText().toString());
+            else
+                newRecord.set_notes("");
 
         }
         return newRecord;

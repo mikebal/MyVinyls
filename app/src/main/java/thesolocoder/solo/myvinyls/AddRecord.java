@@ -23,6 +23,10 @@ public class AddRecord extends RecordBaseActivity {
             else
                 newRecord.set_hasimage("false");
 
+            if(!notes.getText().toString().equals(""))
+                newRecord.set_notes(notes.getText().toString());
+            else
+                newRecord.set_notes("");
 
             MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
             if(editCall.equals("-1")) {

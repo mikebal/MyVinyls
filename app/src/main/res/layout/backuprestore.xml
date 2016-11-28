@@ -10,8 +10,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_width="match_parent"
-        android:layout_height="106dp"
-        android:text="MyVinyls uses google drive for backing up your data.\nYour record catolog will be saved as an editable text file.\n"
+        android:layout_height="wrap_content"
+        android:text="MyVinyls uses google drive for backing up your data.\nYour record catolog will be saved as an editable text file.\n***At this time backup of record notes is not eabled***"
         android:textSize="20dp"
         android:id="@+id/textView12" />
 

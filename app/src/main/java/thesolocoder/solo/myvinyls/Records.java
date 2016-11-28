@@ -11,6 +11,7 @@ public class Records {
     private ArrayList<String> _genre;
     private String _imageurl;
     private String _hasimage;
+    private String _notes;
     private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
 
     public Records(){}
@@ -42,6 +43,8 @@ public class Records {
 
     public void set_imageurl(String _imageurl){ this._imageurl = _imageurl; }
 
+    public void set_notes(String noteData) { this._notes = noteData;}
+
     public String get_id() { return _id; }
 
     public String get_bandname() { return _bandname; }
@@ -59,5 +62,7 @@ public class Records {
     public String get_imageurl() { return _imageurl; }
 
     public String get_hasimage() { return  _hasimage;}
+
+    public String get_notes() {return _notes;}
 
 }

@@ -29,6 +29,18 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonEdit"
+            android:src="@mipmap/ic_create_black_36dp"
+            android:visibility="gone"
+            android:onClick="editClicked"
+            android:background="@android:color/transparent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,19 +124,7 @@
         android:layout_toLeftOf="@+id/editText_year"
         android:layout_toStartOf="@+id/editText_year" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton2"
-        android:layout_below="@+id/editText_bandName"
-        android:layout_alignLeft="@+id/editText_bandName"
-        android:layout_alignStart="@+id/editText_bandName"
-        android:layout_marginTop="36dp"
-        android:background="@android:color/transparent"
-        android:src ="@mipmap/ic_add_circle_black_24dp"
-        android:onClick="addGenreClicked"/>
-
-    <TextView
+        <TextView
         android:layout_width="50dp"
         android:layout_height="20dp"
         android:text="Genre"
@@ -132,20 +132,6 @@
         android:layout_alignBottom="@+id/imageButton2"
         android:layout_alignRight="@+id/textView"
         android:layout_alignEnd="@+id/textView" />
-
-    <Button
-        android:textColor="#000000"
-        android:textSize="28sp"
-        android:layout_width="120dp"
-        android:layout_height="49dp"
-        android:background="@drawable/buttonoutline"
-        android:text="Add"
-        android:onClick="addRecordClicked"
-        android:id="@+id/button"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true"
-        android:textAllCaps="false"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -171,6 +157,54 @@
         android:layout_toEndOf="@+id/imageButton"
         android:layout_marginBottom="20dp"/>
 
-</RelativeLayout>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton2"
+            android:background="@android:color/transparent"
+            android:src ="@mipmap/ic_add_circle_black_24dp"
+            android:onClick="addGenreClicked"
+            android:layout_below="@+id/editText_bandName"
+            android:layout_alignLeft="@+id/editText_bandName"
+            android:layout_alignStart="@+id/editText_bandName" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes:"
+            android:id="@+id/textViewNoteHeader"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/imageButton2"
+            android:layout_alignLeft="@+id/editText_bandName"
+            android:layout_alignStart="@+id/editText_bandName"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="500"
+            android:maxLines="4"
+            android:id="@+id/editTextNote"
+            android:layout_below="@+id/textViewNoteHeader"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:textColor="#000000"
+            android:textSize="28sp"
+            android:layout_width="120dp"
+            android:layout_height="49dp"
+            android:background="@drawable/buttonoutline"
+            android:text="Add"
+            android:onClick="addRecordClicked"
+            android:id="@+id/button"
+            android:layout_marginTop="30dp"
+            android:layout_below="@+id/editTextNote"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
 </ScrollView>
 </RelativeLayout>
