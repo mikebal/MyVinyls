@@ -11,7 +11,7 @@
         android:layout_marginRight="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="MyVinyls uses google drive for backing up your data.\nYour record catolog will be saved as an editable text file.\n***At this time backup of record notes is not eabled***"
+        android:text="@string/backupHeader"
         android:textSize="20dp"
         android:id="@+id/textView12" />
 
@@ -19,15 +19,17 @@
         android:layout_marginTop="10dp"
         android:layout_width="349dp"
         android:layout_height="110dp"
-        android:text="Backup"
+        android:text="@string/backup"
         android:textAllCaps="false"
         android:textSize="40dp"
         android:id="@+id/buttonBackup"
         android:layout_gravity="center_horizontal"
         android:drawablePadding="-50dp"
         android:drawableLeft="@mipmap/ic_cloud_upload_black_48dp"
+        android:drawableStart="@mipmap/ic_cloud_upload_black_48dp"
         android:onClick="backupClicked"
-        android:paddingLeft="50dp" />
+        android:paddingLeft="50dp"
+        android:paddingStart="50dp"/>
 
     <TextView
         android:layout_marginTop="10dp"
@@ -35,14 +37,14 @@
         android:layout_marginRight="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restored version of the record catalog will override existing application catalog.\nThis can not be undone."
+        android:text="@string/restoreHeader"
         android:textSize="20dp"
         android:id="@+id/textView13" />
 
     <Button
         android:layout_marginTop="15dp"
         android:id="@+id/buttonRestore"
-        android:text="Restore"
+        android:text="@string/restore"
         android:layout_width="349dp"
         android:layout_height="110dp"
         android:textSize="40dp"
@@ -50,6 +52,7 @@
         android:drawableLeft="@mipmap/ic_cloud_download_black_48dp"
         android:layout_gravity="center_horizontal"
         android:onClick="restoreClicked"
-        android:paddingLeft="50dp" />
+        android:paddingLeft="50dp"
+        android:paddingStart="50dp"/>
 
 </LinearLayout>

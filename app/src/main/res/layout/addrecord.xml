@@ -44,7 +44,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Album cover"
+        android:text="@string/albumCover"
         android:id="@+id/textView5"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/imageButton" />
@@ -62,18 +62,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Album Name"
+        android:text="@string/albumName"
         android:id="@+id/textView"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_below="@+id/imageButton"/>
 
     <TextView
         android:layout_width="40dp"
         android:layout_height="20dp"
-        android:text="Year"
+        android:text="@string/year"
         android:id="@+id/textView2"
         android:layout_marginLeft="280dp"
+        android:layout_marginStart="280dp"
         android:layout_alignTop="@+id/textView"/>
 
     <EditText
@@ -100,12 +102,10 @@
         android:layout_toRightOf="@+id/imageButton"
         android:layout_toEndOf="@+id/imageButton" />
 
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Band Name:"
+        android:text="@string/bandName"
         android:id="@+id/textView3"
         android:layout_marginTop="31dp"
         android:layout_below="@+id/editText_year"
@@ -127,7 +127,7 @@
         <TextView
         android:layout_width="50dp"
         android:layout_height="20dp"
-        android:text="Genre"
+        android:text="@string/genre"
         android:id="@+id/textView4"
         android:layout_alignBottom="@+id/imageButton2"
         android:layout_alignRight="@+id/textView"
@@ -170,7 +170,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notes:"
+            android:text="@string/notes"
             android:id="@+id/textViewNoteHeader"
             android:layout_marginTop="15dp"
             android:layout_below="@+id/imageButton2"
@@ -196,7 +196,7 @@
             android:layout_width="120dp"
             android:layout_height="49dp"
             android:background="@drawable/buttonoutline"
-            android:text="Add"
+            android:text="@string/add"
             android:onClick="addRecordClicked"
             android:id="@+id/button"
             android:layout_marginTop="30dp"

@@ -104,7 +104,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Genre"
+        android:text="@string/genre"
         android:id="@+id/button2"
         android:onClick="addNewGenre"
         android:visibility="gone"
@@ -128,7 +128,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text="@string/Done"
         android:background="@drawable/buttonoutline"
         android:id="@+id/button4"
         android:onClick="doneClicked"

@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "records.db";
     private static final String TABLE_RECORDS = "records";
     private static final String TABLE_GENRES = "genres";
@@ -37,7 +37,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(queryTableRecords);
         final String queryTableGenres = "CREATE TABLE recordsgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
-        final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT);";
+        final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT);";
         db.execSQL(queryTableWishlist);
         final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout TEXT, dueback TEXT);";
         db.execSQL(queryTableLentout);
@@ -62,6 +62,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if(oldVersion < 2)
         {
             db.execSQL("ALTER TABLE records ADD COLUMN notes TEXT");
+        }
+        if(oldVersion < 3)
+        {
+            db.execSQL("ALTER TABLE wishlist ADD COLUMN notes TEXT");
         }
     }
 

@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Easiest way is to create the document on PC with excel.\nFormat is as follows:"
+            android:text="@string/infoHeader"
             android:id="@+id/textView16" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Record ID #, Band Name, Album Name, Year, Genre1, Genre2, Genre3,..."
+            android:text="@string/infoEXP"
             android:id="@+id/textView17" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Once done save the excel document as a txt file and place in your google drive folder."
+            android:text="@string/infoHow"
             android:id="@+id/textView18" />
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Sample Doc"
+            android:text="@string/sampleDoc"
             android:id="@+id/textViewSampleDoc"
             android:layout_gravity="center_horizontal" />
 
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Then simply click restore on the previous screen and select the file in google drive to load your record collection to the database"
+            android:text="@string/restoreHowTo"
             android:id="@+id/textView19" />
     </LinearLayout>
 </LinearLayout>

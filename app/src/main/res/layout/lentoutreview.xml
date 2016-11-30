@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Album Name"
+        android:text=""
         android:id="@+id/textViewAlbumName"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"/>
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Band Name"
+        android:text=""
         android:id="@+id/textViewBandName"
         android:layout_gravity="center_horizontal" />
 
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="YEAR"
+        android:text=""
         android:id="@+id/textViewYear"
         android:layout_gravity="center_horizontal" />
 

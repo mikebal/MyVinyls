@@ -97,12 +97,7 @@ public class AddGenre extends AppCompatActivity {
             checkboxArea2.removeAllViews();
         }
     }
-    public void addSubGenreClicked(View v)
-    {
-        Intent open_AddSubGenrePopup = new Intent(AddGenre.this, AddSubGenrePopup.class);
-        startActivityForResult(open_AddSubGenrePopup, 1);
-        closeOpenMenu();
-    }
+
     public void addNewGenre(){
             final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
