@@ -63,13 +63,15 @@ public class RecordBaseActivity extends Activity {
         if (hasRequiredFields())
         {
             newRecord = new Records();
-            newRecord.set_albumname(albumName.getText().toString());
+            String albumNameCommaCheck = albumName.getText().toString().replace("'","\'");
+            newRecord.set_albumname(albumNameCommaCheck);
 
             if (!albumYear.getText().toString().equals(""))
                 newRecord.set_releaseyear(albumYear.getText().toString());
             else
                 newRecord.set_releaseyear("");
-            newRecord.set_bandname(albumBand.getText().toString());
+            String bandNameCommaCheck = albumBand.getText().toString().replace("'","\'");
+            newRecord.set_bandname(bandNameCommaCheck);
             newRecord.set_genre(genres);
 
             if (albumCover != null)
