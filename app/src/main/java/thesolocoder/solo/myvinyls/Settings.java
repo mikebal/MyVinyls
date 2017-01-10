@@ -15,7 +15,7 @@ public class Settings extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, true);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
         if(useDarkTheme)
             setTheme(R.style.AppTheme_Dark_NoActionBar);
 

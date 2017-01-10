@@ -322,4 +322,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         return path;
     }
+
+    public String getWishlistDataStr(){
+        final String query = "SELECT * FROM wishlist";
+        ArrayList<Records> recordList = databaseToList(query, "wishlist" );
+        String wishlist = "";
+        for(Records record : recordList){
+            wishlist += "Album: " + record.get_albumname() + "\n";
+            wishlist += "Band: " + record.get_bandname() + "\n";
+            wishlist += "Year: " + record.get_releaseyear() + "\n\n";
+        }
+        return wishlist;
+    }
 }

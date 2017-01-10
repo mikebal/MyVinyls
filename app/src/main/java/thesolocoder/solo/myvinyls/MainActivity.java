@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -156,6 +157,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getTitle().equals("Title"))
             tabSearchAnimationHandler();
+        else
+            emailWishlist();
         return super.onOptionsItemSelected(item);
     }
     private void tabSearchAnimationHandler(){
@@ -381,5 +384,20 @@ public class MainActivity extends AppCompatActivity
 
         LinearLayout tabBar = (LinearLayout)findViewById(R.id.linearLayout);
         tabBar.setBackgroundColor(Color.parseColor(color));
+    }
+
+    private void emailWishlist(){
+        final MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        String wishlist = dbHandler.getWishlistDataStr();
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        //i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"recipient@example.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "My Wishlist");
+        i.putExtra(Intent.EXTRA_TEXT   , wishlist);
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
