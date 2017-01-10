@@ -71,5 +71,6 @@
         <activity android:name=".RetrieveContentsWithProgressDialogActivity"/>
         <activity android:name=".ImportExplanation"/>
         <activity android:name=".ViewRecord"/>
+        <activity android:name=".Settings"/>
     </application>
 </manifest>

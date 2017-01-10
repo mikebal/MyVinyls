@@ -3,6 +3,7 @@ package thesolocoder.solo.myvinyls;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
@@ -33,6 +34,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
+    boolean isDarkThemeEnabled = false;
     ListView  recordDisplayList;
     ListViewAdapterMain customAdapter;
     String databaseTable = "records";
@@ -42,12 +46,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+            isDarkThemeEnabled = true;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
         setupDefaultAppearance();
+        if(useDarkTheme)
+            changeActionBarColor("#191919");
+        else
+            changeActionBarColor("#1c2f2f");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if(fab != null)
@@ -100,14 +116,14 @@ public class MainActivity extends AppCompatActivity
             reloadListView();
             getSupportActionBar().setTitle("My Collection");
             changeActionBarColor("#1c2f2f");
-
+            replaceOptionsMenuWithSearch();
         } else if (id == R.id.nav_wishlist) {
             databaseTable = "wishlist";
             customAdapter.isOnLendoutScreen = false;
             reloadListView();
             getSupportActionBar().setTitle("Wishlist");
             changeActionBarColor("#2f1c2f");
-
+            replaceOptionsMenuWithSend();
 
         } else if (id == R.id.nav_backup) {
             Intent open_BackupMenu = new Intent(MainActivity.this, BackupRestore.class);
@@ -119,6 +135,10 @@ public class MainActivity extends AppCompatActivity
             fab.setVisibility(View.GONE);
             getSupportActionBar().setTitle("Lentout");
             changeActionBarColor("#2f2f1c");
+            replaceOptionsMenuWithSearch();
+        }else if(id == R.id.nav_settings){
+            Intent open_Settings = new Intent(MainActivity.this, Settings.class);
+            startActivity(open_Settings);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -134,7 +154,8 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        tabSearchAnimationHandler();
+        if(item.getTitle().equals("Title"))
+            tabSearchAnimationHandler();
         return super.onOptionsItemSelected(item);
     }
     private void tabSearchAnimationHandler(){
@@ -151,8 +172,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void searchBarAnimation(final LinearLayout fadeoutElement, final LinearLayout fadeInElement){
+    private void replaceOptionsMenuWithSend(){
+        menuItem.setIcon(R.drawable.ic_menu_send);
+        menuItem.setTitle("menu_send");
+        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
 
+    private void replaceOptionsMenuWithSearch(){
+        menuItem.setTitle("Title");
+        menuItem.setIcon(R.mipmap.ic_search_white_48dp);
+    }
+
+    private void searchBarAnimation(final LinearLayout fadeoutElement, final LinearLayout fadeInElement){
         fadeoutElement.setAlpha(1);
         fadeoutElement.animate().setDuration(1000).alpha(0).setListener(new AnimatorListenerAdapter() {
             @Override
@@ -330,10 +361,21 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         if(lastClickedButton != null)
             tabButtonClicked(lastClickedButton);
+
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+        if(useDarkTheme != isDarkThemeEnabled){
+            isDarkThemeEnabled = useDarkTheme;
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
     private void changeActionBarColor(String color){
+        final LinearLayout searchArea = (LinearLayout) findViewById(R.id.linearLayoutSearchBar);
         ActionBar mActionBar = getSupportActionBar();
         mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(color)));
+        searchArea.setBackgroundColor(Color.parseColor(color));
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setDisplayShowTitleEnabled(true);
 

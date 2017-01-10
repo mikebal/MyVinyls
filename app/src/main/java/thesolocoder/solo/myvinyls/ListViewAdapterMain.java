@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -86,12 +88,17 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         }
 
         if(lentOut != null)
-            loadLentOutData(customView, position, moreMenu);
+            loadLentOutData(customView, position);
 
+        SharedPreferences preferences = context.getSharedPreferences("prefs", context.MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean("dark_theme", false);
+        if(useDarkTheme){
+            moreMenu.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
         return customView;
     }
 
-    private void loadLentOutData(View customView, int position, ImageButton moreMenu){
+    private void loadLentOutData(View customView, int position){
 
         TextView header = (TextView) customView.findViewById(R.id.textViewLentOutHeader);
         TextView lentOutToName = (TextView) customView.findViewById(R.id.textViewLentOutName);
@@ -196,9 +203,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
 
     private View.OnClickListener viewRecord = new View.OnClickListener() {
         public void onClick(View v) {
-            final CharSequence[] items = {"Edit", "Lend out"};
             final String recordID = (String) v.getTag();
-
             Intent startActivity = new Intent();
             startActivity.setClass(context, ViewRecord.class);
             startActivity.setAction(ViewRecord.class.getName());
@@ -208,7 +213,6 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
 
 
     private void switchView(Intent startActivity, String recordID){
-
         startActivity.setFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);

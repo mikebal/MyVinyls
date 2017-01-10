@@ -40,4 +40,5 @@
     <string name="infoHow">Once done save the excel document as a txt file and place in your google drive folder.</string>
     <string name="sampleDoc">Sample Doc</string>
     <string name="restoreHowTo">Then simply click restore on the previous screen and select the file in google drive to load your record collection to the database</string>
+    <string name="UseDarkTheme">Use Dark Theme</string>
 </resources>

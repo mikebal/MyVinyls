@@ -9,12 +9,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -31,14 +34,37 @@ public class RecordBaseActivity extends Activity {
     String editCall = "-1";
     String dbTableReferenced;
     ArrayList<String> genres = new ArrayList<>();
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
+    boolean isDarkThemeEnabled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+            isDarkThemeEnabled = true;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addrecord);
         setupVariables();
+        if(useDarkTheme){
+            setIconsColorFilter();
+        }
         Bundle extras = getIntent().getExtras();
         dbTableReferenced = extras.getString("toAddToTable");
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+        if(useDarkTheme != isDarkThemeEnabled){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
     }
 
     private void setupVariables() {
@@ -47,6 +73,21 @@ public class RecordBaseActivity extends Activity {
         albumBand = (EditText) findViewById(R.id.editText_bandName);
         notes = (EditText) findViewById(R.id.editTextNote);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);
+    }
+
+    private void setIconsColorFilter(){
+        ImageButton button = (ImageButton) findViewById(R.id.imageButtonDelete);
+        button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        button = (ImageButton) findViewById(R.id.imageButtonEdit);
+        button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        button = (ImageButton) findViewById(R.id.imageButtonRotation);
+        button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        button = (ImageButton) findViewById(R.id.imageButton2);
+        button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        Button addButton = (Button) findViewById(R.id.button);
+        addButton.setBackgroundColor(Color.LTGRAY);
+        //button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
     }
 
     public boolean hasRequiredFields() {
