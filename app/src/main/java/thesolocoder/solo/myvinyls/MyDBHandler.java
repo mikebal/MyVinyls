@@ -219,7 +219,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return item;
     }
 
-    public void updateRecord(Records record) {
+    public void updateRecord(Records record, String tableName) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_BANDNAME, record.get_bandname());
@@ -227,7 +227,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
         values.put(COLUMN_NOTES, record.get_notes());
-        db.update(TABLE_RECORDS, values, "_id=" + record.get_id(), null);
+        db.update(tableName, values, "_id=" + record.get_id(), null);
         db.close();
     }
 

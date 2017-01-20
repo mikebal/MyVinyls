@@ -35,11 +35,11 @@ public class AddRecord extends RecordBaseActivity {
             else{
                 newAlbumID = editCall;
                 newRecord.set_id(editCall);
-                dbHandler.updateRecord(newRecord);
+                dbHandler.updateRecord(newRecord, dbTableReferenced);
             }
             if(albumCover != null) {
                 ImageManager imageManager = new ImageManager();
-                imageManager.saveImageToFile(albumCover, newAlbumID);
+                imageManager.saveImageToFile(albumCover, dbTableReferenced + newAlbumID);
             }
             finish();
         }

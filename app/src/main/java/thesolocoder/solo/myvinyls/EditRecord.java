@@ -48,7 +48,7 @@ public class EditRecord extends RecordBaseActivity {
         loadImage(albumArtwork, _id);
     }
     private void loadImage(ImageView albumCover, String fileName) {
-        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + callingTable + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
         if(bitmap != null)
             albumCover.setImageBitmap(bitmap);
@@ -67,11 +67,11 @@ public class EditRecord extends RecordBaseActivity {
             if(newRecord != null){
                 MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
                 newRecord.set_id(editCall);
-                dbHandler.updateRecord(newRecord);
+                dbHandler.updateRecord(newRecord, callingTable);
             }
             if(albumCover != null) {
                 ImageManager imageManager = new ImageManager();
-                imageManager.saveImageToFile(albumCover, newAlbumID);
+                imageManager.saveImageToFile(albumCover, callingTable + newAlbumID);
             }
             finish();
         }

@@ -72,7 +72,7 @@ class ListViewAdapterMain extends BaseAdapter implements Filterable {
         albumName.setText(record.get_albumname());
         bandName.setText(record.get_bandname());
         albumYear.setText(record.get_releaseyear());
-        loadImage(albumCover, record.get_imageurl());
+        loadImage(albumCover, callingTable + record.get_imageurl());
 
         if(lentOut != null)
             record.set_imageurl(lentOut.get(position).id);

@@ -87,7 +87,6 @@ public class RecordBaseActivity extends Activity {
 
         Button addButton = (Button) findViewById(R.id.button);
         addButton.setBackgroundColor(Color.LTGRAY);
-        //button.getDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
     }
 
     public boolean hasRequiredFields() {

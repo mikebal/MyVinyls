@@ -2,6 +2,8 @@ package thesolocoder.solo.myvinyls;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final Animation animRotate = AnimationUtils.loadAnimation(this, R.anim.anim_rotate);
+        displayNotification(preferences);
         setupDefaultAppearance();
         if(useDarkTheme)
             changeActionBarColor("#191919");
@@ -398,6 +401,25 @@ public class MainActivity extends AppCompatActivity
             startActivity(Intent.createChooser(i, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayNotification(SharedPreferences preferences){
+        final MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
+        boolean isAlbumCoverNamesUpToDate = preferences.getBoolean("albumCoverNameVersion2", false);
+        if(!isAlbumCoverNamesUpToDate) {
+            ArrayList<Records> records = dbHandler.databaseToList("SELECT * from records", "records");
+            if (records.isEmpty())
+                records = dbHandler.databaseToList("SELECT * from wishlist", "wishlist");
+
+            if (!records.isEmpty() && !isAlbumCoverNamesUpToDate) {
+                Intent updateAlbumCoverFix = new Intent(MainActivity.this, UpdateAlbumCoverFix.class);
+                startActivity(updateAlbumCoverFix);
+            } else {
+                SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putBoolean("albumCoverNameVersion2", true);
+                editor.apply();
+            }
         }
     }
 }

@@ -72,5 +72,6 @@
         <activity android:name=".ImportExplanation"/>
         <activity android:name=".ViewRecord"/>
         <activity android:name=".Settings"/>
+        <activity android:name=".UpdateAlbumCoverFix"/>
     </application>
 </manifest>

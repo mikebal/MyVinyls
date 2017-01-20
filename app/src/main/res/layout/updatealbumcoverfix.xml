@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:id="@+id/backupRestoreLayout"
+    android:background="#f5f5f5">
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Due to error you may have have noticed album artwork mixed between your 'collection' and 'wishlist'.  To correct this
+     you must select one list to assign all the images to.  Any new artwork will be assigned correctly.\n\n Sorry for any inconveniences this may cause"
+        android:textSize="20dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textAlignment="center"
+        android:id="@+id/textView12" />
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="349dp"
+        android:layout_height="80dp"
+        android:text="My Collection"
+        android:textAllCaps="false"
+        android:textSize="40dp"
+        android:id="@+id/buttonMyCollection"
+        android:layout_gravity="center_horizontal"
+        android:drawablePadding="-50dp"
+        android:onClick="albumFixMyCollection"/>
+
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:id="@+id/buttonWishlist"
+        android:text="Wishlist"
+        android:layout_width="349dp"
+        android:layout_height="80dp"
+        android:textSize="40dp"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:onClick="albumFixWishlist"/>
+
+    <Button
+        android:layout_marginTop="15dp"
+        android:id="@+id/buttonPC"
+        android:text="No artwork / Do manually on PC"
+        android:layout_width="349dp"
+        android:layout_height="80dp"
+        android:textSize="20dp"
+        android:textAllCaps="false"
+        android:layout_gravity="center_horizontal"
+        android:onClick="albumFixManual"/>
+
+</LinearLayout>
