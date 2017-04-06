@@ -74,7 +74,7 @@ public class ViewRecord extends EditRecord{
     }
 
     private void loadImage(ImageButton albumCover, String fileName) {
-        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + fileName + ".jpg";
+        String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + callingTable + fileName + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(imageInSD);
         if(bitmap != null)
             albumCover.setImageBitmap(bitmap);

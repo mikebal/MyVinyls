@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -42,5 +43,10 @@ public class Settings extends Activity {
         finish();
 
         startActivity(intent);
+    }
+
+    public void deleteAllImagesClicked(View v){
+        Intent open_deleteAllImages = new Intent(Settings.this, DeleteAllImages.class);
+        startActivity(open_deleteAllImages);
     }
 }

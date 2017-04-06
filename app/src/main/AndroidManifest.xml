@@ -73,5 +73,6 @@
         <activity android:name=".ViewRecord"/>
         <activity android:name=".Settings"/>
         <activity android:name=".UpdateAlbumCoverFix"/>
+        <activity android:name=".DeleteAllImages"/>
     </application>
 </manifest>

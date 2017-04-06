@@ -2,8 +2,6 @@ package thesolocoder.solo.myvinyls;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -228,6 +226,7 @@ public class MainActivity extends AppCompatActivity
         recordDisplayList = (ListView) findViewById(R.id.listViewMainDisplay);
 
         customAdapter = new ListViewAdapterMain(this, recordList, null);
+        customAdapter.callingTable = databaseTable;
         customAdapter.artistView = true;
         recordDisplayList.setAdapter(customAdapter);
         recordDisplayList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Records selectedRecord = customAdapter.getItem(position);
                 String selectedBandName = selectedRecord.get_bandname();
-                populateArrayList("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='" + selectedBandName + "' ORDER BY records._id;", false);
+                populateArrayList("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='" + selectedBandName + "' AND records.hasImage='true' ORDER BY records._id;", false);
             }
 
         });

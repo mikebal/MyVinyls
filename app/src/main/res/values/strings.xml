@@ -26,7 +26,7 @@
     <string name="genre">Genre</string>
     <string name="notes">Notes:</string>
     <string name="add">Add</string>
-    <string name="backupHeader">MyVinyls uses google drive for backing up your data.\nYour record catolog will be saved as an editable text file.\n***At this time backup of record notes is not enabled***</string>
+    <string name="backupHeader">MyVinyls uses google drive for backing up your data.\nYour record catalog will be saved as an editable text file.\n***At this time backup of record notes is not enabled***</string>
     <string name="backup">Backup</string>
     <string name="restoreHeader">Restored version of the record catalog will override existing application catalog.\nThis can not be undone.</string>
     <string name="restore">Restore</string>
@@ -41,4 +41,7 @@
     <string name="sampleDoc">Sample Doc</string>
     <string name="restoreHowTo">Then simply click restore on the previous screen and select the file in google drive to load your record collection to the database</string>
     <string name="UseDarkTheme">Use Dark Theme</string>
+    <string name="deleteImages">The album artwork of this app is stored outside of the install folder.  This allows google photos to backup the images.  Click here to remove the images from this device (Uninstalling will not delete the images)</string>
+    <string name="deleteAllImagesWarning">Warning you are about to delete all of your saved album artwork.  This can not be undone unless you have backed-up your photos with google pictures.  If you are sure you want to clear your photos check the box bellow and click ok.</string>
+    <string name="IUnderstand">I Understand</string>
 </resources>

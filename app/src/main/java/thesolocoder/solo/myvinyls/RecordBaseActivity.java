@@ -191,7 +191,7 @@ public class RecordBaseActivity extends Activity {
                 genres.add(current);
         }
     }
-    private void loadAndSetImage() {
+    protected void loadAndSetImage() {
         try {
             ImageManager imageManager = new ImageManager();
             albumCover = imageManager.getCorrectlyOrientedImage(getApplicationContext(), mPhotoUri, imageOrientation);

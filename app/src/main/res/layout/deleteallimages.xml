@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:textSize="20sp"
+        android:text="@string/deleteAllImagesWarning"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/IUnderstand"
+        android:textSize="30dp"
+        android:onClick="warningUnderstood"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/deleteImagesCheckBox"/>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/deleteAllArtworkNowButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:layout_marginBottom="50dp"
+        android:onClick="deleteAllImagesNow"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:onClick="closeActivity"/>
+</LinearLayout>

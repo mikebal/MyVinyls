@@ -126,7 +126,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_bandname(c.getString(c.getColumnIndex("bandname")));
                 listEntry.set_albumname(c.getString(c.getColumnIndex("albumname")));
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
-                listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
+                if(query.contains("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='")) {
+                    listEntry.set_imageurl(c.getString(c.getColumnIndex("album_id")));
+                }
+                else{
+                    listEntry.set_imageurl(c.getString(c.getColumnIndex("_id")));
+                }
                 listEntry.set_hasimage(c.getString(c.getColumnIndex("hasimage")));  // Might not need this in ListView object
                 listEntry.set_notes(c.getString(c.getColumnIndex(COLUMN_NOTES)));
                 String genre_query = "SELECT * FROM " + table + TABLE_GENRES + " WHERE " +
@@ -188,7 +193,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public ArrayList<Records> getGenres(String callingTable) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + callingTable + TABLE_GENRES + " WHERE album_id!='-1'";
+        String query = "SELECT DISTINCT " + COLUMN_GENRE + " FROM " + callingTable + TABLE_GENRES + " WHERE album_id!='-1' AND genre!=''";
         ArrayList<Records> genres = new ArrayList<>();
         Records item;
         Cursor c = db.rawQuery(query, null);
@@ -197,7 +202,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             item = new Records();
             if (c.getString(c.getColumnIndex("genre")) != null) {
                 item.set_bandname(c.getString(c.getColumnIndex("genre")));
-                item = getImagesForGenreItem(item, true, db, item.get_albumname());
+                item = getImagesForGenreItem(item, true, db, item.get_bandname());
 
             }
             genres.add(item);
@@ -212,8 +217,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         final String MY_QUERY = "SELECT * FROM records INNER JOIN recordsgenres ON  records._id=recordsgenres.album_id WHERE  records.hasimage='true' AND genre='" + genre + "'";
         Cursor imageCursor = db.rawQuery(MY_QUERY, null);
         imageCursor.moveToFirst();
-        while (!imageCursor.isAfterLast()) {
-            item.set_imageurl(imageCursor.getString(imageCursor.getColumnIndex("_id")));
+        if (!imageCursor.isAfterLast()) {
+            item.set_imageurl(imageCursor.getString(imageCursor.getColumnIndex("album_id")));
         }
         imageCursor.close();
         return item;
