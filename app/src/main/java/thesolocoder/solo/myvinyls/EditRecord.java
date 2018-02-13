@@ -40,12 +40,18 @@ public class EditRecord extends RecordBaseActivity {
     public void loadRecordToEdit(String _id){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
         Records recordToEdit = dbHandler.getRecordByID(_id, callingTable);
-        albumName.setText(recordToEdit.get_albumname());
-        albumBand.setText(recordToEdit.get_bandname());
-        albumYear.setText(recordToEdit.get_releaseyear());
-        mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
-        notes.setText(recordToEdit.get_notes());
-        loadImage(albumArtwork, _id);
+        if(recordToEdit != null) {
+            albumName.setText(recordToEdit.get_albumname());
+            albumBand.setText(recordToEdit.get_bandname());
+            albumYear.setText(recordToEdit.get_releaseyear());
+            mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
+            notes.setText(recordToEdit.get_notes());
+            loadImage(albumArtwork, _id);
+        }
+        else
+        {
+            finish();
+        }
     }
     private void loadImage(ImageView albumCover, String fileName) {
         String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + callingTable + fileName + ".jpg";

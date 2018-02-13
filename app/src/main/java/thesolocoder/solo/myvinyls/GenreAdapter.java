@@ -168,7 +168,7 @@ public class GenreAdapter  extends BaseAdapter {
                 checkedItems.add(subGenre);
             }
             else{
-                int listLocation = findIndexOfString(checkedItems, subGenre);
+                int listLocation = findIndexOfString(checkedItems, genre);
                 checkedItems.remove(listLocation - 1); // Remove Genre
                 checkedItems.remove(listLocation - 1); // Remove Sub-Genre
             }

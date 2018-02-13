@@ -165,6 +165,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         Cursor genre_cursor;
         c.moveToFirst();
+        if(c.getCount() == 0){
+            return null;
+        }
         if (c.getString(c.getColumnIndex("bandname")) != null) {
             selectedRecord.set_bandname(c.getString(c.getColumnIndex("bandname")));
             selectedRecord.set_albumname(c.getString(c.getColumnIndex("albumname")));

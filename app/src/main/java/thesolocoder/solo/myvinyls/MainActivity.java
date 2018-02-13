@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
                 Records selectedRecord = customAdapter.getItem(position);
                 String selectedBandName = selectedRecord.get_bandname();
-                populateArrayList("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='" + selectedBandName + "' AND records.hasImage='true' ORDER BY records._id;", false);
+                populateArrayList("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='" + selectedBandName + "' ORDER BY records._id;", false);
             }
 
         });
@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
 
                Records selectedRecord = customAdapter.getItem(position);
                String selectedBandName = selectedRecord.get_bandname();
-               populateArrayList("SELECT * FROM "+ databaseTable +" WHERE bandname='" + selectedBandName +"';", false);
+               populateArrayList("SELECT * FROM "+ databaseTable +" WHERE bandname='" + selectedBandName.replace("'","\'") +"';", false);
            }
 
        });
