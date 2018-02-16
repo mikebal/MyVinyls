@@ -75,6 +75,7 @@ public class AddGenre extends AppCompatActivity {
         selectedView = (LinearLayout) findViewById(R.id.LinearLayoutSelectedCategory);
         selectedCategoryTextView = (TextView) findViewById(R.id.selectedCateogryTextView);
         upArrow = (ImageButton) findViewById(R.id.imageButton_genre_pullUp);
+
     }
     private void populateList(){
         MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
