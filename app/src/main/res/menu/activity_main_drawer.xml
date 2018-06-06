@@ -25,7 +25,7 @@
                 android:title="Backup" />
             <item
                 android:id="@+id/nav_settings"
-                android:icon="@mipmap/ic_settings_black_24dp"
+                android:icon="@mipmap/baseline_settings_black_24"
                 android:title="Settings"/>
         </menu>
     </item>

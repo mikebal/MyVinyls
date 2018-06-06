@@ -46,12 +46,24 @@ public class EditRecord extends RecordBaseActivity {
             albumYear.setText(recordToEdit.get_releaseyear());
             mPhotoUri = Uri.parse(recordToEdit.get_imageurl());
             notes.setText(recordToEdit.get_notes());
+            _recordSize.setSelection(getIndexOfRecordSize(recordToEdit.get_size()));
             loadImage(albumArtwork, _id);
         }
         else
         {
             finish();
         }
+    }
+
+    private int getIndexOfRecordSize(String recordSize){
+        String[] recordSizeArray = getResources().getStringArray(R.array.recordSize_array);
+        int index = 0;
+        for(int i = 0; i < recordSizeArray.length; i++){
+            if(recordSize.equals(recordSizeArray[i])){
+                index = i;
+            }
+        }
+        return index;
     }
     private void loadImage(ImageView albumCover, String fileName) {
         String imageInSD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "/MyVinylsAlbumArt/" + callingTable + fileName + ".jpg";

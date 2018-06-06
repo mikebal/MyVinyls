@@ -169,8 +169,8 @@ public class GenreAdapter  extends BaseAdapter {
             }
             else{
                 int listLocation = findIndexOfString(checkedItems, genre);
-                checkedItems.remove(listLocation - 1); // Remove Genre
-                checkedItems.remove(listLocation - 1); // Remove Sub-Genre
+                checkedItems.remove(listLocation); // Remove Genre
+                checkedItems.remove(listLocation); // Remove Sub-Genre
             }
         }
     }

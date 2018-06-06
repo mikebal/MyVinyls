@@ -44,4 +44,14 @@
     <string name="deleteImages">The album artwork of this app is stored outside of the install folder.  This allows google photos to backup the images.  Click here to remove the images from this device (Uninstalling will not delete the images)</string>
     <string name="deleteAllImagesWarning">Warning you are about to delete all of your saved album artwork.  This can not be undone unless you have backed-up your photos with google pictures.  If you are sure you want to clear your photos check the box bellow and click ok.</string>
     <string name="IUnderstand">I Understand</string>
+    <string name="collectionSize">Collection Size: </string>
+    <string name="wishlistSize">Wishlist Size: </string>
+    <string name="recordSize">Record Size</string>
+
+    <string-array name="recordSize_array">
+        <item> </item>
+        <item>7\"</item>
+        <item>10\"</item>
+        <item>12\"</item>
+    </string-array>
 </resources>

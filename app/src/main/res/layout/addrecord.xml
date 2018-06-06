@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
@@ -112,17 +113,20 @@
         android:layout_alignLeft="@+id/editText_albumName"
         android:layout_alignStart="@+id/editText_albumName" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText_bandName"
-        android:maxLength="25"
-        android:maxLines="1"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3"
-        android:layout_toLeftOf="@+id/editText_year"
-        android:layout_toStartOf="@+id/editText_year" />
+
+        <EditText
+            android:id="@+id/editText_bandName"
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView3"
+            android:layout_alignStart="@+id/textView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/editText_year"
+            android:layout_toStartOf="@+id/editText_year"
+            android:maxLength="25"
+            android:maxLines="1" />
 
         <TextView
         android:layout_width="50dp"
@@ -204,6 +208,27 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:textAllCaps="false"/>
+
+
+        <Spinner
+            android:id="@+id/spinnerRecordSize"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/textView3"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_alignParentRight="true"
+            android:entries="@array/recordSize_array"/>
+
+        <TextView
+            android:id="@+id/textViewCollectionSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView3"
+            android:layout_toEndOf="@+id/imageButton"
+            android:layout_toRightOf="@+id/imageButton"
+            android:text="@string/recordSize"/>
 
     </RelativeLayout>
 </ScrollView>

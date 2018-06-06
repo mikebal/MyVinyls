@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     EditText inputSearch;
     MenuItem menuItem;
     View lastClickedButton;
+    TextView _recordCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,7 +275,20 @@ public class MainActivity extends AppCompatActivity
 
        });
         customAdapter.notifyDataSetChanged();
+       _recordCount = (TextView) findViewById(R.id.textViewRecordCount);
+       _recordCount.setText(getRecordCountText() + recordList.size());
         dbHandler.close();
+    }
+
+    private String getRecordCountText(){
+        String label;
+        if(databaseTable.equals("wishlist")){
+            label = getResources().getString(R.string.wishlistSize);
+        }
+        else{
+            label = getResources().getString(R.string.collectionSize);
+        }
+        return label;
     }
 
     private void setListClickListener(){

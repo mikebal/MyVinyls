@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import java.io.File;
 
@@ -58,6 +59,7 @@ public class ViewRecord extends EditRecord{
         editText.setFocusable(false);
         ImageButton albumCover = (ImageButton) findViewById(R.id.imageButton);
         albumCover.setClickable(false);
+        findViewById(R.id.spinnerRecordSize).setEnabled(false);
         loadImage(albumCover, editCall);
     }
 

@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "records.db";
     private static final String TABLE_RECORDS = "records";
     private static final String TABLE_GENRES = "genres";
@@ -24,6 +24,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String COLUMN_GENRE = "genre";
     private static final String COLUMN_HASIMAGE = "hasimage";
     private static final String COLUMN_NOTES = "notes";
+    private static final String COLUMN_RECORD_SIZE = "record_size";
     private Context appContext;
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -33,11 +34,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT);";
+        final String queryTableRecords = "CREATE TABLE records (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT, record_size TEXT);";
         db.execSQL(queryTableRecords);
         final String queryTableGenres = "CREATE TABLE recordsgenres (_id INTEGER PRIMARY KEY, album_id INTEGER, genre TEXT, subgenre TEXT);";
         db.execSQL(queryTableGenres);
-        final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT);";
+        final String queryTableWishlist = "CREATE TABLE wishlist (_id INTEGER PRIMARY KEY, albumname TEXT, bandname TEXT, releaseyear INTEGER, hasimage TEXT, notes TEXT, record_size TEXT);";
         db.execSQL(queryTableWishlist);
         final String queryTableLentout = "CREATE TABLE lentout (_id INTEGER PRIMARY KEY, album_id INTEGER, lentout TEXT, dateout TEXT, dueback TEXT);";
         db.execSQL(queryTableLentout);
@@ -67,6 +68,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         {
             db.execSQL("ALTER TABLE wishlist ADD COLUMN notes TEXT");
         }
+        if(oldVersion < 4)
+        {
+            db.execSQL("ALTER TABLE records ADD COLUMN record_size TEXT");
+            db.execSQL("UPDATE records set record_size = ' '");
+            db.execSQL("ALTER TABLE wishlist ADD COLUMN record_size TEXT");
+            db.execSQL("UPDATE wishlist set record_size = ' '");
+        }
+
     }
 
     public void dropAndRemake()
@@ -89,6 +98,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
         values.put(COLUMN_NOTES, record.get_notes());
+        values.put(COLUMN_RECORD_SIZE, record.get_size());
         if(hasID)
            values.put(COLUMN_ID, Integer.valueOf(record.get_imageurl()));
 
@@ -174,6 +184,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             selectedRecord.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
             selectedRecord.set_imageurl(c.getString(c.getColumnIndex("_id")));
             selectedRecord.set_notes(c.getString(c.getColumnIndex(COLUMN_NOTES)));
+            selectedRecord.set_size(c.getString(c.getColumnIndex(COLUMN_RECORD_SIZE)));
             String genre_query = "SELECT * FROM " + callingTable + TABLE_GENRES + " WHERE " +
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_query, null);
@@ -235,6 +246,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_ALBUMNAME, record.get_albumname());
         values.put(COLUMN_HASIMAGE, record.get_hasimage());
         values.put(COLUMN_NOTES, record.get_notes());
+        values.put(COLUMN_RECORD_SIZE, record.get_size());
         db.update(tableName, values, "_id=" + record.get_id(), null);
         db.close();
     }

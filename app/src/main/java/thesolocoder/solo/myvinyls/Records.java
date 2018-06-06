@@ -12,6 +12,7 @@ public class Records {
     private String _imageurl;
     private String _hasimage;
     private String _notes;
+    private String _size;
     private static final String EMPTY_FIELD_DEFAULT = "#!NULL!#";
 
     public Records(){}
@@ -45,6 +46,8 @@ public class Records {
 
     public void set_notes(String noteData) { this._notes = noteData;}
 
+    public void set_size(String size) {this._size = size; }
+
     public String get_id() { return _id; }
 
     public String get_bandname() { return _bandname; }
@@ -64,5 +67,7 @@ public class Records {
     public String get_hasimage() { return  _hasimage;}
 
     public String get_notes() {return _notes;}
+
+    public String get_size() { return  _size; }
 
 }

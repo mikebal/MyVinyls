@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -37,6 +38,7 @@ public class RecordBaseActivity extends Activity {
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
     boolean isDarkThemeEnabled = false;
+    Spinner _recordSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class RecordBaseActivity extends Activity {
         albumBand = (EditText) findViewById(R.id.editText_bandName);
         notes = (EditText) findViewById(R.id.editTextNote);
         albumArtwork = (ImageButton) findViewById(R.id.imageButton);
+        _recordSize = (Spinner) findViewById(R.id.spinnerRecordSize);
     }
 
     private void setIconsColorFilter(){
@@ -124,6 +127,7 @@ public class RecordBaseActivity extends Activity {
             else
                 newRecord.set_notes("");
 
+            newRecord.set_size(_recordSize.getSelectedItem().toString());
         }
         return newRecord;
     }
