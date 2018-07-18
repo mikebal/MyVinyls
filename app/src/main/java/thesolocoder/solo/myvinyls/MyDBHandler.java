@@ -136,6 +136,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 listEntry.set_bandname(c.getString(c.getColumnIndex("bandname")));
                 listEntry.set_albumname(c.getString(c.getColumnIndex("albumname")));
                 listEntry.set_releaseyear(c.getString(c.getColumnIndex("releaseyear")));
+                listEntry.set_size(c.getString(c.getColumnIndex("record_size")));
                 if(query.contains("SELECT * FROM records INNER JOIN recordsgenres ON records._id=recordsgenres.album_id WHERE recordsgenres.genre='")) {
                     listEntry.set_imageurl(c.getString(c.getColumnIndex("album_id")));
                 }
@@ -189,7 +190,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_query, null);
             genre_cursor.moveToFirst();
-            while (!genre_cursor.isAfterLast()) {
+            while (!genre_cursor.isLast()) {
                 if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
                     genres.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
                 }
@@ -257,6 +258,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + table + " WHERE " + COLUMN_ID + "=\"" + _id + "\";");
         db.execSQL("DELETE FROM " + table + "genres WHERE album_id=\"" + _id + "\";");
         db.execSQL("DELETE FROM " + "lentout WHERE album_id=\"" + _id + "\";");
+        db.close();
     }
 
     public ArrayList<String> dbReturnListStrings(String query, String targetCol) {

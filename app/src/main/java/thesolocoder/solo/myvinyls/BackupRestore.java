@@ -10,6 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+
 public class BackupRestore extends AppCompatActivity {
 
     @Override
@@ -44,14 +48,23 @@ public class BackupRestore extends AppCompatActivity {
     }
 
     public void backupClicked(View v){
-        Intent startBackup = new Intent(BackupRestore.this, CreateFileActivity.class);
-        startActivity(startBackup);
-        finish();
+
+
+        FileExportHelper exportHelper = new FileExportHelper();
+
+
+            String recordData = exportHelper.getRecordData(getApplicationContext(), "records");
+
+
+
     }
 
     public void restoreClicked(View v){
-        Intent startRestore = new Intent(BackupRestore.this, RetrieveContentsWithProgressDialogActivity.class);
-        startActivity(startRestore);
-        finish();
-    }
+        FileExportHelper exportHelper = new FileExportHelper();
+
+
+        String recordData = exportHelper.getRecordData(getApplicationContext(), "records");
+        FileImporter importer = new FileImporter();
+        importer.processBackup(recordData);
+}
 }

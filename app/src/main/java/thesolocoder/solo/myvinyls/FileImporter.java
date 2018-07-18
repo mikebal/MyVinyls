@@ -76,12 +76,79 @@ public class FileImporter {
         return errorMessage;
     }
 
+    public void processBackup(String line){
+        if(verifyRecordIsOfKnownType(line) && recordHasRequiredFields(line)){
+            Records newRecord = createRecordFromBackupEntry(line);
+        }
+    }
+
+    private Records createRecordFromBackupEntry(String line){
+        Records newRecordFromBackup = new Records();
+        return newRecordFromBackup;
+    }
+ /*   private void verifyTags(String record){
+        boolean isRecordTypeKnown = false;
+        Records importedRecord
+                final String[] recordTags = {"ID_URL", "BAND_NAME", "ALBUM", "YEAR", "SIZE", "NOTE", "GENRE"};
+
+        isRecordTypeKnown = verifyRecordIsOfKnownType(record);
+       if(isRecordTypeKnown){
+
+       }
+    }*/
+
+    boolean verifyRecordIsOfKnownType(String record){
+        final String[] backupRecordTypes = {"records", "wishlist", "lentout"};
+        boolean validated = false;
+
+        for (String type: backupRecordTypes){
+            BackupHeaderTrailer tagFormat = new BackupHeaderTrailer(type);
+            if(record.startsWith(tagFormat.getHeaderTag()) && record.endsWith(tagFormat.getTrailerTag() + "\n")){
+                validated = true;
+            }
+        }
+        return validated;
+    }
+
+    private boolean recordHasRequiredFields(String line){
+        final String[] requiredTags = {"ID_URL", "ALBUM"};
+        boolean validated = true;
+
+        for (String tag: requiredTags){
+            BackupHeaderTrailer requiredTag = new BackupHeaderTrailer(tag);
+
+            if(!line.contains(requiredTag.getHeaderTag()) && !line.contains(requiredTag.getTrailerTag())
+                    || (line.indexOf(requiredTag.getHeaderTag()) > line.indexOf(requiredTag.getTrailerTag()))){
+                validated = false;
+            }
+            if(validated){
+                String requiredValue = getStringBetweenTags(tag, line);
+                if(requiredValue == null || requiredValue.isEmpty()){
+                    validated = false;
+                }
+            }
+        }
+        return validated;
+    }
+
+    private String getStringBetweenTags(String searchTag, String line){
+        String value = null;
+        BackupHeaderTrailer tag = new BackupHeaderTrailer(searchTag);
+
+        if(line.indexOf(tag.getHeaderTag()) < line.indexOf(tag.getTrailerTag())){
+            value = line.substring(line.indexOf(tag.getHeaderTag()) + tag.getHeaderTag().length(), line.indexOf(tag.getTrailerTag()));
+        }
+        return value;
+    }
+
+
     public void addRecord(ArrayList<String> lineParsed, String tableName, MyDBHandler dbHandler){
         Records newRecord;
         final int _ID = 0;
         final int BAND_NAME = 1;
         final int ALBUM_NAME = 2;
         final int RELEASE_YEAR = 3;
+        final int RECORD_SIZE = 4;
 
         newRecord = new Records();
         newRecord.set_imageurl(lineParsed.get(_ID));
@@ -94,6 +161,13 @@ public class FileImporter {
             newRecord.set_releaseyear("");
         else
             newRecord.set_releaseyear(lineParsed.get(RELEASE_YEAR));
+
+        if(isValidRecordSize(lineParsed.get(RECORD_SIZE))){
+            newRecord.set_size(lineParsed.get(RECORD_SIZE) + "\"");
+        } else{
+            newRecord.set_size(" ");
+        }
+
 
         lineParsed.remove(RELEASE_YEAR);
         lineParsed.remove(ALBUM_NAME);
@@ -148,5 +222,16 @@ public class FileImporter {
         }
         // only got here if we didn't return false
         return true;
+    }
+
+    private boolean isValidRecordSize(String size){
+        boolean isValid = true;
+        if(size == null || size.isEmpty()){
+            isValid = false;
+        } else if( !size.equals("7") || !size.equals("10") || !size.equals("12")){
+            isValid = false;
+        }
+
+        return isValid;
     }
 }

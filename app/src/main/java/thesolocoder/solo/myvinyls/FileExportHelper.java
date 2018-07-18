@@ -17,25 +17,17 @@ public class FileExportHelper {
     private String convertRecordListToString(ArrayList<Records> records, String tableName)
     {
         String data = "";
-        String temp = "";
         for (int i = 0; i < records.size(); i++)
         {
-            data += records.get(i).get_imageurl() + ",";
-            temp =  records.get(i).get_bandname();
-            if(temp.isEmpty() || temp.equals(""))
-                temp = "#EMPTY#,";
-            else
-                temp += ",";
-            data += temp;
-            data += records.get(i).get_albumname() + ",";
-
-            temp += records.get(i).get_releaseyear();
-            if(temp.isEmpty() || temp.equals(""))
-                temp = "#EMPTY#,";
-            else
-                temp += ",";
-            data += temp;
-            data += listToCommaString(records.get(i).get_genre()) + "\n";
+            data += "<" + tableName + "\\>";
+            data += "<ID_URL\\>" + records.get(i).get_imageurl() + "</ID_URL>";
+            data += "<BAND_NAME\\>" + records.get(i).get_bandname() + "</BAND_NAME>";
+            data += "<ALBUM\\>" + records.get(i).get_albumname() +"</ALBUM>";
+            data += "<YEAR\\>" +  records.get(i).get_releaseyear() + "</YEAR>";
+            data += "<SIZE\\>" + records.get(i).get_size() + "</SIZE>";
+            data += "<NOTE\\>" + records.get(i).get_notes() + "</NOTE>";
+            data += "<GENRE\\>" + listToCommaString(records.get(i).get_genre()) + "</GENRE>";
+            data += "</" + tableName + ">\n";
         }
         return data;
     }
@@ -62,9 +54,14 @@ public class FileExportHelper {
     private String listToCommaString(ArrayList<String> list)
     {
         String commaString = "";
-        for(int i = 0; i < list.size(); i++)
-            commaString += "," + list.get(i);
-
+        if(list.size() > 0) {
+            commaString += list.get(0);
+            for (int i = 1; i < list.size(); i++) {
+                if(list.get(i) != null) {
+                    commaString += "," + list.get(i);
+                }
+            }
+        }
         return commaString;
     }
 }

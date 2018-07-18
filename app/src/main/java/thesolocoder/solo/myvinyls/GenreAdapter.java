@@ -163,14 +163,14 @@ public class GenreAdapter  extends BaseAdapter {
         else{
             if(isAdd){
                 if(subGenre.equals(""))
-                    subGenre = "###";
+              //      subGenre = "###";
                 checkedItems.add(genre);
-                checkedItems.add(subGenre);
+              //  checkedItems.add(subGenre);
             }
             else{
                 int listLocation = findIndexOfString(checkedItems, genre);
                 checkedItems.remove(listLocation); // Remove Genre
-                checkedItems.remove(listLocation); // Remove Sub-Genre
+              //  checkedItems.remove(listLocation); // Remove Sub-Genre
             }
         }
     }
