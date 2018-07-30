@@ -190,7 +190,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                     COLUMN_ALBUMID + "=" + c.getString(c.getColumnIndex("_id"));
             genre_cursor = db.rawQuery(genre_query, null);
             genre_cursor.moveToFirst();
-            while (!genre_cursor.isLast()) {
+            while (!genre_cursor.isAfterLast()) {
                 if (genre_cursor.getString(genre_cursor.getColumnIndex("genre")) != null) {
                     genres.add(genre_cursor.getString(genre_cursor.getColumnIndex("genre")));
                 }

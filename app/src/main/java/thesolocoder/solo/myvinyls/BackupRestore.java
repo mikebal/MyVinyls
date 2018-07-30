@@ -65,6 +65,6 @@ public class BackupRestore extends AppCompatActivity {
 
         String recordData = exportHelper.getRecordData(getApplicationContext(), "records");
         FileImporter importer = new FileImporter();
-        importer.processBackup(recordData);
+        importer.processBackup(recordData, getApplicationContext());
 }
 }

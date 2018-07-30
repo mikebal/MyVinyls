@@ -10,7 +10,88 @@ import java.util.StringTokenizer;
 
 public class FileImporter {
 
-    public String acceptDriveVersion(DriveContents contents, Context context){
+    final String[] _backupRecordTypes = {"records", "wishlist", "lentout"};
+    final String[] _requiredTags = {"ID_URL", "ALBUM"};
+    final String[] _recordTags = {"BAND_NAME", "YEAR", "SIZE", "NOTE", "GENRE"};
+
+
+    public String acceptDriveVersionNew(DriveContents contents, Context context) {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        String tableName = "records";
+        ArrayList<String> lineParsed;
+        int lentOutID = 1;
+        int lineCount = 1;
+        ArrayList<String> badLineList = new ArrayList<>();
+        String errorMessage = "";
+
+        MyDBHandler dbHandler = new MyDBHandler(context, null, null, 1);
+        try {
+            dbHandler.dropAndRemake();
+            while ((line = reader.readLine()) != null) {
+                builder.setLength(0);
+                builder.append(line);
+                line = builder.toString();
+
+                processBackup(line, context);
+            }
+        }
+                  catch (Exception e){
+                Toast toast = Toast.makeText(context, e.getClass().getName(), Toast.LENGTH_LONG);
+                toast.show();
+            }
+            return errorMessage;
+        }
+                /*if(lineParsed.size() == 1) {
+                    if (lineParsed.get(0).toLowerCase().equals("wishlist") || lineParsed.get(0).toLowerCase().equals("lentout")) {
+                        tableName = lineParsed.get(0).toLowerCase();
+                    }
+                    else{
+                        if(!lineParsed.get(0).contains("records")) {    // correction for possible special symbole if edited by google drive
+                            Toast toast = Toast.makeText(context, "Record Category is wrong: " + lineParsed.get(0), Toast.LENGTH_LONG);
+                            toast.show();
+                            break;
+                        }
+                    }
+                }
+                else {
+                    lineParsed = lineToColumb(builder.toString());
+                    if (isValidFormat(lineParsed)) {
+                        if (!tableName.equals("lentout"))
+                            addRecord(lineParsed, tableName, dbHandler);
+                        else {
+                            addLentOut(lentOutID, lineParsed, dbHandler);
+                            lentOutID++;
+                        }
+                    }
+                    else{
+                        badLineList.add(String.valueOf(lineCount));
+                    }
+                }
+                lineCount++;
+            }
+            if(badLineList.size() >= 1)
+            {
+                errorMessage = "The Records on the following lines have been ignored:\n";
+                for(int i = 0; i < badLineList.size(); i++)
+                {
+                    if(i != 0)
+                        errorMessage += ",";
+                    errorMessage += String.valueOf(badLineList.get(i));
+                }
+            }
+        }
+        catch (Exception e){
+            Toast toast = Toast.makeText(context, e.getClass().getName(), Toast.LENGTH_LONG);
+            toast.show();
+        }
+        return errorMessage;
+
+    }*/
+
+    public String acceptDriveVersionOld(DriveContents contents, Context context){
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(contents.getInputStream()));
         StringBuilder builder = new StringBuilder();
@@ -76,32 +157,40 @@ public class FileImporter {
         return errorMessage;
     }
 
-    public void processBackup(String line){
+    public void processBackup(String line, Context context){
         if(verifyRecordIsOfKnownType(line) && recordHasRequiredFields(line)){
             Records newRecord = createRecordFromBackupEntry(line);
+            MyDBHandler myDBHandler = new MyDBHandler(context, null, null, 1);
+            myDBHandler.dropAndRemake();
+            myDBHandler.addRecord(newRecord, "records", "recordsgenres", true);
         }
     }
 
+    /**
+     *   final String[] _backupRecordTypes = {"records", "wishlist", "lentout"};
+     final String[] _requiredTags = {"ID_URL", "ALBUM"};
+     final String[] _recordTags = {"BAND_NAME", "YEAR", "SIZE", "NOTE", "GENRE"};
+     * @param line
+     * @return
+     */
     private Records createRecordFromBackupEntry(String line){
         Records newRecordFromBackup = new Records();
+        newRecordFromBackup.set_id(getStringBetweenTags(_requiredTags[0], line));
+        newRecordFromBackup.set_albumname(getStringBetweenTags(_requiredTags[1], line));
+
+        newRecordFromBackup.set_bandname(getStringBetweenTags(_recordTags[0], line));
+        newRecordFromBackup.set_releaseyear(getStringBetweenTags(_recordTags[1], line));
+        newRecordFromBackup.set_size(getStringBetweenTags(_recordTags[2], line));
+        newRecordFromBackup.set_notes(getStringBetweenTags(_recordTags[3], line));
+        newRecordFromBackup.set_imageurl(getStringBetweenTags(_requiredTags[0], line));
+        newRecordFromBackup.set_genre(lineToColumb(getStringBetweenTags(_recordTags[4], line)));
         return newRecordFromBackup;
     }
- /*   private void verifyTags(String record){
-        boolean isRecordTypeKnown = false;
-        Records importedRecord
-                final String[] recordTags = {"ID_URL", "BAND_NAME", "ALBUM", "YEAR", "SIZE", "NOTE", "GENRE"};
-
-        isRecordTypeKnown = verifyRecordIsOfKnownType(record);
-       if(isRecordTypeKnown){
-
-       }
-    }*/
 
     boolean verifyRecordIsOfKnownType(String record){
-        final String[] backupRecordTypes = {"records", "wishlist", "lentout"};
         boolean validated = false;
 
-        for (String type: backupRecordTypes){
+        for (String type: _backupRecordTypes){
             BackupHeaderTrailer tagFormat = new BackupHeaderTrailer(type);
             if(record.startsWith(tagFormat.getHeaderTag()) && record.endsWith(tagFormat.getTrailerTag() + "\n")){
                 validated = true;
@@ -111,10 +200,10 @@ public class FileImporter {
     }
 
     private boolean recordHasRequiredFields(String line){
-        final String[] requiredTags = {"ID_URL", "ALBUM"};
+
         boolean validated = true;
 
-        for (String tag: requiredTags){
+        for (String tag: _requiredTags){
             BackupHeaderTrailer requiredTag = new BackupHeaderTrailer(tag);
 
             if(!line.contains(requiredTag.getHeaderTag()) && !line.contains(requiredTag.getTrailerTag())
